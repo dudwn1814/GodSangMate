@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:orientation="horizontal"
+    tools:context=".CalendarFragment">
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="320dp"
+        android:layout_marginTop="5dp"
+        android:background="#65B8FB"
+        android:text="취소"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/todoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="To Do 생성"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="23sp"></TextView>
+
+
+    <EditText
+        android:id="@+id/textInput"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="30dp"
+        android:hint="할 일을 적어보세요"
+        android:privateImeOptions="defaultInputmode=korean" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="280dp" />
+
+    <CheckBox
+        android:id="@+id/repeatChk"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="230dp"
+        android:layout_marginLeft="20dp"
+        android:text="반복" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="20dp">
+
+        <Button
+            android:id="@+id/sunBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/sunday"
+            tools:layout_editor_absoluteX="29dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/monBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/monday"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/tueBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/tuesday"
+            tools:layout_editor_absoluteX="124dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/wedBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/wednesday"
+            tools:layout_editor_absoluteX="183dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/thuBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/thursday"
+            tools:layout_editor_absoluteX="237dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/friBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/friday"
+            tools:layout_editor_absoluteX="283dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/satBtn"
+            android:textColor="@color/black"
+            android:layout_width="46dp"
+            android:layout_height="39dp"
+            android:text="@string/saturday"
+            tools:layout_editor_absoluteX="334dp"
+            tools:layout_editor_absoluteY="288dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/alarmChk"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="20dp"
+        android:text="알림" />
+
+
+    <LinearLayout
+        android:id="@+id/timeLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="380dp"
+        android:layout_marginLeft="120dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="00"
+            android:textSize="30sp"></EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" : "
+            android:textSize="30sp"></TextView>
+
+        <EditText
+            android:id="@+id/minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="00"
+            android:textSize="30sp"></EditText>
+
+        <EditText
+            android:id="@+id/ampm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint=" AM"
+            android:textSize="30sp"></EditText>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="500dp"
+        android:background="#65B8FB"
+        android:text="등록하기"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment">
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
