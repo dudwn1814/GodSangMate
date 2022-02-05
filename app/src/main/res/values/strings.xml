@@ -52,5 +52,14 @@
     <string name="submitBtn">등록하기</string>
     <string name="timeText">TextView</string>
 
+    <string name="b_login">로그인</string>
+    <string name="ID">이메일ID</string>
+    <string name="PW">비밀번호</string>
+    <string name="re_PW">비밀번호 재입력</string>
+    <string name="b_register">회원가입하기</string>
+    <string name="create">계정 생성</string>
+    <string name="logo">logo</string>
+    <string name="login">LOG IN</string>
+
 
 </resources>
