@@ -42,10 +42,10 @@ public class LoginActivity extends AppCompatActivity {
                 email = Id.getText().toString();
                 password = Pw.getText().toString();
 
-                /*if(!myDB.validation(email, password)) {
+                /* if(!myDB.validation(email, password)) {
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
-                    }*/
+                    } */
                 //else
                 //if 그룹 있으면 메인 화면(to do list)으로 이동
                 //else 그룹 선택 화면으로 이동

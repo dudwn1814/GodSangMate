@@ -1,42 +1,33 @@
 {
   "project_info": {
-    "project_number": "531894433466",
-    "firebase_url": "https://godsangmate.firebaseio.com",
-    "project_id": "godsangmate",
-    "storage_bucket": "godsangmate.appspot.com"
+    "project_number": "724658057111",
+    "project_id": "fir-d6ad1",
+    "storage_bucket": "fir-d6ad1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:531894433466:android:9293a1db6f98cd4aa8b483",
+        "mobilesdk_app_id": "1:724658057111:android:66bc5c23195d5b28d29ed2",
         "android_client_info": {
           "package_name": "com.example.re_todolist"
         }
       },
       "oauth_client": [
         {
-          "client_id": "531894433466-cbtctasnlm2ekk2n2slc54q8ul8rufau.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.re_todolist",
-            "certificate_hash": "51d99f756c7dba45d28cbd4d3fa05c928289b0cd"
-          }
-        },
-        {
-          "client_id": "531894433466-h5j6ul2iehs5vlmok8ijdo2vcsfi3fl0.apps.googleusercontent.com",
+          "client_id": "724658057111-vpvst09df7g5g47k6sd8vv19oi2lkus3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmhguJu3uBm2ZFAUdIjom0bItENUflQQM"
+          "current_key": "AIzaSyDb3GHMQ0f8pCTg3PjC0p4baF7oXQ9Rv-o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "531894433466-h5j6ul2iehs5vlmok8ijdo2vcsfi3fl0.apps.googleusercontent.com",
+              "client_id": "724658057111-vpvst09df7g5g47k6sd8vv19oi2lkus3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
