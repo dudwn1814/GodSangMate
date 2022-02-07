@@ -34,7 +34,6 @@
         <activity android:name=".CalendarActivity"/>
         <activity android:name=".GroupNum"/>
         <activity android:name=".GroupName"/>
-<!--        <activity android:name=".MainActivity"/>-->
         <activity android:name=".Groupmenu"/>
 
     </application>
