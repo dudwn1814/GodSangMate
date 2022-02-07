@@ -51,6 +51,7 @@
     <string name="sunday">일</string>
     <string name="submitBtn">등록하기</string>
     <string name="timeText">TextView</string>
+    <string name="choiceGroupe">참가 그룹 선택</string>
 
 
 </resources>
