@@ -4,6 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_join.xml" value="0.1" />
+        <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_login.xml" value="0.21467391304347827" />
+        <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_nickname.xml" value="0.21467391304347827" />
+        <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_partgroup.xml" value="0.21467391304347827" />
+        <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_todo.xml" value="0.21467391304347827" />
+        <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/course.xml" value="0.21467391304347827" />
       </map>
     </option>
   </component>
