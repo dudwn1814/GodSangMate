@@ -40,6 +40,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         app:endIconMode="clear_text"
+        app:errorIconDrawable="@null"
         android:hint="@string/PW"
         android:id="@+id/PW">
 
