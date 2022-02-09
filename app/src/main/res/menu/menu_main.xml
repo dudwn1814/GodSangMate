@@ -2,9 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.re_todolist.MainActivity">
+
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/groupCode"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="123456"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/groupExit"
+        android:orderInCategory="100"
+        android:title="그룹 탈퇴"
+        app:showAsAction="never" />
+
 </menu>
