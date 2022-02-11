@@ -9,18 +9,151 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/ToDoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:textSize="25dp"
+            android:textColor="@color/black"
+            android:text="그룹명" />
+
+        <TextView
+            android:id="@+id/GroupPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:textSize="15dp"
+            android:text="(1명의 인원이 참가하고 있습니다)" />
+
+        <Button
+            android:id="@+id/optionBtn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="..." />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/acheivement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:textSize="20dp"
+            android:text="달성률" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:src="?attr/actionModeShareDrawable" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/border">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/achieve_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="5dp"
+            android:textSize="13dp"
+            android:text="그룹별" />
+
+        <TextView
+            android:id="@+id/achieve_personal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:layout_marginTop="5dp"
+            android:textSize="13dp"
+            android:text="개인별" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:id="@+id/circlebar_group"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:progress_text_size="30sp"
+            app:style="solid_line"
+            app:progress_stroke_width="20dp "
+            app:progress_stroke_cap="round"
+            app:progress_start_color="#FFBB00"
+            app:progress_end_color="#ABF200"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="5dp"/>
+
+            <com.dinuscxj.progressbar.CircleProgressBar
+                android:id="@+id/circlebar_personal"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:progress_text_size="30sp"
+                app:style="solid_line"
+                app:progress_stroke_width="20dp "
+                app:progress_stroke_cap="round"
+                app:progress_start_color="#FFBB00"
+                app:progress_end_color="#ABF200"
+                android:layout_marginLeft="70dp"
+                android:layout_marginBottom="5dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="#ffffff"
         android:orientation="vertical">
 
         <ListView
             android:id="@+id/courseListView"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="300dp"
             android:divider="#ffffff"
             android:dividerHeight="10dp"
-            android:padding="5dp"></ListView>
+            android:padding="5dp"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -32,5 +165,6 @@
             android:contentDescription="TODO" />
 
     </LinearLayout>
+
 
 </LinearLayout>
