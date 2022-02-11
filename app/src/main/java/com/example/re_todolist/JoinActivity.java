@@ -125,7 +125,6 @@ public class JoinActivity extends AppCompatActivity {
                 else{
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
-
                 }
             }
         });
@@ -134,10 +133,11 @@ public class JoinActivity extends AppCompatActivity {
     private void checkEmail() {
         Pattern pattern = android.util.Patterns.EMAIL_ADDRESS;
         if (pattern.matcher(email).matches()) {
-            mDbRef.child("UserAccount").orderByChild("emailID").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDbRef.child("UserAccount").orderByChild("emailID").equalTo(email)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String value = snapshot.getValue(String.class);
+                    UserAccount value = snapshot.getValue(UserAccount.class);
                     if(value != null){
                         Id_layout.setHelperText(null);
                         Id_layout.setError("이미 사용중인 아이디입니다.");
@@ -204,9 +204,8 @@ public class JoinActivity extends AppCompatActivity {
                     account.setPassword(password);
 
                     //db에 insert
-                    mDbRef.child("UserAcount").child(account.getUid()).setValue(account);
+                    mDbRef.child("UserAccount").child(account.getUid()).setValue(account);
 
-                    String msg = "아이디 "+email+" 비밀번호 "+password;
                     Toast.makeText(getApplicationContext(), "가입되었습니다.",
                             Toast.LENGTH_LONG).show();
                 }

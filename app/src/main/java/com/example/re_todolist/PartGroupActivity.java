@@ -56,8 +56,7 @@ public class PartGroupActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                groupCode = gCode.toString();
-
+                groupCode = gCode.getText().toString();
                 if(groupCode.length() == 0){
                     alert_confirm.setPositiveButton("확인", null);
                     alert_confirm.setMessage("참가 그룹의 코드를 입력해주세요.");
@@ -65,6 +64,7 @@ public class PartGroupActivity extends AppCompatActivity {
                     alert.show();
                 }
                 else{
+                    Toast.makeText(getApplicationContext(),"value : "+groupCode,Toast.LENGTH_LONG).show();
                     validation(groupCode);
                 }
             }

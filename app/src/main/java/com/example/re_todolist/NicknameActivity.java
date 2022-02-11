@@ -50,7 +50,7 @@ public class NicknameActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
 
-/*        nn.addTextChangedListener(new TextWatcher() {
+        nn.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 입력난에 변화가 있을 시 조치
@@ -69,14 +69,14 @@ public class NicknameActivity extends AppCompatActivity {
         });
 
         alert_confirm = new AlertDialog.Builder(this);
-        alert_confirm.setMessage("입력 정보를 다시 확인해주세요.");
+        alert_confirm.setMessage("입력정보를 다시 확인해주세요.");
         alert_confirm.setPositiveButton("확인", null);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nnstate) {
-                    register(email,password);
+                if(nnstate) { 
+                    //register(email,password);
                 }
                 else{
                     AlertDialog alert = alert_confirm.create();
@@ -88,7 +88,8 @@ public class NicknameActivity extends AppCompatActivity {
     }
 
     private void checkNickname() {
-        //mDbRef.child("UserAccount").orderByChild("emailID").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        if(nickname.length() <= 8) {
+        /*mDbRef.child("UserAccount").orderByChild("emailID").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String value = snapshot.getValue(String.class);
@@ -97,23 +98,30 @@ public class NicknameActivity extends AppCompatActivity {
                     nn_layout.setError("이미 사용중인 닉네임입니다.");
                     setnnState(false);
                 }
-                else{
+                else{*/
                     nn_layout.setError(null);
                     nn_layout.setHelperText("사용 가능한 닉네임입니다.");
                     setnnState(true);
                 }
+        /*
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
+        }*/
+        else{
+            nn_layout.setHelperText(null);
+            nn_layout.setError("8자 이내로 입력해주세요.");
+            setnnState(false);
+        }
     }
 
     void setnnState(Boolean state){
         nnstate=state;
     }
-
+/*
     private void register(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -138,6 +146,6 @@ public class NicknameActivity extends AppCompatActivity {
                 }
             }
         });
-    }*/
     }
+    */
 }
