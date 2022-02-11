@@ -33,6 +33,13 @@
 
         <activity android:name=".CalendarActivity"/>
 
+        <activity android:name=".PartGroupActivity"
+            android:parentActivityName=".LoginActivity" />
+
+        <activity android:name=".NicknameActivity">
+        </activity>
+
+
     </application>
 
 </manifest>

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "724658057111",
-    "project_id": "fir-d6ad1",
-    "storage_bucket": "fir-d6ad1.appspot.com"
+    "project_number": "508691673042",
+    "project_id": "gsmate-sm",
+    "storage_bucket": "gsmate-sm.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:724658057111:android:66bc5c23195d5b28d29ed2",
+        "mobilesdk_app_id": "1:508691673042:android:5a368ea9012cd692fca20b",
         "android_client_info": {
           "package_name": "com.example.re_todolist"
         }
       },
       "oauth_client": [
         {
-          "client_id": "724658057111-vpvst09df7g5g47k6sd8vv19oi2lkus3.apps.googleusercontent.com",
+          "client_id": "508691673042-ero3oh49br718c9bg8uu017kpt8o8960.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDb3GHMQ0f8pCTg3PjC0p4baF7oXQ9Rv-o"
+          "current_key": "AIzaSyCKq9q75dXa_y3pXTlnMqViY9u2cDHOTSk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "724658057111-vpvst09df7g5g47k6sd8vv19oi2lkus3.apps.googleusercontent.com",
+              "client_id": "508691673042-ero3oh49br718c9bg8uu017kpt8o8960.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
