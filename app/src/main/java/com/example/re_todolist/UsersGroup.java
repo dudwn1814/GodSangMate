@@ -26,6 +26,4 @@ public class UsersGroup {
         this.g_name = g_name;
     }
 
-
-
 }

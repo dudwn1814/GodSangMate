@@ -1,10 +1,10 @@
 package com.example.re_todolist;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,7 +64,6 @@ public class PartGroupActivity extends AppCompatActivity {
                     alert.show();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"value : "+groupCode,Toast.LENGTH_LONG).show();
                     validation(groupCode);
                 }
             }
@@ -72,31 +71,42 @@ public class PartGroupActivity extends AppCompatActivity {
     }
 
     private void validation( String code ){
-        /* if(code exists) {
-                alert_confirm.setMessage("그룹명에 참가하시겠습니까?");
-                alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    userAccount에 groupcode 저장
-                    Intent intent = new Intent(getApplicationContext(), com.example.re_todolist.NicknameActivity.class);
-                    startActivity(intent);
-                  }
-                }
-            });
+        mDbRef.child("GroupList").orderByChild("g_code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GroupInfo value = snapshot.getValue(GroupInfo.class);
+                if(value != null){
+                    String name = snapshot.child(code).child("name").getValue().toString();
+                    alert_confirm.setMessage("\'"+name+"\' 그룹에 참가하시겠습니까?");
+                    alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //userAccount에 groupcode 저장
+                            Intent intent = new Intent(getApplicationContext(), com.example.re_todolist.NicknameActivity.class);
+                            startActivity(intent);
+                        }
+                    });
 
-            alert_confirm.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-
-           else {
+                alert_confirm.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                    AlertDialog alert = alert_confirm.create();
+                    alert.show();
+            }
+                else{
                     alert_confirm.setPositiveButton("확인", null);
                     alert_confirm.setMessage("해당 그룹을 찾을 수 없습니다.");
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
                 }
-         */
-    }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 }
+
