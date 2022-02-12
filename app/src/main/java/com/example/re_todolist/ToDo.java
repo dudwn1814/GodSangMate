@@ -1,6 +1,6 @@
 package com.example.re_todolist;
 
-public class Course {
+public class ToDo {
 
     //알람 반복 시간 요일, 그룹/개인, 투두
     String todo;
@@ -10,7 +10,7 @@ public class Course {
     boolean alarm;
     String time;
 
-    public Course(String todo, String personal, boolean repeat, String day, boolean alarm, String time) {
+    public ToDo(String todo, String personal, boolean repeat, String day, boolean alarm, String time) {
         this.todo = todo;
         this.personal = personal;
         this.repeat = repeat;

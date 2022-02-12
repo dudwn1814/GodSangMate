@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".CourseFragment">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,9 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
-            android:textSize="25dp"
+            android:text="그룹명"
             android:textColor="@color/black"
-            android:text="그룹명" />
+            android:textSize="25dp" />
 
         <TextView
             android:id="@+id/GroupPerson"
@@ -31,8 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
-            android:textSize="15dp"
-            android:text="(1명의 인원이 참가하고 있습니다)" />
+            android:text="(1명의 인원이 참가하고 있습니다)"
+            android:textSize="15dp" />
 
         <Button
             android:id="@+id/optionBtn"
@@ -40,7 +39,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:text="..." />
-
 
 
     </LinearLayout>
@@ -56,8 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
-            android:textSize="20dp"
-            android:text="달성률" />
+            android:text="달성률"
+            android:textSize="20dp" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -65,7 +63,8 @@
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="15dp"
-            android:src="?attr/actionModeShareDrawable" />
+            android:src="?attr/actionModeShareDrawable"
+            tools:ignore="TouchTargetSizeCheck" />
 
     </LinearLayout>
 
@@ -74,8 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="vertical"
-        android:background="@drawable/border">
+        android:background="@drawable/border"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,23 +82,23 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/achieve_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="5dp"
-            android:textSize="13dp"
-            android:text="그룹별" />
+            <TextView
+                android:id="@+id/achieve_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="5dp"
+                android:text="그룹별"
+                android:textSize="13dp" />
 
-        <TextView
-            android:id="@+id/achieve_personal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="140dp"
-            android:layout_marginTop="5dp"
-            android:textSize="13dp"
-            android:text="개인별" />
+            <TextView
+                android:id="@+id/achieve_personal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="140dp"
+                android:layout_marginTop="5dp"
+                android:text="개인별"
+                android:textSize="13dp" />
 
         </LinearLayout>
 
@@ -109,35 +108,36 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
-        <com.dinuscxj.progressbar.CircleProgressBar
-            android:id="@+id/circlebar_group"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:progress_text_size="30sp"
-            app:style="solid_line"
-            app:progress_stroke_width="20dp "
-            app:progress_stroke_cap="round"
-            app:progress_start_color="#FFBB00"
-            app:progress_end_color="#ABF200"
-            android:layout_marginLeft="50dp"
-            android:layout_marginBottom="5dp"/>
+            <com.dinuscxj.progressbar.CircleProgressBar
+                android:id="@+id/circlebar_group"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginBottom="5dp"
+                app:progress_end_color="#ABF200"
+                app:progress_start_color="#FFBB00"
+                app:progress_stroke_cap="round"
+                app:progress_stroke_width="20dp "
+                app:progress_text_size="30sp"
+                app:style="solid_line" />
 
             <com.dinuscxj.progressbar.CircleProgressBar
                 android:id="@+id/circlebar_personal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:progress_text_size="30sp"
-                app:style="solid_line"
-                app:progress_stroke_width="20dp "
-                app:progress_stroke_cap="round"
-                app:progress_start_color="#FFBB00"
-                app:progress_end_color="#ABF200"
                 android:layout_marginLeft="70dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                app:progress_end_color="#ABF200"
+                app:progress_start_color="#FFBB00"
+                app:progress_stroke_cap="round"
+                app:progress_stroke_width="20dp "
+                app:progress_text_size="30sp"
+                app:style="solid_line" />
 
         </LinearLayout>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -147,22 +147,38 @@
         android:background="#ffffff"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/courseListView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:divider="#ffffff"
-            android:dividerHeight="10dp"
-            android:padding="5dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ffffff"
+            android:orientation="horizontal">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:contentDescription="TODO" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="15dp"
+                android:text="To Do List"
+                android:textSize="20dp" />
+
+            <ImageButton
+                android:id="@+id/writeBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_baseline_add_24" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
     </LinearLayout>
 

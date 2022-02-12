@@ -1,9 +1,7 @@
 package com.example.re_todolist;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,23 +11,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.Console;
-import java.util.HashMap;
 
-
-public class CalendarActivity extends AppCompatActivity {
+public class TodoWriteActivity extends AppCompatActivity {
 
     private boolean alarm = false;
     private boolean repeat = false;
@@ -40,6 +33,9 @@ public class CalendarActivity extends AppCompatActivity {
     private String time_minute = "00";
     private String time_ampm = "AM";
 
+    private String uid;         //firebase uid
+    FirebaseAuth mAuth;
+    DatabaseReference mDbRef;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor")
@@ -48,12 +44,15 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo);
 
+        mAuth = FirebaseAuth.getInstance();
+        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
+
         Button cancelBtn = findViewById(R.id.cancel_button);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mainIntent = new Intent(CalendarActivity.this, MainActivity.class);
-                CalendarActivity.this.startActivity(mainIntent);
+                Intent mainIntent = new Intent(TodoWriteActivity.this, MainActivity.class);
+                TodoWriteActivity.this.startActivity(mainIntent);
             }
         });
 
@@ -113,7 +112,7 @@ public class CalendarActivity extends AppCompatActivity {
         satBtn.setOnClickListener(view -> day = "sat");
 
 
-        TextView todoText = (TextView) findViewById(R.id.todoText);
+        EditText todoText = (EditText) findViewById(R.id.textInput);
 
         EditText hour = (EditText) findViewById(R.id.hour);
 
@@ -132,29 +131,16 @@ public class CalendarActivity extends AppCompatActivity {
             time_ampm = (ampm.getText().toString().isEmpty() ? "AM" : ampm.getText().toString());
 
             //not empty 조건 넣기
-            Course todoObj = new Course(todo, group, repeat, day, alarm, time_hour + time_minute + time_ampm.toUpperCase());
+            ToDo todoObj = new ToDo(todo, group, repeat, day, alarm, time_hour + time_minute + time_ampm.toUpperCase());
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            UserAccount account = new UserAccount();
+            account.setUid(firebaseUser.getUid());
+            mDbRef.child("todoTest").child(account.getUid()).setValue(todoObj);
 
-           /* mDatabase.child("todos").child(todo).setValue(todoObj)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(getApplicationContext(), "저장을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "저장을 실패했습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            */
 
-            String info = todo + " " + repeat + " " + day + " " + alarm + " " + group + " " + time_hour + time_minute + time_ampm.toUpperCase();
-            Toast.makeText(getApplicationContext(), info, Toast.LENGTH_LONG).show();
-            //Intent intent = new Intent(this, MainActivity.class);
-            //intent.putExtra("todo", info);
-            //setResult(Activity.RESULT_OK, intent);
+            Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();
         });
     }
+
 }

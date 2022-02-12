@@ -43,8 +43,6 @@
         <activity android:name=".GroupNum"
             android:parentActivityName=".GroupName" />
 
-        <activity android:name=".CalendarActivity"/>
-
 
         <activity android:name=".NicknameActivity">
         </activity>

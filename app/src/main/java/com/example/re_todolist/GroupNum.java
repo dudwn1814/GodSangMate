@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,11 +27,11 @@ public class GroupNum extends AppCompatActivity {
         setContentView(R.layout.group_num);
         FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
-        mAuth = FirebaseAuth.getInstance();
-        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
-
         TextView Group_name = (TextView) findViewById(R.id.group_name);
         TextView Group_code = (TextView) findViewById(R.id.group_code);
+
+        mAuth = FirebaseAuth.getInstance();
+        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
 
         Intent intent = getIntent();
 
@@ -42,22 +43,22 @@ public class GroupNum extends AppCompatActivity {
         Group_code.setText(groupcode + "입니다.");
 
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        UserAccount account = new UserAccount();
+        UsersGroup account = new UsersGroup();
         account.setUid(firebaseUser.getUid());
-        account.setEmailID(firebaseUser.getEmail());
         account.setG_name(groupname);
         account.setG_code(groupcode);
 
         //db에 insert
-        mDbRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
+        mDbRef.child("UsersGroup").child(firebaseUser.getUid()).setValue(account);
 
         Button backButton = (Button) findViewById(R.id.button);
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("message", "result message is OK!");
+                Intent intent = new Intent(GroupNum.this, NicknameActivity.class);
+                intent.putExtra("groupname", groupname);
+                intent.putExtra("code", groupcode);
 
-                setResult(Activity.RESULT_OK, resultIntent);
+                startActivity(intent);
                 finish();
             }
         });
