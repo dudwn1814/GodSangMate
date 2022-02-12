@@ -13,10 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
 
     private static final String DEFAULT_PATTERN = "%d%%";
+    private DatabaseReference myRefer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

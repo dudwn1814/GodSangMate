@@ -14,7 +14,7 @@
         android:theme="@style/Theme.RE_ToDoList">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.RE_ToDoList.NoActionBar">
             <intent-filter>
@@ -23,22 +23,28 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".LoginActivity"/>
         <activity
-            android:name=".LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
         </activity>
 
         <activity android:name=".JoinActivity"
             android:parentActivityName=".LoginActivity" />
 
-        <activity android:name=".CalendarActivity"/>
-        <activity android:name=".GroupNum"/>
-        <activity android:name=".GroupName"/>
-        <activity android:name=".Groupmenu"/>
+        <activity android:name=".Groupmenu"
+            android:parentActivityName=".LoginActivity" />
 
+        <activity android:name=".GroupName"
+            android:parentActivityName=".Groupmenu" />
         <activity android:name=".PartGroupActivity"
-            android:parentActivityName=".Groupmenu">
-        </activity>
+            android:parentActivityName=".Groupmenu"/>
+
+        <activity android:name=".GroupNum"
+            android:parentActivityName=".GroupName" />
+
+        <activity android:name=".CalendarActivity"/>
+
 
         <activity android:name=".NicknameActivity">
         </activity>

@@ -1,6 +1,8 @@
 package com.example.re_todolist;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,82 +19,91 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 public class LoginActivity extends AppCompatActivity {
-    Button button1, button2;
-    TextInputLayout Id_layout, Pw_layout;
-    EditText Id, Pw;
-    String email, password;
-    Boolean LIstate;
-    AlertDialog.Builder alert_confirm;
-    FirebaseAuth mAuth;
+    private EditText id;
+    private EditText password;
+
+    private Button login;
+    private Button signup;
+    private FirebaseRemoteConfig firebaseRemoteConfig;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signOut();
 
-        Id_layout = findViewById(R.id.ID);
-        Pw_layout = findViewById(R.id.PW);
-        Id = Id_layout.getEditText();
-        Pw = Pw_layout.getEditText();
-        button1 = findViewById(R.id.b_login);
-        button2 = findViewById(R.id.b_register);
+        id = (EditText) findViewById(R.id.loginActivity_edittext_id);
+        password = (EditText) findViewById(R.id.loginActivity_edittext_password);
 
-        mAuth = FirebaseAuth.getInstance();
+        login = (Button) findViewById(R.id.login);
+        signup = (Button) findViewById(R.id.signup);
 
-        alert_confirm = new AlertDialog.Builder(this);
-
-
-        button1.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                email = Id.getText().toString();
-                password = Pw.getText().toString();
-
-                alert_confirm.setMessage("아이디 또는 비밀번호가 잘못 입력 되었습니다.");
-                alert_confirm.setPositiveButton("확인", null);
-
-                validation(email, password);
+                loginEvent();
+            }
+        });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, JoinActivity.class));
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), com.example.re_todolist.JoinActivity.class);
-                startActivity(intent);
-            }
-        });
-        }
+        //로그인 인터페이스 리스너
 
-    private void validation(String email, String password){
-        if(email.length() != 0 && password.length() != 0){
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                //if 그룹 있으면 메인 화면(to do list)으로 이동
-                                //else 그룹 선택 화면으로 이동
-                                Toast.makeText(getApplicationContext(), "로그인 되었습니다.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                AlertDialog alert = alert_confirm.create();
-                                alert.show();
-                            }
-                        }
-                    });
-        }
-        else{
-            AlertDialog alert = alert_confirm.create();
-            alert.show();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    //로그인
+                    Intent intent = new Intent(LoginActivity.this,Groupmenu.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    //로그아웃
+                }
+
+            }
         };
+
     }
 
-    private void setState(boolean state){
-        LIstate = state;
+    void loginEvent() {
+        firebaseAuth.signInWithEmailAndPassword(id.getText().toString(), password.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (!task.isSuccessful()) {
+                            //로그인 실패한부분
+                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 }

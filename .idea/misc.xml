@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_join.xml" value="0.21197916666666666" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_login.xml" value="0.21197916666666666" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_main.xml" value="0.21197916666666666" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_nickname.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_partgroup.xml" value="0.21197916666666666" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/activity_todo.xml" value="0.21197916666666666" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/layout/course.xml" value="0.21197916666666666" />
+        <entry key="..\:/Users/SM-PC/AndroidStudioProjects/gsmate/app/src/main/res/xml/xml.xml" value="0.1" />
         <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_join.xml" value="0.1" />
         <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_login.xml" value="0.21467391304347827" />
         <entry key="..\:/Users/gyu/CookAndoid/Project/GodSangMate/app/src/main/res/layout/activity_main.xml" value="0.264" />

@@ -26,7 +26,7 @@ public class Groupmenu extends AppCompatActivity {
         Button menu02Button = findViewById(R.id.menu02Button);
         menu02Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), GroupNum.class);
+                Intent intent = new Intent(getApplicationContext(), PartGroupActivity.class);
 
                 startActivity(intent);
             }

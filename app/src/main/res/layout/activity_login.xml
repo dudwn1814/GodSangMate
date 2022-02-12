@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".LoginActivity">
+
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon"
         android:contentDescription="@string/logo"
-        />
+        android:scaleType="fitCenter"
+        android:src="@drawable/loading_icon" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,11 +34,11 @@
         android:hint="@string/ID"
         android:id="@+id/ID">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginActivity_edittext_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -51,21 +52,21 @@
         android:id="@+id/PW">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginActivity_edittext_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/b_login"
+        android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/b_login" />
 
     <Button
-        android:id="@+id/b_register"
+        android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
