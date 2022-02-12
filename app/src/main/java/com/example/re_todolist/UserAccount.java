@@ -5,8 +5,6 @@ public class UserAccount {
     private String uid;         //firebase uid
     private String emailID;
     private String password;
-    private String g_code;
-    private String g_name;
 
     public UserAccount() { }
 
@@ -30,6 +28,5 @@ public class UserAccount {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 }
