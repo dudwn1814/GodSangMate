@@ -100,11 +100,11 @@ public class NicknameActivity extends AppCompatActivity {
             nn_layout.setError(null);
             setnnState(false);
         }
-        else if (nickname.contains(" ")){
+        /*else if (nickname.contains(" ")){
             nn_layout.setHelperText(null);
             nn_layout.setError("사용할 수 없는 닉네임입니다.");
             setnnState(false);
-        }
+        }*/
         else {
             if (nickname.length() > 8) {
                 nn_layout.setHelperText(null);
