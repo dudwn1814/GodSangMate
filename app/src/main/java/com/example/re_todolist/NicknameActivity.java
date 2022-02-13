@@ -1,5 +1,6 @@
 package com.example.re_todolist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,8 +47,10 @@ public class NicknameActivity extends AppCompatActivity {
         nn_layout = findViewById(R.id.nickname);
         nn = nn_layout.getEditText();
         button = findViewById(R.id.b_start);
-        group_code = "111111";
-        group_name = "그룹명";
+
+        Intent intent = getIntent();
+        group_name = intent.getExtras().getString("name");
+        group_code = intent.getExtras().getString("g_code");
 
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
@@ -125,8 +128,8 @@ public class NicknameActivity extends AppCompatActivity {
     }
 
     private void register(String nickname){
-        //FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        //String uid = firebaseUser.getUid();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        String uid = firebaseUser.getUid();
 
         /* 그룹 최종 생성 단계 */
         GroupInfo group = new GroupInfo();
@@ -135,18 +138,18 @@ public class NicknameActivity extends AppCompatActivity {
         mDbRef.child("GroupList").child(group.getG_code()).setValue(group);
 
         /* UserAccount에 groupInfo 저장 */
-        /*
+
         mDbRef.child("UserAccount").child(uid).child("g_code").setValue(group_code);
-        mDbRef.child("UserAccount").child(uid).child("nickname").setValue(nickname);*/
-        mDbRef.child("UserAccount").child("user1").child("g_code").setValue(group_code);
-        mDbRef.child("UserAccount").child("user1").child("nickname").setValue(nickname);
+        mDbRef.child("UserAccount").child(uid).child("nickname").setValue(nickname);
+        //mDbRef.child("UserAccount").child("user1").child("g_code").setValue(group_code);
+        //mDbRef.child("UserAccount").child("user1").child("nickname").setValue(nickname);
 
         /* 그룹 단위 멤버 uid-닉네임 저장 */
         GroupMember member = new GroupMember();
-        //member.setUid(uid);
-        member.setUid("user1");
+        member.setUid(uid);
+        //member.setUid("user1");
         member.setNickname(nickname);
-        //mDbRef.child("GroupMember").child(group_code).child(uid).setValue(nickname);
-        mDbRef.child("GroupMember").child(group_code).child("user1").setValue(member);
+        mDbRef.child("GroupMember").child(group_code).child(uid).setValue(member);
+        //mDbRef.child("GroupMember").child(group_code).child("user1").setValue(member);
     }
 }
