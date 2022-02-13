@@ -55,8 +55,8 @@ public class GroupNum extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(GroupNum.this, NicknameActivity.class);
-                intent.putExtra("groupname", groupname);
-                intent.putExtra("code", groupcode);
+                intent.putExtra("name", groupname);
+                intent.putExtra("g_code", groupcode);
 
                 startActivity(intent);
                 finish();

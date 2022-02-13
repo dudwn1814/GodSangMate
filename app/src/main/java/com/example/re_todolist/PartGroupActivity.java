@@ -32,7 +32,7 @@ public class PartGroupActivity extends AppCompatActivity {
     Button button;
     TextInputLayout gCode_layout;
     EditText gCode;
-    String groupCode;
+    String groupCode, groupName;
 
     FirebaseAuth mAuth;
     DatabaseReference mDbRef;
@@ -76,13 +76,15 @@ public class PartGroupActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GroupInfo value = snapshot.getValue(GroupInfo.class);
                 if(value != null){
-                    String name = snapshot.child(code).child("name").getValue().toString();
-                    alert_confirm.setMessage("\'"+name+"\' 그룹에 참가하시겠습니까?");
+                    groupName = snapshot.child(code).child("name").getValue().toString();
+                    alert_confirm.setMessage("\'"+groupName+"\' 그룹에 참가하시겠습니까?");
                     alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //userAccount에 groupcode 저장
-                            Intent intent = new Intent(getApplicationContext(), com.example.re_todolist.NicknameActivity.class);
+                            Intent intent = new Intent(PartGroupActivity.this, NicknameActivity.class);
+                            intent.putExtra("g_code", groupCode);
+                            intent.putExtra("name", groupName);
                             startActivity(intent);
                         }
                     });

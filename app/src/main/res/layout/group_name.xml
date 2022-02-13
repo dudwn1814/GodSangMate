@@ -62,6 +62,7 @@
                 android:id="@+id/nameInput"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:layout_alignBaseline="@id/nameLabel" />
         </LinearLayout>
 
