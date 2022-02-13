@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Random;
 
 public class GroupName extends AppCompatActivity {
@@ -16,11 +21,16 @@ public class GroupName extends AppCompatActivity {
     EditText nameInput;
     String groupname;
     AlertDialog.Builder alert_confirm;
+    FirebaseAuth mAuth;
+    DatabaseReference mDbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_name);
+
+        mAuth = FirebaseAuth.getInstance();
+        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
 
         alert_confirm = new AlertDialog.Builder(this);
         alert_confirm.setMessage("그룹 이름을 입력해주세요.");
@@ -33,7 +43,7 @@ public class GroupName extends AppCompatActivity {
                 nameInput = findViewById(R.id.nameInput);
                 groupname = nameInput.getText().toString();
 
-                if(groupname.length() == 0){
+                if(groupname.trim().length() == 0){
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
                 }
@@ -51,12 +61,27 @@ public class GroupName extends AppCompatActivity {
                     for (int i = 0; i < codeLen; i++) {
                         buf.append(characterTable[random.nextInt(table_len)]);
                     }
-                    String s = buf.toString();
+                    String groupcode = buf.toString();
+
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                    String uid = firebaseUser.getUid();
+
+                    /* 그룹 최종 생성 단계 */
+                    GroupInfo group = new GroupInfo();
+                    group.setG_code(groupcode);
+                    group.setName(groupname);
+                    mDbRef.child("GroupList").child(group.getG_code()).setValue(group);
+
+                    /* UserAccount에 groupInfo 저장 */
+                    mDbRef.child("UserAccount").child(uid).child("g_code").setValue(groupcode);
+
+                    /* GroupMember에 uid 저장 */
+                    mDbRef.child("GroupMember").child(groupcode).child(uid).child("uid").setValue(uid);
 
                     Intent intent = new Intent(GroupName.this, GroupNum.class);
                     EditText nameInput = (EditText) findViewById(R.id.nameInput);
                     intent.putExtra("group_name", groupname);
-                    intent.putExtra("group_code", s);
+                    intent.putExtra("group_code", groupcode);
 
                     startActivity(intent);
                 }

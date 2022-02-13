@@ -52,6 +52,8 @@ public class NicknameActivity extends AppCompatActivity {
         group_name = intent.getExtras().getString("name");
         group_code = intent.getExtras().getString("g_code");
 
+        //group_code = "2KRZOZ";
+
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
 
@@ -64,7 +66,7 @@ public class NicknameActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable arg0) {
                 // 입력이 끝났을 때 조치
-                nickname = nn.getText().toString();
+                nickname = nn.getText().toString().trim();
                 checkNickname();
             }
 
@@ -80,7 +82,7 @@ public class NicknameActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nnstate) { 
+                if(nnstate) {
                     register(nickname);
                 }
                 else{
@@ -93,33 +95,43 @@ public class NicknameActivity extends AppCompatActivity {
     }
 
     private void checkNickname() {
-        if(nickname.length() <= 8) {
-        mDbRef.child("GroupMember").child(group_code).orderByChild("nickname").equalTo(nickname).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GroupMember value = snapshot.getValue(GroupMember.class);
-                if(value != null){
-                    nn_layout.setHelperText(null);
-                    nn_layout.setError("이미 사용중인 닉네임입니다.");
-                    setnnState(false);
-                }
-                else{
-                    nn_layout.setError(null);
-                    nn_layout.setHelperText("사용 가능한 닉네임입니다.");
-                    setnnState(true);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
-        }
-        else{
+        if(nickname.length()==0){
             nn_layout.setHelperText(null);
-            nn_layout.setError("8자 이내로 입력해주세요.");
+            nn_layout.setError(null);
             setnnState(false);
+        }
+        else if (nickname.contains(" ")){
+            nn_layout.setHelperText(null);
+            nn_layout.setError("사용할 수 없는 닉네임입니다.");
+            setnnState(false);
+        }
+        else {
+            if (nickname.length() > 8) {
+                nn_layout.setHelperText(null);
+                nn_layout.setError("8자 이내로 입력해주세요.");
+                setnnState(false);
+            }
+            else {
+                mDbRef.child("GroupMember").child(group_code).orderByChild("nickname").equalTo(nickname).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        GroupMember value = snapshot.getValue(GroupMember.class);
+                        if (value != null) {
+                            nn_layout.setHelperText(null);
+                            nn_layout.setError("이미 사용중인 닉네임입니다.");
+                            setnnState(false);
+                        } else {
+                            nn_layout.setError(null);
+                            nn_layout.setHelperText("사용 가능한 닉네임입니다.");
+                            setnnState(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
         }
     }
 
@@ -132,24 +144,23 @@ public class NicknameActivity extends AppCompatActivity {
         String uid = firebaseUser.getUid();
 
         /* 그룹 최종 생성 단계 */
+        /*
         GroupInfo group = new GroupInfo();
         group.setG_code(group_code);
         group.setName(group_name);
-        mDbRef.child("GroupList").child(group.getG_code()).setValue(group);
+        mDbRef.child("GroupList").child(group.getG_code()).setValue(group); */
 
         /* UserAccount에 groupInfo 저장 */
-
-        mDbRef.child("UserAccount").child(uid).child("g_code").setValue(group_code);
+        //mDbRef.child("UserAccount").child(uid).child("g_code").setValue(group_code);
         mDbRef.child("UserAccount").child(uid).child("nickname").setValue(nickname);
-        //mDbRef.child("UserAccount").child("user1").child("g_code").setValue(group_code);
-        //mDbRef.child("UserAccount").child("user1").child("nickname").setValue(nickname);
+
 
         /* 그룹 단위 멤버 uid-닉네임 저장 */
-        GroupMember member = new GroupMember();
-        member.setUid(uid);
+        //GroupMember member = new GroupMember();
+        //member.setUid(uid);
         //member.setUid("user1");
-        member.setNickname(nickname);
-        mDbRef.child("GroupMember").child(group_code).child(uid).setValue(member);
+        //member.setNickname(nickname);
+        mDbRef.child("GroupMember").child(group_code).child(uid).child("nickname").setValue(nickname);
         //mDbRef.child("GroupMember").child(group_code).child("user1").setValue(member);
     }
 }

@@ -56,7 +56,8 @@ public class PartGroupActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                groupCode = gCode.getText().toString();
+                String group_code = gCode.getText().toString();
+                groupCode = group_code.trim();
                 if(groupCode.length() == 0){
                     alert_confirm.setPositiveButton("확인", null);
                     alert_confirm.setMessage("참가 그룹의 코드를 입력해주세요.");
@@ -81,7 +82,15 @@ public class PartGroupActivity extends AppCompatActivity {
                     alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //userAccount에 groupcode 저장
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            String uid = firebaseUser.getUid();
+
+                            /* UserAccount에 groupInfo 저장 */
+                            mDbRef.child("UserAccount").child(uid).child("g_code").setValue(groupCode);
+
+                            /* GroupMember에 uid 저장 */
+                            mDbRef.child("GroupMember").child(groupCode).child(uid).child("uid").setValue(uid);
+
                             Intent intent = new Intent(PartGroupActivity.this, NicknameActivity.class);
                             intent.putExtra("g_code", groupCode);
                             intent.putExtra("name", groupName);
