@@ -6,11 +6,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -21,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
     private static final String DEFAULT_PATTERN = "%d%%";
     FirebaseAuth mAuth;
-    DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");;
+    DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
+    ArrayList<String> arrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,42 +76,36 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
 
         //RecyclerView
+        ArrayList<String> arrayList = new ArrayList<>();
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        recyclerView.setHasFixedSize(true);
 
-        RecycleAdapter recycleAdapter = new RecycleAdapter();
+        mDbRef.child("todoTest")
+                .child("testUID")
+                .child("todo")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        arrayList.clear();
+                        String todoString = snapshot.getValue(String.class);
+                        Log.v("todo_value", todoString);
+                        arrayList.add(todoString);
+                        Log.v("todo_array", arrayList.toString());
+                        RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), arrayList, recyclerView);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        recyclerView.setAdapter(adapter);
+                    }
 
-        //FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        /*ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
-                recycleAdapter.setArrayData(value);
-            }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.v("TAG", "loadPost:onCancelled", error.toException());
+                    }
+                });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        mDbRef.addValueEventListener(postListener);
-        */
+        Log.v("todo_Array", arrayList.toString());
 
-        // TODO: 2022-02-13 DB 데이터 불러오기 시도중!
-        mDbRef.child("todoTest").child("wUB1Q6UH3aTbNxtjnVQlPtBzOPS2").child("todo").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
-                recycleAdapter.setArrayData(value);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
-            }
-        });
-
-        recyclerView.setAdapter(recycleAdapter);
     }
 
     @Override
@@ -137,4 +128,5 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     public CharSequence format(int progress, int max) {
         return String.format(DEFAULT_PATTERN, (int) ((float) progress / (float) max * 100));
     }
+
 }

@@ -132,10 +132,11 @@ public class TodoWriteActivity extends AppCompatActivity {
 
             //not empty 조건 넣기
             ToDo todoObj = new ToDo(todo, group, repeat, day, alarm, time_hour + time_minute + time_ampm.toUpperCase());
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            UserAccount account = new UserAccount();
-            account.setUid(firebaseUser.getUid());
-            mDbRef.child("todoTest").child(account.getUid()).setValue(todoObj);
+            //FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            //UserAccount account = new UserAccount();
+            //account.setUid(firebaseUser.getUid());
+            // TODO: 2022-02-15 test uid
+            mDbRef.child("todoTest").child("testUID").setValue(todoObj);
 
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
