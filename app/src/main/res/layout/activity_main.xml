@@ -18,27 +18,27 @@
             android:id="@+id/ToDoTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="그룹명"
+            android:text="@string/groupName"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/GroupPerson"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:text="(1명의 인원이 참가하고 있습니다)"
-            android:textSize="15dp" />
+            android:text="@string/personText"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/optionBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:text="..." />
+            android:layout_marginStart="40dp"
+            android:text="@string/menuBtn" />
 
 
     </LinearLayout>
@@ -49,20 +49,21 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/acheivement"
+            android:id="@+id/achievement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
-            android:text="달성률"
-            android:textSize="20dp" />
+            android:text="@string/achievement"
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="40dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="15dp"
+            android:contentDescription="@string/shareBtn"
             android:src="?attr/actionModeShareDrawable"
             tools:ignore="TouchTargetSizeCheck" />
 
@@ -86,19 +87,19 @@
                 android:id="@+id/achieve_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
+                android:layout_marginStart="80dp"
                 android:layout_marginTop="5dp"
-                android:text="그룹별"
-                android:textSize="13dp" />
+                android:text="@string/groupText"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/achieve_personal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="140dp"
+                android:layout_marginStart="140dp"
                 android:layout_marginTop="5dp"
-                android:text="개인별"
-                android:textSize="13dp" />
+                android:text="@string/personAchievement"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -112,7 +113,7 @@
                 android:id="@+id/circlebar_group"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginBottom="5dp"
                 app:progress_end_color="#ABF200"
                 app:progress_start_color="#FFBB00"
@@ -125,7 +126,7 @@
                 android:id="@+id/circlebar_personal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginLeft="70dp"
+                android:layout_marginStart="70dp"
                 android:layout_marginBottom="5dp"
                 app:progress_end_color="#ABF200"
                 app:progress_start_color="#FFBB00"
@@ -159,17 +160,18 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="15dp"
-                android:text="To Do List"
-                android:textSize="20dp" />
+                android:text="@string/ToDoTitle"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/writeBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:contentDescription="@string/writeBtn"
                 android:src="@drawable/ic_baseline_add_24" />
 
         </LinearLayout>

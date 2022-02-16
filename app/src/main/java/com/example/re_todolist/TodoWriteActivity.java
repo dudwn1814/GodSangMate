@@ -17,7 +17,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,12 +47,9 @@ public class TodoWriteActivity extends AppCompatActivity {
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
 
         Button cancelBtn = findViewById(R.id.cancel_button);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent mainIntent = new Intent(TodoWriteActivity.this, MainActivity.class);
-                TodoWriteActivity.this.startActivity(mainIntent);
-            }
+        cancelBtn.setOnClickListener(view -> {
+            Intent mainIntent = new Intent(TodoWriteActivity.this, MainActivity.class);
+            TodoWriteActivity.this.startActivity(mainIntent);
         });
 
 
@@ -78,14 +74,10 @@ public class TodoWriteActivity extends AppCompatActivity {
         });
 
         CheckBox alarmChk = findViewById(R.id.alarmChk);
-        alarmChk.setOnClickListener(view -> {
-            alarm = !alarm;
-        });
+        alarmChk.setOnClickListener(view -> alarm = !alarm);
 
         CheckBox repeatChk = findViewById(R.id.repeatChk);
-        repeatChk.setOnClickListener(view -> {
-            repeat = !repeat;
-        });
+        repeatChk.setOnClickListener(view -> repeat = !repeat);
 
         //요일 설정
         Button sunBtn = findViewById(R.id.sunBtn);
@@ -112,13 +104,13 @@ public class TodoWriteActivity extends AppCompatActivity {
         satBtn.setOnClickListener(view -> day = "sat");
 
 
-        EditText todoText = (EditText) findViewById(R.id.textInput);
+        EditText todoText = findViewById(R.id.textInput);
 
-        EditText hour = (EditText) findViewById(R.id.hour);
+        EditText hour = findViewById(R.id.hour);
 
-        EditText minute = (EditText) findViewById(R.id.minute);
+        EditText minute = findViewById(R.id.minute);
 
-        EditText ampm = (EditText) findViewById(R.id.ampm);
+        EditText ampm = findViewById(R.id.ampm);
 
 
         //DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -136,7 +128,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             //UserAccount account = new UserAccount();
             //account.setUid(firebaseUser.getUid());
             // TODO: 2022-02-15 test uid
-            mDbRef.child("todoTest").child("testUID").setValue(todoObj);
+            mDbRef.child("todoTest").child("cF6jxtem0SaEtCVSdGEVCj6r31R2").setValue(todoObj);
 
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();

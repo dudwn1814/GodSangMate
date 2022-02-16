@@ -35,9 +35,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.v("todo_Array", arrayList.toString());
+        Log.v("TODO", arrayList.toString());
         String item = arrayList.get(position);
-        Log.v("todo_Adapter", item + " " + position);
         holder.checkBox.setText(item);
     }
 
@@ -46,7 +45,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return arrayList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView_todo;
         ImageView alarm_icon;
         CheckBox checkBox;
