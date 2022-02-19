@@ -63,6 +63,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="15dp"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/shareBtn"
             android:src="?attr/actionModeShareDrawable"
             tools:ignore="TouchTargetSizeCheck" />

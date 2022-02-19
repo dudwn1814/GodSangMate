@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -89,11 +90,26 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             p.show();
         });
 
+        //달성률
+        int achieve_g = 50;
+        int achieve_p = 70;
         CircleProgressBar circleProgressBar_group = findViewById(R.id.circlebar_group);
         CircleProgressBar circleProgressBar_personal = findViewById(R.id.circlebar_personal);
 
-        circleProgressBar_group.setProgress(50);
-        circleProgressBar_personal.setProgress(70);
+        circleProgressBar_group.setProgress(achieve_g);
+        circleProgressBar_personal.setProgress(achieve_p);
+
+        //달성률 공유하기
+        ImageButton b_share = findViewById(R.id.imageButton);
+
+        b_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+                intent.putExtra("achieve", achieve_p);
+                startActivity(intent);
+            }
+        });
 
 
         //RecyclerView

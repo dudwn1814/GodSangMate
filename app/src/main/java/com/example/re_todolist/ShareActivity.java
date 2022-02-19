@@ -23,13 +23,8 @@ import java.io.IOException;
 public class ShareActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
 
     private static final String DEFAULT_PATTERN = "%d%%";
-    ImageButton button, button2;
+    ImageButton button;
     LinearLayout layout;
-    //View layout;
-    //TextView text;
-
-    //FirebaseAuth mAuth;
-    //DatabaseReference mDbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +34,11 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         button = findViewById(R.id.share);
         layout = findViewById(R.id.layout);
 
-        //mAuth = FirebaseAuth.getInstance();
-        //mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
+        Intent intent = getIntent();
+        int achieve = intent.getExtras().getInt("achieve");
 
         CircleProgressBar circle1 = findViewById(R.id.circlebar_prac);
-        circle1.setProgress(70);
+        circle1.setProgress(achieve);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
