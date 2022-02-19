@@ -45,9 +45,21 @@
         <activity android:name=".GroupNum"
             android:parentActivityName=".GroupName" />
 
-
         <activity android:name=".NicknameActivity">
         </activity>
+
+        <activity android:name=".ShareActivity">
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.re_todolist.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
     </application>
 

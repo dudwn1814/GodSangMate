@@ -120,10 +120,9 @@ public class JoinActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(IDstate && PWstate && rePWstate) {
-                    register(email,password);
-                }
-                else{
+                if (IDstate && PWstate && rePWstate) {
+                    register(email, password);
+                } else {
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
                 }
@@ -136,26 +135,25 @@ public class JoinActivity extends AppCompatActivity {
         if (pattern.matcher(email).matches()) {
             mDbRef.child("UserAccount").orderByChild("emailID").equalTo(email)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    UserAccount value = snapshot.getValue(UserAccount.class);
-                    if(value != null){
-                        Id_layout.setHelperText(null);
-                        Id_layout.setError("이미 사용중인 아이디입니다.");
-                        setIdState(false);
-                    }
-                    else{
-                        Id_layout.setError(null);
-                        Id_layout.setHelperText("사용 가능한 ID 입니다.");
-                        setIdState(true);
-                    }
-                }
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            UserAccount value = snapshot.getValue(UserAccount.class);
+                            if (value != null) {
+                                Id_layout.setHelperText(null);
+                                Id_layout.setError("이미 사용중인 아이디입니다.");
+                                setIdState(false);
+                            } else {
+                                Id_layout.setError(null);
+                                Id_layout.setHelperText("사용 가능한 ID 입니다.");
+                                setIdState(true);
+                            }
+                        }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                        }
+                    });
         } else {
             Id_layout.setHelperText(null);
             Id_layout.setError("이메일 형식에 맞지 않는 ID입니다.");
@@ -183,21 +181,23 @@ public class JoinActivity extends AppCompatActivity {
         }
     }
 
-    void setIdState(Boolean state){
-        IDstate=state;
-    }
-    void setPwState(Boolean state){
-        PWstate=state;
-    }
-    void setREPwState(Boolean state){
-        rePWstate=state;
+    void setIdState(Boolean state) {
+        IDstate = state;
     }
 
-    private void register(String email, String password){
+    void setPwState(Boolean state) {
+        PWstate = state;
+    }
+
+    void setREPwState(Boolean state) {
+        rePWstate = state;
+    }
+
+    private void register(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                     UserAccount account = new UserAccount();
                     account.setUid(firebaseUser.getUid());
@@ -211,8 +211,7 @@ public class JoinActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), com.example.re_todolist.LoginActivity.class);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
                 }
