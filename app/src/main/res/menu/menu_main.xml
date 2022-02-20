@@ -4,9 +4,9 @@
     tools:context="com.example.re_todolist.MainActivity">
 
     <item
-        android:id="@+id/groupCode"
+        android:id="@+id/invitation"
         android:orderInCategory="100"
-        android:title="123456"
+        android:title="초대하기"
         app:showAsAction="never" />
 
     <item

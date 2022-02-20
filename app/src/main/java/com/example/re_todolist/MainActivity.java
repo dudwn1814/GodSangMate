@@ -1,5 +1,6 @@
 package com.example.re_todolist;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
@@ -33,12 +36,16 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     private static final String DEFAULT_PATTERN = "%d%%";
     FirebaseAuth mAuth;
     DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
-    String groupCode;
+    String groupCode, groupName, uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        uid = "user1";
+
+        getDatafromDB();
 
         TextView groupPerson = findViewById(R.id.GroupPerson);
 
@@ -64,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             MainActivity.this.startActivity(calendarIntent);
         });
 
-        Button optionBtn = findViewById(R.id.optionBtn);
+/*        Button optionBtn = findViewById(R.id.optionBtn);
 
 
         optionBtn.setOnClickListener(view -> {
@@ -89,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             });
             p.show();
         });
+ */
 
         //달성률
         int achieve_g = 50;
@@ -107,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ShareActivity.class);
                 intent.putExtra("achieve", achieve_p);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, circleProgressBar_personal, "transition");
+                startActivity(intent, options.toBundle());
             }
         });
 
@@ -172,13 +181,50 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return true;
     }
 
+    private void getDatafromDB(){
+        mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                groupCode = user.getG_code();
+
+                mDbRef.child("GroupList").child(groupCode).child("name").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String value = dataSnapshot.getValue(String.class);
+                        groupName = value;
+                        TextView title = findViewById(R.id.ToDoTitle);
+                        title.setText(groupName);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == 1) {
-            return true;
+        switch(item.getItemId()){
+            case R.id.invitation:
+                String msg = "[갓생메이트] '"+groupName+"' 그룹에 초대합니다:) \n그룹 코드 : "+groupCode;
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, msg);
+                startActivity(Intent.createChooser(intent,"Group Invitation"));
+                return true;
+            case R.id.groupExit:
+                return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
 

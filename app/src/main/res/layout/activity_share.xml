@@ -22,16 +22,18 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="50dp"
             android:layout_marginRight="40dp"
+
             android:text="오늘의 달성률은"
             android:textSize="28sp" />
 
         <com.dinuscxj.progressbar.CircleProgressBar
-            android:id="@+id/circlebar_prac"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/circlebar_share"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="50dp"
+            android:transitionName="transition"
             app:progress_end_color="#ABF200"
             app:progress_start_color="#FFBB00"
             app:progress_stroke_cap="round"
@@ -40,14 +42,27 @@
             app:style="solid_line" />
     </LinearLayout>
 
-    <ImageButton
+<!--    <Button
         android:id="@+id/share"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="50dp"
-        android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_share_black_24dp" />
+        android:background="@android:color/transparent"
+        android:textColor="#737373"
+        android:textSize="7pt"
+        android:text="공유하기"/>
+        -->
+    <ImageButton
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:scaleType="fitXY"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_send_black_24dp"
+        android:text="공유하기"/>
 
 </LinearLayout>

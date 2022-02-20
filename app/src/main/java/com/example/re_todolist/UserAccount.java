@@ -5,12 +5,16 @@ public class UserAccount {
     private String uid;         //firebase uid
     private String emailID;
     private String password;
+    private String nickname;
+    private String g_code;
 
-    public UserAccount() { }
+    public UserAccount() {
+    }
 
     public String getUid() {
         return uid;
     }
+
     public void setUid(String uid) {
         this.uid = uid;
     }
@@ -18,6 +22,7 @@ public class UserAccount {
     public String getEmailID() {
         return emailID;
     }
+
     public void setEmailID(String emailID) {
         this.emailID = emailID;
     }
@@ -25,8 +30,16 @@ public class UserAccount {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getNickname() { return nickname; }
+
+    public void setNickname(String nickname) { this.nickname = nickname; }
+
+    public String getG_code() { return g_code; }
+
+    public void setG_code(String g_code) { this.g_code = g_code; }
 }

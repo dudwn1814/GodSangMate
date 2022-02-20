@@ -37,7 +37,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         Intent intent = getIntent();
         int achieve = intent.getExtras().getInt("achieve");
 
-        CircleProgressBar circle1 = findViewById(R.id.circlebar_prac);
+        CircleProgressBar circle1 = findViewById(R.id.circlebar_share);
         circle1.setProgress(achieve);
 
         button.setOnClickListener(new View.OnClickListener() {
