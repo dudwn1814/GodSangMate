@@ -1,5 +1,6 @@
 package com.example.re_todolist;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,18 +9,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Random;
 
 public class GroupName extends AppCompatActivity {
 
     EditText nameInput;
-    String groupname;
+    String groupcode, groupname;
     AlertDialog.Builder alert_confirm;
     FirebaseAuth mAuth;
     DatabaseReference mDbRef;
@@ -43,26 +48,42 @@ public class GroupName extends AppCompatActivity {
                 nameInput = findViewById(R.id.nameInput);
                 groupname = nameInput.getText().toString();
 
-                if(groupname.trim().length() == 0){
+                if (groupname.trim().length() == 0) {
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
+                } else {
+                    createCode();
+                    validation();
                 }
+            }
+        });
+    }
 
-                else{
-                    int codeLen = 6;
-                    final char[] characterTable = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-                            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                            'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
+    public void createCode() {
+        int codeLen = 6;
+        final char[] characterTable = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
 
-                    Random random = new Random(System.currentTimeMillis());
-                    int table_len = characterTable.length;
-                    StringBuffer buf = new StringBuffer();
+        Random random = new Random(System.currentTimeMillis());
+        int table_len = characterTable.length;
+        StringBuffer buf = new StringBuffer();
 
-                    for (int i = 0; i < codeLen; i++) {
-                        buf.append(characterTable[random.nextInt(table_len)]);
-                    }
-                    String groupcode = buf.toString();
+        for (int i = 0; i < codeLen; i++) {
+            buf.append(characterTable[random.nextInt(table_len)]);
+        }
+        groupcode = buf.toString();
+    }
 
+    public void validation() {
+        mDbRef.child("GroupList").orderByChild("g_code").equalTo(groupcode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GroupInfo value = snapshot.getValue(GroupInfo.class);
+                if (value != null) {
+                    createCode();
+                    validation();
+                } else {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                     String uid = firebaseUser.getUid();
 
@@ -85,27 +106,10 @@ public class GroupName extends AppCompatActivity {
 
                     startActivity(intent);
                 }
+            }
 
-/*                int codeLen = 6;
-                final char[] characterTable = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-                        'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                        'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
-
-                Random random = new Random(System.currentTimeMillis());
-                int table_len = characterTable.length;
-                StringBuffer buf = new StringBuffer();
-
-                for (int i = 0; i < codeLen; i++) {
-                    buf.append(characterTable[random.nextInt(table_len)]);
-                }
-                String s = buf.toString();
-
-                Intent intent = new Intent(GroupName.this, GroupNum.class);
-                EditText nameInput = (EditText) findViewById(R.id.nameInput);
-                intent.putExtra("group_name", nameInput.getText().toString());
-                intent.putExtra("group_code", s);
-
-                startActivity(intent);          */
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
