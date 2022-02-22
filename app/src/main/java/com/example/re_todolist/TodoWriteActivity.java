@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,7 +45,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo);
 
         mAuth = FirebaseAuth.getInstance();
-        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
+        mDbRef = FirebaseDatabase.getInstance().getReference();
 
         Button cancelBtn = findViewById(R.id.cancel_button);
         cancelBtn.setOnClickListener(view -> {
@@ -127,8 +128,16 @@ public class TodoWriteActivity extends AppCompatActivity {
             //FirebaseUser firebaseUser = mAuth.getCurrentUser();
             //UserAccount account = new UserAccount();
             //account.setUid(firebaseUser.getUid());
-            // TODO: 2022-02-15 test uid
-            mDbRef.child("todoTest").child("cF6jxtem0SaEtCVSdGEVCj6r31R2").setValue(todoObj);
+            // TODO: 2022-02-15 test uid -> firebaseUser.getUid()로 해보기
+            FirebaseUser user = mAuth.getCurrentUser();
+            if (user != null) {
+                uid = user.getUid();
+            } else {
+                uid = "test";
+                Toast.makeText(getApplicationContext(), "uid를 못불러옴.",
+                        Toast.LENGTH_LONG).show();
+            }
+            mDbRef.child("TodoList").child(uid).push().setValue(todoObj);
 
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
