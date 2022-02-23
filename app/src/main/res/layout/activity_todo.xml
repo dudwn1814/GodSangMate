@@ -18,7 +18,6 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/todoText"
         android:layout_width="match_parent"
@@ -30,7 +29,6 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="23sp" />
 
-
     <EditText
         android:id="@+id/textInput"
         android:layout_width="350dp"
@@ -38,7 +36,6 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
         android:autofillHints=""
-        android:hint="@string/detail_todo_input_hint"
         android:privateImeOptions="defaultInput-mode=korean" />
 
     <Spinner
@@ -133,7 +130,6 @@
             tools:layout_editor_absoluteX="334dp"
             tools:layout_editor_absoluteY="288dp" />
 
-
     </LinearLayout>
 
     <CheckBox
@@ -143,7 +139,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="330dp"
         android:text="@string/alarmCheck" />
-
 
     <LinearLayout
         android:id="@+id/timeLinearLayout"
@@ -184,7 +179,6 @@
             android:textSize="30sp" />
 
     </LinearLayout>
-
 
     <Button
         android:id="@+id/saveButton"

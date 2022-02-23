@@ -40,18 +40,21 @@
             android:exported="true">
         </activity>-->
 
-        <activity android:name=".JoinActivity"
+        <activity
+            android:name=".JoinActivity"
             android:parentActivityName=".LoginActivity" />
 
-        <activity android:name=".Groupmenu"
+        <activity
+            android:name=".Groupmenu"
             android:parentActivityName=".LoginActivity" />
 
-        <activity android:name=".GroupName"
+        <activity
+            android:name=".GroupName"
             android:parentActivityName=".Groupmenu" />
 
-        <activity android:name=".PartGroupActivity"
-            android:parentActivityName=".Groupmenu">
-        </activity>
+        <activity
+            android:name=".PartGroupActivity"
+            android:parentActivityName=".Groupmenu" />
 
         <!--
         <activity android:name=".GroupNum"
@@ -59,20 +62,19 @@
 
         <activity android:name=".GroupNum" />
 
-        <activity android:name=".TodoWriteActivity"
+        <activity
+            android:name=".TodoWriteActivity"
             android:parentActivityName=".MainActivity" />
 
-        <activity android:name=".NicknameActivity">
-        </activity>
+        <activity android:name=".NicknameActivity"></activity>
 
-        <activity android:name=".ShareActivity">
-        </activity>
+        <activity android:name=".ShareActivity"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.re_todolist.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />

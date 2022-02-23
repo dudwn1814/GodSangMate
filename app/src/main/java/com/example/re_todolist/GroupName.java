@@ -24,7 +24,7 @@ import java.util.Random;
 public class GroupName extends AppCompatActivity {
 
     EditText nameInput;
-    String groupcode, groupname;
+    static String groupcode, groupname;
     AlertDialog.Builder alert_confirm;
     FirebaseAuth mAuth;
     DatabaseReference mDbRef;

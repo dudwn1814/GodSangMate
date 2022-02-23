@@ -1,45 +1,22 @@
 <resources>
     <string name="app_name">RE_ToDoList</string>
-    <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
-    <string name="detail_title">상세 설정</string>
-    <string name="detail_todo_text">할 일</string>
-    <string name="detail_todo_time_text">시간 설정</string>
-    <string name="detail_cancel_btn_text">취소</string>
-    <string name="detail_confirm_btn_text">확인</string>
-    <string name="detail_todo_input_hint">할 일을 입력해주세요.</string>
-    <string name="main_todo_add_btn">추가</string>
-    <string name="main_todo_input_hint">오늘 할 일 간단히 추가</string>
-    <string name="menu_sort">정렬기준</string>
-    <string name="menu_sort_register">등록일 기준</string>
-    <string name="menu_sort_date">날짜 기준</string>
-    <string name="menu_search">검색</string>
-    <string name="menu_delete_done">완료 지우기</string>
 
     <string name="menuBtn">…</string>
-    <string name="groupName">그룹명</string>
     <string name="personText">(1명의 인원이 참가하고 있습니다)</string>
     <string name="achievement">달성률</string>
     <string name="groupText">그룹별</string>
     <string name="personAchievement">개인별</string>
-    <string name="groupPercent">XX%</string>
-    <string name="personPercent">XX%</string>
     <string name="ToDoTitle">To Do List</string>
     <string name="TodoAddBtn">TODO</string>
     <string name="ShareBtn">TODO</string>
     <string name="CheckBoxText">To Do</string>
-    <string name="TodoAdditionalText">TextView</string>
     <string name="cancelBtn">취소</string>
     <string name="makeTodoText">To Do 생성</string>
-    <string name="TodoMakeText">해야 할 일</string>
     <string name="repeatCheck">반복</string>
     <string name="alarmCheck">알람</string>
     <string name="monday">월</string>
@@ -50,8 +27,8 @@
     <string name="saturday">토</string>
     <string name="sunday">일</string>
     <string name="submitBtn">등록하기</string>
-    <string name="timeText">TextView</string>
-    <string name="choiceGroupe">참가 그룹 선택</string>
+
+    <string name="choiceGroup">참가 그룹 선택</string>
 
     <string name="b_login">로그인</string>
     <string name="ID">이메일ID</string>
@@ -74,5 +51,6 @@
     <string name="todo_time">:</string>
     <string name="todo_minute">00</string>
     <string name="todo_am">AM</string>
+    <string name="toggle">toggle</string>
 
 </resources>

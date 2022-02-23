@@ -7,15 +7,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,40 +45,27 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         uid = "user1";
 
-        getDatafromDB();
-
-        TextView groupPerson = findViewById(R.id.GroupPerson);
-
-        mDbRef.child("gsmate").child("GroupMember")
-                .child("YJSIVV")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        long person = snapshot.getChildrenCount();
-                        groupPerson.setText("(" + person + "명의 인원이 참가하고 있습니다)");
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.v("TAG", "loadPost:onCancelled", error.toException());
-                    }
-                });
+        //그룹 이름, 인원 수 가져오기
+        getGroupDatafromDB();
 
 
+        //todo 작성 페이지로 이동
         ImageButton fab = findViewById(R.id.writeBtn);
+
         fab.setOnClickListener(view -> {
-            Intent calendarIntent = new Intent(MainActivity.this, TodoWriteActivity.class);
-            MainActivity.this.startActivity(calendarIntent);
+            Intent todoWriteIntent = new Intent(MainActivity.this, TodoWriteActivity.class);
+            MainActivity.this.startActivity(todoWriteIntent);
         });
 
-/*        Button optionBtn = findViewById(R.id.optionBtn);
 
+        //옵션 버튼
+/*        Button optionBtn = findViewById(R.id.optionBtn);
 
         optionBtn.setOnClickListener(view -> {
             PopupMenu p = new PopupMenu(getApplicationContext(), view);
             getMenuInflater().inflate(R.menu.menu_main, p.getMenu());
 
-            mDbRef.child("UserAccount").child("cF6jxtem0SaEtCVSdGEVCj6r31R2").child("g_code").get().addOnCompleteListener(task -> {
+            mDbRef.child("UserAccount").child(uid).child("g_code").get().addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
@@ -103,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         });
  */
 
+
         //달성률
         int achieve_g = 50;
         int achieve_p = 70;
@@ -111,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         circleProgressBar_group.setProgress(achieve_g);
         circleProgressBar_personal.setProgress(achieve_p);
+
 
         //달성률 공유하기
         ImageButton b_share = findViewById(R.id.imageButton);
@@ -127,45 +111,47 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
 
         //RecyclerView
-        ArrayList<String> arrayList = new ArrayList<>();
+        //ArrayList<String> arrayList = new ArrayList<>();
         List<ExpandableListAdapter.Item> data = new ArrayList<>();
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        //FirebaseUser firebaseUser = mAuth.getCurrentUser();
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            uid = user.getUid();
-        } else {
-            uid = "test";
-            Toast.makeText(getApplicationContext(), "uid를 못불러옴.",
-                    Toast.LENGTH_LONG).show();
-        }
-
         ArrayList<String> dbKey = new ArrayList<>();
-        mDbRef.child("TodoList")
-                .child(uid)
-                .addValueEventListener(new ValueEventListener() {
+
+        ExpandableListAdapter.Item group_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "GROUP");
+        ExpandableListAdapter.Item personal_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "PERSONAL");
+
+        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                groupCode = user.getG_code();
+
+                mDbRef.child("TodoList").child(uid).child(groupCode).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        arrayList.clear();
+                        //arrayList.clear();
                         dbKey.clear();
+                        data.clear();
+
+                        group_todo.invisibleChildren = new ArrayList<>();
+                        personal_todo.invisibleChildren = new ArrayList<>();
 
                         for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             String key = postSnapshot.getKey();
                             dbKey.add(key);
                             String todoString = postSnapshot.child("todo").getValue().toString();
-                            Log.v("groupCheck", todoString + "");
 
                             if (todoString != null) {
-                                arrayList.add(todoString);
-                                data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
+                                if (postSnapshot.child("personal").getValue().toString().equals("그룹")) {
+                                    group_todo.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
+                                } else {
+                                    personal_todo.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
+                                }
+                                //arrayList.add(todoString);
                             }
                         }
-
-                        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Group"));
 
                         //String todoString = snapshot.getValue(String.class);
                         //Toast.makeText(getApplicationContext(), snapshot.getValue()+"",
@@ -174,17 +160,14 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         //    arrayList.add(todoString);
                         //data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
                         //}
+                        data.add(group_todo);
+                        data.add(personal_todo);
 
-                        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Cars"));
-                        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Audi"));
-                        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Aston Martin"));
-                        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "BMW"));
-
-                        arrayList.add("To Do");
-                        RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), arrayList, recyclerView);
+                        //arrayList.add("To Do");
+                        //RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), arrayList, recyclerView);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        //recyclerView.setAdapter(new ExpandableListAdapter(data));
-                        recyclerView.setAdapter(adapter);
+                        recyclerView.setAdapter(new ExpandableListAdapter(data));
+                        //recyclerView.setAdapter(adapter);
                     }
 
                     @Override
@@ -192,9 +175,26 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         Log.v("TAG", "loadPost:onCancelled", error.toException());
                     }
                 });
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+//SWIPE---------------------------------------------------------------------------------------------------------------------
         //recyclerview swipe
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        /*ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return super.isItemViewSwipeEnabled();
+            }
+
+
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 Toast.makeText(getApplicationContext(), "on Move",
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
-                Log.v("groupCheck", dbKey + "" + position + "");
+                Log.v("groupCheck", position+"");
                 //db 삭제
 
                 FirebaseUser user = mAuth.getCurrentUser();
@@ -217,13 +217,14 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             Toast.LENGTH_LONG).show();
                 }
 
-                mDbRef.child("TodoList").child(uid).child(dbKey.get(position)).removeValue();
+                //mDbRef.child("TodoList").child(uid).child("group-code").child(dbKey.get(position)).removeValue();
             }
-        };
+        };*/
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        //ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        //itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+//----------------------------------------------------------------------------------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return true;
     }
 
-    private void getDatafromDB() {
+    private void getGroupDatafromDB() {
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -251,6 +252,23 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",
                                 Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                //인원 수 가져오기
+                TextView groupPerson = findViewById(R.id.GroupPerson);
+
+                mDbRef.child("gsmate").child("GroupMember").child(groupCode).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        long person = snapshot.getChildrenCount();
+                        groupPerson.setText("(" + person + "명의 인원이 참가하고 있습니다)");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.v("TAG", "loadPost:onCancelled", error.toException());
                     }
                 });
             }
@@ -279,11 +297,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return false;
     }
 
-
     @Override
     public CharSequence format(int progress, int max) {
         return String.format(DEFAULT_PATTERN, (int) ((float) progress / (float) max * 100));
     }
-
-
 }

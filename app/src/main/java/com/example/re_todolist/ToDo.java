@@ -2,7 +2,7 @@ package com.example.re_todolist;
 
 public class ToDo {
 
-    //알람 반복 시간 요일, 그룹/개인, 투두
+    //투두, 그룹/개인, 반복, 요일, 알람, 시간
     String todo;
     String personal;
     boolean repeat;

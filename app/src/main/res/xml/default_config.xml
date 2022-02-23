@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- START xml_defaults -->
+<?xml version="1.0" encoding="utf-8"?><!-- START xml_defaults -->
 <defaultsMap>
     <entry>
         <key>splash_background</key>
@@ -13,5 +12,4 @@
         <key>splash_message</key>
         <value>서버 점검 중 입니다! - 갓생메이커</value>
     </entry>
-</defaultsMap>
-    <!-- END xml_defaults -->
+</defaultsMap><!-- END xml_defaults -->

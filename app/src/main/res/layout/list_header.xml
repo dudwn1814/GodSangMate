@@ -3,10 +3,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingStart="13dp"
-    android:paddingLeft="13dp"
     android:paddingTop="5dp"
     android:paddingEnd="10dp"
-    android:paddingRight="10dp"
     android:paddingBottom="5dp">
 
     <TextView
@@ -23,5 +21,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_weight="0"
+        android:contentDescription="@string/toggle"
         android:src="@drawable/circle_plus" />
+
 </LinearLayout>
