@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -144,39 +146,20 @@
         android:id="@+id/timeLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="370dp"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/hour"
+        <TimePicker
+            android:id="@+id/timePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:hint="@string/todo_hour"
-            android:textSize="30sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/todo_time"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/minute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:hint="@string/todo_minute"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/ampm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:hint="@string/todo_am"
-            android:textSize="30sp" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:timePickerMode="spinner"/>
 
     </LinearLayout>
 
@@ -184,8 +167,10 @@
         android:id="@+id/saveButton"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginBottom="83dp"
         android:background="#65B8FB"
         android:text="@string/submitBtn"
         android:textColor="#FFFFFF"
@@ -198,5 +183,3 @@
         android:layout_height="match_parent" />
 
 </RelativeLayout>
-
-
