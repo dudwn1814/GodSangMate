@@ -31,14 +31,7 @@
             android:layout_marginTop="15dp"
             android:text="@string/personText"
             android:textSize="15sp" />
-        <!--
-                <Button
-                    android:id="@+id/optionBtn"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:text="@string/menuBtn" />
-                -->
+
 
     </LinearLayout>
 
