@@ -1,6 +1,7 @@
 package com.example.re_todolist;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +30,16 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public static final int HEADER = 0;
     public static final int CHILD = 1;
 
-    private final List<Item> data;
+    FirebaseAuth mAuth;
+    DatabaseReference mDbRef;
+    String groupCode, groupName, uid;
 
-    public ExpandableListAdapter(List<Item> data) {
+    private final List<Item> data;
+    private final ArrayList<String> dbkey;
+
+    public ExpandableListAdapter(List<Item> data, ArrayList<String> dbkey) {
         this.data = data;
+        this.dbkey = dbkey;
     }
 
     @NonNull
@@ -45,7 +61,12 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        mAuth = FirebaseAuth.getInstance();
+        mDbRef = FirebaseDatabase.getInstance().getReference();
+
         final Item item = data.get(position);
+        final String dbItem = dbkey.get(position);
+
         switch (item.type) {
             case HEADER:
                 final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
@@ -88,7 +109,52 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     public boolean onLongClick(View view) {
                         Toast.makeText(view.getContext(), "long click",
                                 Toast.LENGTH_SHORT).show();
-                        Log.v("longClick", childItemController.checkBox.getText()+"");
+
+                        new MaterialAlertDialogBuilder(view.getContext())
+                                .setTitle(item.text)
+                                .setMessage(dbItem)
+                                .setNeutralButton("취소", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Toast.makeText(view.getContext(), "취소",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("수정", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Toast.makeText(view.getContext(), "수정",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Toast.makeText(view.getContext(), "삭제",
+                                                Toast.LENGTH_SHORT).show();
+
+                                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                        uid = firebaseUser.getUid();
+
+                                        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                                                groupCode = user.getG_code();
+
+                                                mDbRef.child("TodoList").child(uid).child(groupCode).child(dbItem).removeValue();
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Toast.makeText(view.getContext(), "그룹코드 가져오기 오류",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                })
+                                .show();
+
                         return false;
                     }
                 });
