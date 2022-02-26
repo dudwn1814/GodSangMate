@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         recyclerView.setHasFixedSize(true);
 
         ArrayList<String> dbKey = new ArrayList<>();
+        ArrayList<String> dbGroupKey = new ArrayList<>();
+        ArrayList<String> dbPersonalKey = new ArrayList<>();
 
         ExpandableListAdapter.Item group_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "GROUP");
         ExpandableListAdapter.Item personal_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "PERSONAL");
@@ -131,43 +133,48 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 mDbRef.child("TodoList").child(uid).child(groupCode).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //arrayList.clear();
                         dbKey.clear();
+                        dbGroupKey.clear();
+                        dbPersonalKey.clear();
                         data.clear();
+
+                        // TODO: 2022-02-26 삭제할때 HEAD가 Index에 영향을 줘서,,, 수정방법 필요
+                        dbGroupKey.add(0, "GROUP");
+                        dbPersonalKey.add(0, "PERSONAL");
 
                         group_todo.invisibleChildren = new ArrayList<>();
                         personal_todo.invisibleChildren = new ArrayList<>();
 
                         for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             String key = postSnapshot.getKey();
-                            dbKey.add(key);
                             String todoString = postSnapshot.child("todo").getValue().toString();
 
                             if (todoString != null) {
                                 if (postSnapshot.child("personal").getValue().toString().equals("그룹")) {
                                     group_todo.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
+                                    dbGroupKey.add(key);
                                 } else {
+                                    // TODO: 2022-02-26 마찬가지,,,
                                     personal_todo.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
+                                    dbPersonalKey.add(key);
                                 }
-                                //arrayList.add(todoString);
                             }
                         }
 
-                        //String todoString = snapshot.getValue(String.class);
-                        //Toast.makeText(getApplicationContext(), snapshot.getValue()+"",
-                        //        Toast.LENGTH_LONG).show();
-                        //if (todoString != null) {
-                        //    arrayList.add(todoString);
-                        //data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, todoString));
-                        //}
+                        for (String group_key : dbGroupKey) {
+                            dbKey.add(group_key);
+                        }
+
+                        for (String personal_key : dbPersonalKey) {
+                            dbKey.add(personal_key);
+                        }
+
                         data.add(group_todo);
                         data.add(personal_todo);
 
-                        //arrayList.add("To Do");
-                        //RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), arrayList, recyclerView);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        recyclerView.setAdapter(new ExpandableListAdapter(data));
-                        //recyclerView.setAdapter(adapter);
+                        recyclerView.setAdapter(new ExpandableListAdapter(data, dbKey));
+
                     }
 
                     @Override
@@ -183,48 +190,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         Toast.LENGTH_LONG).show();
             }
         });
-
-
-//SWIPE---------------------------------------------------------------------------------------------------------------------
-        //recyclerview swipe
-        /*ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-            @Override
-            public boolean isItemViewSwipeEnabled() {
-                return super.isItemViewSwipeEnabled();
-            }
-
-
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                Toast.makeText(getApplicationContext(), "on Move",
-                        Toast.LENGTH_LONG).show();
-                return true;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition();
-                Log.v("groupCheck", position+"");
-                //db 삭제
-
-                FirebaseUser user = mAuth.getCurrentUser();
-                if (user != null) {
-                    uid = user.getUid();
-                } else {
-                    uid = "test";
-                    Toast.makeText(getApplicationContext(), "uid를 못불러옴.",
-                            Toast.LENGTH_LONG).show();
-                }
-
-                //mDbRef.child("TodoList").child(uid).child("group-code").child(dbKey.get(position)).removeValue();
-            }
-        };*/
-
-        //ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        //itemTouchHelper.attachToRecyclerView(recyclerView);
     }
-//----------------------------------------------------------------------------------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

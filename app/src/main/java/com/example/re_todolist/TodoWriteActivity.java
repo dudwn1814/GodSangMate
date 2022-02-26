@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 
 public class TodoWriteActivity extends AppCompatActivity {
@@ -135,7 +138,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             time_ampm = (ampm.getText().toString().isEmpty() ? "AM" : ampm.getText().toString());
 
             // TODO: 2022-02-23 not empty 조건 넣기
-            ToDo todoObj = new ToDo(todo, group, repeat, day, alarm, time_hour + time_minute + time_ampm.toUpperCase());
+            ToDo todoObj = new ToDo(todo, group, repeat, day, alarm, time_hour + time_minute + time_ampm.toUpperCase(), "tmp");
 
             mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -144,6 +147,25 @@ public class TodoWriteActivity extends AppCompatActivity {
                     groupCode = user.getG_code();
 
                     mDbRef.child("TodoList").child(uid).child(groupCode).push().setValue(todoObj);
+
+                    mDbRef.child("TodoList").child(uid).child(groupCode).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                String key = postSnapshot.getKey();
+                                String todoString = postSnapshot.child("todoId").getValue().toString();
+
+                                if (todoString != null && todoString.equals("tmp")) {
+                                    mDbRef.child("TodoList").child(uid).child(groupCode).child(key).child("todoId").setValue(key);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.v("TAG", "loadPost:onCancelled", error.toException());
+                        }
+                    });
                 }
 
                 @Override

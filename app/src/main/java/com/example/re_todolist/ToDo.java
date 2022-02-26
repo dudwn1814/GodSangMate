@@ -9,14 +9,16 @@ public class ToDo {
     String day;
     boolean alarm;
     String time;
+    String todoId;
 
-    public ToDo(String todo, String personal, boolean repeat, String day, boolean alarm, String time) {
+    public ToDo(String todo, String personal, boolean repeat, String day, boolean alarm, String time, String todoId) {
         this.todo = todo;
         this.personal = personal;
         this.repeat = repeat;
         this.day = day;
         this.alarm = alarm;
         this.time = time;
+        this.todoId = todoId;
     }
 
     public String getTodo() {
@@ -65,5 +67,13 @@ public class ToDo {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getTodoId() {
+        return todoId;
+    }
+
+    public void setTodoId(String todoId) {
+        this.todoId = todoId;
     }
 }
