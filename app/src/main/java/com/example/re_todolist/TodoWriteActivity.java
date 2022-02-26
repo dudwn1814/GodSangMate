@@ -53,7 +53,6 @@ public class TodoWriteActivity extends AppCompatActivity {
     private String todo = "";
     private String day;
 
-
     FirebaseAuth mAuth;
     DatabaseReference mDbRef;
     String groupCode, groupName, uid;
@@ -68,6 +67,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
+        uid = "user1";
 
         //메인 페이지로 이동
         Button cancelBtn = findViewById(R.id.cancel_button);
@@ -130,7 +130,8 @@ public class TodoWriteActivity extends AppCompatActivity {
         //Todo 입력
         EditText todoText = findViewById(R.id.textInput);
 
-//알람 시간 입력
+
+        //알람 시간 입력
         final TimePicker picker = (TimePicker) findViewById(R.id.timePicker);
         picker.setIs24HourView(true);
 
@@ -164,6 +165,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             picker.setCurrentHour(pre_hour);
             picker.setCurrentMinute(pre_minute);
         }
+
 
         //투두 저장
         Button saveButton = findViewById(R.id.saveButton);
@@ -212,10 +214,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             String time = calendar.getTime().toString();
 
             // TODO: 2022-02-23 not empty 조건 넣기
-            ToDo todoObj = new ToDo(todo, group, repeat, day, alarm, time + am_pm.toUpperCase(), "tmp");
-
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            uid = firebaseUser.getUid();
+            ToDo todoObj = new ToDo(todo, group, repeat, day, alarm, time +am_pm.toUpperCase(), "tmp");
 
             mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -224,25 +223,6 @@ public class TodoWriteActivity extends AppCompatActivity {
                     groupCode = user.getG_code();
 
                     mDbRef.child("TodoList").child(uid).child(groupCode).push().setValue(todoObj);
-
-                    mDbRef.child("TodoList").child(uid).child(groupCode).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                String key = postSnapshot.getKey();
-                                String todoString = postSnapshot.child("todoId").getValue().toString();
-
-                                if (todoString != null && todoString.equals("tmp")) {
-                                    mDbRef.child("TodoList").child(uid).child(groupCode).child(key).child("todoId").setValue(key);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Log.v("TAG", "loadPost:onCancelled", error.toException());
-                        }
-                    });
                 }
 
                 @Override
@@ -256,7 +236,6 @@ public class TodoWriteActivity extends AppCompatActivity {
             finish();
         });
     }
-
 
     void diaryNotification(Calendar calendar) {
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
