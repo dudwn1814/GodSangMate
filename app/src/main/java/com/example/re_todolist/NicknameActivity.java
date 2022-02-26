@@ -82,10 +82,9 @@ public class NicknameActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nnstate) {
+                if (nnstate) {
                     register(nickname);
-                }
-                else{
+                } else {
                     AlertDialog alert = alert_confirm.create();
                     alert.show();
 
@@ -95,7 +94,7 @@ public class NicknameActivity extends AppCompatActivity {
     }
 
     private void checkNickname() {
-        if(nickname.length()==0){
+        if (nickname.length() == 0) {
             nn_layout.setHelperText(null);
             nn_layout.setError(null);
             setnnState(false);
@@ -110,8 +109,7 @@ public class NicknameActivity extends AppCompatActivity {
                 nn_layout.setHelperText(null);
                 nn_layout.setError("8자 이내로 입력해주세요.");
                 setnnState(false);
-            }
-            else {
+            } else {
                 mDbRef.child("GroupMember").child(group_code).orderByChild("nickname").equalTo(nickname).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,11 +133,11 @@ public class NicknameActivity extends AppCompatActivity {
         }
     }
 
-    void setnnState(Boolean state){
-        nnstate=state;
+    void setnnState(Boolean state) {
+        nnstate = state;
     }
 
-    private void register(String nickname){
+    private void register(String nickname) {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         String uid = firebaseUser.getUid();
 
@@ -162,5 +160,8 @@ public class NicknameActivity extends AppCompatActivity {
         //member.setNickname(nickname);
         mDbRef.child("GroupMember").child(group_code).child(uid).child("nickname").setValue(nickname);
         //mDbRef.child("GroupMember").child(group_code).child("user1").setValue(member);
+
+        Intent intent = new Intent(NicknameActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
