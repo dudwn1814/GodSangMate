@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
-        //uid = "user1";
 
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
@@ -56,35 +55,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             Intent todoWriteIntent = new Intent(MainActivity.this, TodoWriteActivity.class);
             MainActivity.this.startActivity(todoWriteIntent);
         });
-
-
-        //옵션 버튼
-/*        Button optionBtn = findViewById(R.id.optionBtn);
-
-        optionBtn.setOnClickListener(view -> {
-            PopupMenu p = new PopupMenu(getApplicationContext(), view);
-            getMenuInflater().inflate(R.menu.menu_main, p.getMenu());
-
-            mDbRef.child("UserAccount").child(uid).child("g_code").get().addOnCompleteListener(task -> {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                } else {
-                    groupCode = String.valueOf(task.getResult().getValue());
-                    p.getMenu().getItem(0).setTitle(groupCode);
-                }
-            });
-
-            p.setOnMenuItemClickListener(item -> {
-                Toast.makeText(getApplicationContext(),
-                        "팝업메뉴 이벤트 처리 - "
-                                + item.getTitle(),
-                        Toast.LENGTH_SHORT).show();
-                return false;
-            });
-            p.show();
-        });
- */
-
 
         //달성률
         int achieve_g = 50;
@@ -123,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         ExpandableListAdapter.Item group_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "GROUP");
         ExpandableListAdapter.Item personal_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "PERSONAL");
+
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
 
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -199,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
     private void getGroupDatafromDB() {
-
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         uid = firebaseUser.getUid();
 
