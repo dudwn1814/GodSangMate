@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
-        uid = "user1";
+        //uid = "user1";
 
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
@@ -199,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
     private void getGroupDatafromDB() {
+
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
+
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

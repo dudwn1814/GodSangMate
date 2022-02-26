@@ -18,18 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RE_ToDoList">
 
-        <!--<activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.RE_ToDoList.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
-
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.RE_ToDoList.NoActionBar">
             <intent-filter>
@@ -38,12 +28,22 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity" />
-
         <!--<activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.RE_ToDoList">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>-->
+
+        <activity android:name=".LoginActivity" />
+
+        <activity
+            android:name=".MainActivity"
+            android:parentActivityName=".NicknameActivity"/>
+
 
         <activity
             android:name=".JoinActivity"

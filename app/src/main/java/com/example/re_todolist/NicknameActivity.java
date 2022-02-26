@@ -162,5 +162,8 @@ public class NicknameActivity extends AppCompatActivity {
         //member.setNickname(nickname);
         mDbRef.child("GroupMember").child(group_code).child(uid).child("nickname").setValue(nickname);
         //mDbRef.child("GroupMember").child(group_code).child("user1").setValue(member);
+
+        Intent intent = new Intent(NicknameActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
