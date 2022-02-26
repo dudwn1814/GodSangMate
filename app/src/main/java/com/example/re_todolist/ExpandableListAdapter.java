@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,9 +63,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
-
-        uid = "user1";
-
 
         final Item item = data.get(position);
         final String dbItem = dbkey.get(position);
@@ -134,6 +132,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         Toast.makeText(view.getContext(), "삭제",
                                                 Toast.LENGTH_SHORT).show();
+
+                                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                        uid = firebaseUser.getUid();
 
                                         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
                                             @Override
