@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button login;
     private Button signup;
+    private AlertDialog.Builder alert_confirm;
     private FirebaseRemoteConfig firebaseRemoteConfig;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -35,15 +36,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signOut();
 
         id = (EditText) findViewById(R.id.loginActivity_edittext_id);
         password = (EditText) findViewById(R.id.loginActivity_edittext_password);
-
         login = (Button) findViewById(R.id.login);
         signup = (Button) findViewById(R.id.signup);
+        alert_confirm = new AlertDialog.Builder(this);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,23 +61,20 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //로그인 인터페이스 리스너
-
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
+                if (user != null) {
                     //로그인
-                    Intent intent = new Intent(LoginActivity.this,Groupmenu.class);
+                    Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
                     startActivity(intent);
                     finish();
-                }else{
+                } else {
                     //로그아웃
                 }
-
             }
         };
-
     }
 
     void loginEvent() {
@@ -83,16 +82,16 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (!task.isSuccessful()) {
                             //로그인 실패한부분
-                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            alert_confirm.setPositiveButton("확인", null);
+                            alert_confirm.setMessage("로그인 정보를 확인해주세요.");
+                            AlertDialog alert = alert_confirm.create();
+                            alert.show();
                         }
-
-
                     }
                 });
-
     }
 
     @Override

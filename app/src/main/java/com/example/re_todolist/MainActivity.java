@@ -1,6 +1,7 @@
 package com.example.re_todolist;
 
 import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     FirebaseAuth mAuth;
     DatabaseReference mDbRef;
     String groupCode, groupName, uid;
+    AlertDialog.Builder alert_confirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
+        alert_confirm = new AlertDialog.Builder(this);
         uid = "user1";
 
         //그룹 이름, 인원 수 가져오기
@@ -56,35 +62,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             Intent todoWriteIntent = new Intent(MainActivity.this, TodoWriteActivity.class);
             MainActivity.this.startActivity(todoWriteIntent);
         });
-
-
-        //옵션 버튼
-/*        Button optionBtn = findViewById(R.id.optionBtn);
-
-        optionBtn.setOnClickListener(view -> {
-            PopupMenu p = new PopupMenu(getApplicationContext(), view);
-            getMenuInflater().inflate(R.menu.menu_main, p.getMenu());
-
-            mDbRef.child("UserAccount").child(uid).child("g_code").get().addOnCompleteListener(task -> {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                } else {
-                    groupCode = String.valueOf(task.getResult().getValue());
-                    p.getMenu().getItem(0).setTitle(groupCode);
-                }
-            });
-
-            p.setOnMenuItemClickListener(item -> {
-                Toast.makeText(getApplicationContext(),
-                        "팝업메뉴 이벤트 처리 - "
-                                + item.getTitle(),
-                        Toast.LENGTH_SHORT).show();
-                return false;
-            });
-            p.show();
-        });
- */
-
 
         //달성률
         int achieve_g = 50;
@@ -108,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 startActivity(intent, options.toBundle());
             }
         });
-
 
         //RecyclerView
         //ArrayList<String> arrayList = new ArrayList<>();
@@ -292,9 +268,54 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 startActivity(Intent.createChooser(intent, "Group Invitation"));
                 return true;
             case R.id.groupExit:
+                alert_confirm.setMessage("\'"+groupName+"\' 그룹을 탈퇴하시겠습니까?");
+                alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        groupExit();
+                    }
+                });
+
+                alert_confirm.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                AlertDialog alert = alert_confirm.create();
+                alert.show();
                 return true;
         }
         return false;
+    }
+
+    public void groupExit(){
+        //user가 작성한 to_do 삭제하기
+        
+        /*user의 그룹정보, 그룹 내 user 정보 제거*/
+        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").setValue(null);
+        mDbRef.child("gsmate").child("UserAccount").child(uid).child("nickname").setValue(null);
+        mDbRef.child("gsmate").child("UsersGroup").child(uid).setValue(null);
+        mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).setValue(null);
+
+        /* groupMember 삭제되면 groupList에서도 삭제하기 */
+        mDbRef.child("gsmate").child("GroupMember").orderByValue().equalTo(groupCode)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        GroupMember value = snapshot.getValue(GroupMember.class);
+                        if (value == null) {
+                            mDbRef.child("gsmate").child("GroupList").child(groupCode).setValue(null);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+        Intent intent = new Intent(getApplicationContext(), Groupmenu.class);
+        startActivity(intent);
     }
 
     @Override
