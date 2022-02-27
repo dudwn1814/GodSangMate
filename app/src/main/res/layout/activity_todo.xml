@@ -37,6 +37,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
         android:autofillHints=""
+        android:inputType="text"
         android:privateImeOptions="defaultInput-mode=korean" />
 
     <Spinner
@@ -46,130 +47,136 @@
         android:layout_marginStart="280dp"
         android:layout_marginTop="150dp" />
 
-    <CheckBox
-        android:id="@+id/repeatChk"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="230dp"
-        android:text="@string/repeatCheck" />
-
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/repeatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/spinner"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="280dp">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/sunBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/sunday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="29dp"
-            tools:layout_editor_absoluteY="288dp" />
+        <CheckBox
+            android:id="@+id/repeatChk"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="@string/repeatCheck" />
 
-        <Button
-            android:id="@+id/monBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/monday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="77dp"
-            tools:layout_editor_absoluteY="288dp" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone">
 
-        <Button
-            android:id="@+id/tueBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/tuesday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="124dp"
-            tools:layout_editor_absoluteY="288dp" />
+            <Button
+                android:id="@+id/sunBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/sunday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="288dp" />
 
-        <Button
-            android:id="@+id/wedBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/wednesday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="183dp"
-            tools:layout_editor_absoluteY="288dp" />
+            <Button
+                android:id="@+id/monBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/monday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="77dp"
+                tools:layout_editor_absoluteY="288dp" />
 
-        <Button
-            android:id="@+id/thuBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/thursday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="237dp"
-            tools:layout_editor_absoluteY="288dp" />
+            <Button
+                android:id="@+id/tueBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/tuesday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="124dp"
+                tools:layout_editor_absoluteY="288dp" />
 
-        <Button
-            android:id="@+id/friBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/friday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="283dp"
-            tools:layout_editor_absoluteY="288dp" />
+            <Button
+                android:id="@+id/wedBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/wednesday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="183dp"
+                tools:layout_editor_absoluteY="288dp" />
 
-        <Button
-            android:id="@+id/satBtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="46dp"
-            android:layout_height="39dp"
-            android:text="@string/saturday"
-            android:textColor="@color/black"
-            tools:layout_editor_absoluteX="334dp"
-            tools:layout_editor_absoluteY="288dp" />
+            <Button
+                android:id="@+id/thuBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/thursday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="237dp"
+                tools:layout_editor_absoluteY="288dp" />
 
+            <Button
+                android:id="@+id/friBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/friday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="283dp"
+                tools:layout_editor_absoluteY="288dp" />
+
+            <Button
+                android:id="@+id/satBtn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="46dp"
+                android:layout_height="39dp"
+                android:text="@string/saturday"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="334dp"
+                tools:layout_editor_absoluteY="288dp" />
+        </LinearLayout>
     </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/alarmChk"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="330dp"
-        android:text="@string/alarmCheck" />
 
     <LinearLayout
         android:id="@+id/timeLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="370dp"
-        android:orientation="horizontal">
+        android:layout_below="@id/repeatLayout"
+        android:layout_marginStart="20dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/alarmChk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alarmCheck" />
 
         <TimePicker
             android:id="@+id/timePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
             android:timePickerMode="spinner"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
-
     </LinearLayout>
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/timeLinearLayout"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="600dp"
-        android:layout_marginBottom="83dp"
+        android:layout_marginTop="10dp"
         android:background="#65B8FB"
         android:text="@string/submitBtn"
         android:textColor="#FFFFFF"

@@ -64,13 +64,6 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
             Toast.makeText(getApplicationContext(), "변환 오류",
                     Toast.LENGTH_SHORT).show();
         }
-        /*else{
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] reviewImage = stream.toByteArray();
-            String simage = byteArrayToBinaryString(reviewImage);
-            mDbRef.child("Share").child(user).setValue(simage);
-        }*/
         else {
             try {
                 File cachePath = new File(getApplicationContext().getCacheDir(), "images");
@@ -94,21 +87,4 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         }
     }
 
-/*    public static String byteArrayToBinaryString(byte[] b){
-        StringBuilder sb =new StringBuilder();
-        for(int i=0; i<b.length; ++i){
-            sb.append(byteToBinaryString(b[i]));
-        }
-        return sb.toString();
-    }
-
-    public static String byteToBinaryString(byte n){
-        StringBuilder sb = new StringBuilder("00000000");
-        for(int bit=0; bit<8; bit++){
-            if(((n >> bit) & 1) > 0){
-                sb.setCharAt(7-bit, '1');
-            }
-        }
-        return sb.toString();
-    }*/
 }

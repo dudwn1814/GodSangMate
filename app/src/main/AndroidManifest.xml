@@ -22,10 +22,6 @@
             android:name=".SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.RE_ToDoList.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!--<activity
@@ -69,11 +65,19 @@
 
         <activity
             android:name=".TodoWriteActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity">
+        </activity>
 
         <activity android:name=".NicknameActivity"></activity>
 
         <activity android:name=".ShareActivity"></activity>
+
+        <activity android:name=".CreateToDoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
