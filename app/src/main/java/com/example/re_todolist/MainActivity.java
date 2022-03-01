@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         alert_confirm = new AlertDialog.Builder(this);
         uid = "user1";
-        groupCode="ABC123";
+        groupCode = "ABC123";
 
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
@@ -134,109 +134,87 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         dbKey.clear();
                         dbGroupKey.clear();
                         personalKey.clear();
+                        todo_personal.clear();
                         data.clear();
 
                         dbGroupKey.add(0, "GROUP");
                         group_todo.invisibleChildren = new ArrayList<>();
 
-                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                    String key = postSnapshot.getKey();
-                                    ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
-                                    String activity = todo.getActivity();
-                                    boolean repeat = todo.isRepeat();
-                                    boolean alarm = todo.isAlarm();
-                                    String tdid = todo.getTdid();
-                                    String uid = todo.getUid();
-                                    boolean done = todo.isDone();
-                                    Object member = todo.getMember();
+                        for (DataSnapshot postSnapshot : snapshot.child("Group").getChildren()) {
+                            String key = postSnapshot.getKey();
+                            ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
+                            String activity = todo.getActivity();
+                            boolean repeat = todo.isRepeat();
+                            boolean alarm = todo.isAlarm();
+                            String tdid = todo.getTdid();
+                            String uid = todo.getUid();
+                            boolean done = todo.isDone();
+                            Object member = todo.getMember();
 
-
-                                    if (alarm) {
-                                        String time = todo.getTime();
-                                        if (member != null) {
-                                            group_todo.invisibleChildren
-                                                    .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done));
-                                            dbGroupKey.add(key);
-                                        } else {
-                                            group_todo.invisibleChildren
-                                                    .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done, member));
-                                            dbGroupKey.add(key);
-                                        }
-                                    } else {
-                                        if (member != null) {
-                                            group_todo.invisibleChildren
-                                                    .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done));
-                                            dbGroupKey.add(key);
-                                        } else {
-                                            group_todo.invisibleChildren
-                                                    .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done, member));
-                                            dbGroupKey.add(key);
-                                        }
-                                    }
+                            if (alarm) {
+                                String time = todo.getTime();
+                                if (member != null) {
+                                    group_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done));
+                                    dbGroupKey.add(key);
+                                } else {
+                                    group_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done, member));
+                                    dbGroupKey.add(key);
                                 }
-
-                                for (Map.Entry<String, String> entry : memberInfo.entrySet()) {
-                                    ArrayList<String> dbPersonalKey = new ArrayList<>();
-                                    dbPersonalKey.add(0, entry.getValue());
-                                    ExpandableListAdapter.Item personal_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, entry.getValue());
-                                    personal_todo.invisibleChildren = new ArrayList<>();
-
-                                    String muid = entry.getKey();
-                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").child(muid).addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                                String key = postSnapshot.getKey();
-                                                ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
-                                                String activity = todo.getActivity();
-                                                boolean repeat = todo.isRepeat();
-                                                String tdid = todo.getTdid();
-                                                String uid = todo.getUid();
-                                                boolean done = todo.isDone();
-
-                                                personal_todo.invisibleChildren
-                                                        .add(new ExpandableListAdapter.Item(ExpandableListAdapter.PERSONALCHILD, activity, tdid, uid, repeat, done));
-                                                dbPersonalKey.add(key);
-                                            }
-                                        }
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                        }
-                                    });
-                                    personalKey.add(dbPersonalKey);
-                                    todo_personal.add(personal_todo);
+                            } else {
+                                if (member != null) {
+                                    group_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done));
+                                    dbGroupKey.add(key);
+                                } else {
+                                    group_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done, member));
+                                    dbGroupKey.add(key);
                                 }
-
-                                for (String group_key : dbGroupKey) {
-                                    dbKey.add(group_key);
-                                }
-
-                                for (ArrayList<String> dbPersonalKey : personalKey) {
-                                    for (String personal_key : dbPersonalKey) {
-                                        dbKey.add(personal_key);
-                                    }
-                                }
-
-                                Log.d("test", dbGroupKey.toString());
-                                Log.d("test", personalKey.toString());
-
-                                data.add(group_todo);
-                                for (ExpandableListAdapter.Item personal_todo : todo_personal) {
-                                    data.add(personal_todo);
-                                }
-
-                                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                recyclerView.setAdapter(new ExpandableListAdapter(data, dbKey));
                             }
+                        }
 
+                        for (Map.Entry<String, String> entry : memberInfo.entrySet()) {
+                            ArrayList<String> dbPersonalKey = new ArrayList<>();
+                            dbPersonalKey.add(0, entry.getValue());
+                            ExpandableListAdapter.Item personal_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, entry.getValue());
+                            personal_todo.invisibleChildren = new ArrayList<>();
+                            String muid = entry.getKey();
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                            for (DataSnapshot postSnapshot : snapshot.child("Personal").child(muid).getChildren()) {
+                                String key = postSnapshot.getKey();
+                                ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
+                                String activity = todo.getActivity();
+                                boolean repeat = todo.isRepeat();
+                                String tdid = todo.getTdid();
+                                String uid = todo.getUid();
+                                boolean done = todo.isDone();
+
+                                personal_todo.invisibleChildren
+                                        .add(new ExpandableListAdapter.Item(ExpandableListAdapter.PERSONALCHILD, activity, tdid, uid, repeat, done));
+                                dbPersonalKey.add(key);
                             }
-                        });
+                            personalKey.add(dbPersonalKey);
+                            todo_personal.add(personal_todo);
+                        }
+
+                        for (String group_key : dbGroupKey) {
+                            dbKey.add(group_key);
+                        }
+                        data.add(group_todo);
+
+                        for (ArrayList<String> dbPersonalKey : personalKey) {
+                            for (String personal_key : dbPersonalKey) {
+                                dbKey.add(personal_key);
+                            }
+                        }
+                        for (ExpandableListAdapter.Item personal_todo : todo_personal) {
+                            data.add(personal_todo);
+                        }
+
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        recyclerView.setAdapter(new ExpandableListAdapter(data, dbKey));
                     }
 
                     @Override
@@ -245,7 +223,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     }
                 });
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
@@ -325,8 +302,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 startActivity(Intent.createChooser(intent, "Group Invitation"));
                 return true;
             case R.id.groupExit:
-                alert_confirm.setMessage("\'"+groupName+"\' 그룹을 탈퇴하시겠습니까?");
-                alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                alert_confirm.setMessage("\'" + groupName + "\' 그룹을 탈퇴하시겠습니까?");
+                alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         groupExit();
@@ -345,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return false;
     }
 
-    public void groupExit(){
+    public void groupExit() {
         /* user가 작성한 to_do 삭제하기 */
         //개인 투두 삭제
         mDbRef.child("gsmate").child("ToDoList").child("Personal").child(uid).setValue(null);
@@ -367,6 +344,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             mDbRef.child("gsmate").child("GroupList").child(groupCode).setValue(null);
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 

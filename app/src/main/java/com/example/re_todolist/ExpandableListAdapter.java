@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +67,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
+        uid = "user1";
+        groupCode="ABC123";
+
         final Item item = data.get(position);
         final String dbItem = dbkey.get(position);
 
@@ -79,6 +83,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 } else {
                     itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_more_black_24dp);
                 }
+
                 itemController.btn_expand_toggle.setOnClickListener(v -> {
                     if (item.invisibleChildren == null) {
                         item.invisibleChildren = new ArrayList<>();
@@ -107,25 +112,24 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 final ListHeaderViewHolder childItemController_g = (ListHeaderViewHolder) holder;
                 childItemController_g.checkBox.setText(item.activity);
 
-                if(item.repeat) childItemController_g.repeatDay.setVisibility(View.VISIBLE);
-                else    childItemController_g.repeatDay.setVisibility(View.GONE);
+                if (item.repeat) childItemController_g.repeatDay.setVisibility(View.VISIBLE);
+                else childItemController_g.repeatDay.setVisibility(View.GONE);
 
-                if(item.alarm){
+                if (item.alarm) {
                     childItemController_g.alarmIcon.setVisibility(View.VISIBLE);
                     //childItemController.alarmTime.setText(item.time);
-                }
-                else{
+                } else {
                     childItemController_g.alarmIcon.setVisibility(View.INVISIBLE);
                 }
 
-                if(item.member != null){
+                if (item.member != null) {
                     //childItemController.todoPerson.setText(인원수 카운트);
                     childItemController_g.todoPerson.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     childItemController_g.todoPerson.setVisibility(View.VISIBLE);
                 }
 
+                /*
                 childItemController_g.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
@@ -166,7 +170,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         return false;
                     }
                 });
+
+                 */
                 break;
+
             case PERSONALCHILD:
                 final ListHeaderViewHolder childItemController_p = (ListHeaderViewHolder) holder;
 
@@ -174,9 +181,28 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 childItemController_p.alarmIcon.setVisibility(View.GONE);
                 childItemController_p.alarmTime.setVisibility(View.GONE);
                 childItemController_p.todoPerson.setVisibility(View.GONE);
-                if(item.repeat) childItemController_p.repeatDay.setVisibility(View.VISIBLE);
-                else    childItemController_p.repeatDay.setVisibility(View.GONE);
+                if (item.repeat) childItemController_p.repeatDay.setVisibility(View.VISIBLE);
+                else childItemController_p.repeatDay.setVisibility(View.GONE);
 
+                childItemController_p.checkBox.setChecked(item.done);
+
+                if (uid.equals(item.uid)) {
+                    childItemController_p.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isChecked) {
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").
+                                        child(uid).child(item.tdid).child("done").setValue(true);
+                            } else {
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").
+                                        child(uid).child(item.tdid).child("done").setValue(false);
+                            }
+                        }
+                    });
+                } else {
+                    childItemController_p.checkBox.setEnabled(false);
+                }
+
+                /*
                 childItemController_p.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
@@ -218,6 +244,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         return false;
                     }
                 });
+
+                 */
                 break;
         }
     }
