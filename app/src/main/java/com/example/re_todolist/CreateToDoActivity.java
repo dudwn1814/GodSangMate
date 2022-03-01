@@ -55,7 +55,6 @@ public class CreateToDoActivity extends AppCompatActivity{
     DatabaseReference mDbRef;
     String groupCode, uid, activity, TDId;
     boolean group ,repeat, alarm;
-    Week week;
     String time;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -125,100 +124,6 @@ public class CreateToDoActivity extends AppCompatActivity{
                 }
             }
         });
-
-        //요일 설정
-        week = new Week();
-        Button sunBtn = findViewById(R.id.sunBtn);
-        Button monBtn = findViewById(R.id.monBtn);
-        Button tueBtn = findViewById(R.id.tueBtn);
-        Button wedBtn = findViewById(R.id.wedBtn);
-        Button thuBtn = findViewById(R.id.thuBtn);
-        Button friBtn = findViewById(R.id.friBtn);
-        Button satBtn = findViewById(R.id.satBtn);
-
-        sunBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sunBtn.setSelected(!sunBtn.isSelected());
-                week.setSun(sunBtn.isSelected());
-                if(sunBtn.isSelected()==true){
-                    sunBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    sunBtn.setBackgroundColor(Color.parseColor("#00000000"));
-                }
-        });
-
-        monBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                monBtn.setSelected(!monBtn.isSelected());
-                week.setMon(monBtn.isSelected());
-                if(monBtn.isSelected()==true){
-                    monBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    monBtn.setBackgroundColor(Color.parseColor("#00000000"));
-            }
-        });
-
-        tueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tueBtn.setSelected(!tueBtn.isSelected());
-                week.setTue(tueBtn.isSelected());
-                if(tueBtn.isSelected()==true){
-                    tueBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    tueBtn.setBackgroundColor(Color.parseColor("#00000000"));
-            }
-        });
-
-        wedBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wedBtn.setSelected(!wedBtn.isSelected());
-                week.setWed(wedBtn.isSelected());
-                if(wedBtn.isSelected()==true){
-                    wedBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    wedBtn.setBackgroundColor(Color.parseColor("#00000000"));
-            }
-        });
-        thuBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                thuBtn.setSelected(!thuBtn.isSelected());
-                week.setThu(thuBtn.isSelected());
-                if(thuBtn.isSelected()==true){
-                    thuBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    thuBtn.setBackgroundColor(Color.parseColor("#00000000"));
-            }
-        });
-
-        friBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                friBtn.setSelected(!friBtn.isSelected());
-                week.setFri(friBtn.isSelected());
-                if(friBtn.isSelected()==true){
-                    friBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    friBtn.setBackgroundColor(Color.parseColor("#00000000"));
-            }
-        });
-
-        satBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                satBtn.setSelected(!satBtn.isSelected());
-                week.setSat(satBtn.isSelected());
-                if(satBtn.isSelected()==true){
-                    satBtn.setBackgroundColor(Color.parseColor("#50bcdf"));
-                }
-                else    satBtn.setBackgroundColor(Color.parseColor("#00000000"));
-            }
-        });
-
 
 
         //알람 체크
@@ -325,7 +230,6 @@ public class CreateToDoActivity extends AppCompatActivity{
             ToDoPrac todoObj = new ToDoPrac();
             todoObj.setActivity(activity);
             todoObj.setRepeat(repeat);
-            if(repeat)  todoObj.setWeek(week);
             todoObj.setUid(uid);
 
 
@@ -333,12 +237,12 @@ public class CreateToDoActivity extends AppCompatActivity{
                 todoObj.setAlarm(alarm);
                 if(alarm)   todoObj.setTime(time + am_pm.toUpperCase());
                 TDId=mDbRef.child("ToDoList").child(groupCode).child("Group").push().getKey();
-                todoObj.setTDId(TDId);
+                todoObj.setTdid(TDId);
                 mDbRef.child("ToDoList").child(groupCode).child("Group").child(TDId).setValue(todoObj);
             }
             else{
                 TDId=mDbRef.child("ToDoList").child(groupCode).child("Personal").child(uid).push().getKey();
-                todoObj.setTDId(TDId);
+                todoObj.setTdid(TDId);
                 mDbRef.child("ToDoList").child(groupCode).child("Personal").child(uid).child(TDId).setValue(todoObj);
             }
 

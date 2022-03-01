@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="ToDoActivity"
+            android:textSize="20dp"/>
+
+        <ImageView
+            android:id="@+id/alarmIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/alarmIcon"
+            android:src="@drawable/ic_alarm_black_24dp" />
+
+        <TextView
+            android:id="@+id/todoPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="1dp"
+            android:layout_marginStart="20dp"
+            android:padding="3dp"
+            android:text="@string/todoPerson"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:textColor="#ff5252" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="40dp">
+        <TextView
+            android:id="@+id/repeatDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="매일"
+            android:textColor="#757575"
+            android:textSize="15dp" />
+        <TextView
+            android:id="@+id/alarmTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오전 7:00"
+            android:textColor="#757575"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+</LinearLayout>

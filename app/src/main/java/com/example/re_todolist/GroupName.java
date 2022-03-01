@@ -76,7 +76,8 @@ public class GroupName extends AppCompatActivity {
     }
 
     public void validation() {
-        mDbRef.child("GroupList").orderByChild("g_code").equalTo(groupcode).addListenerForSingleValueEvent(new ValueEventListener() {
+        //mDbRef.child("GroupList").orderByChild("g_code").equalTo(groupcode).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDbRef.child("GroupMember").orderByChild("g_code").equalTo(groupcode).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GroupInfo value = snapshot.getValue(GroupInfo.class);
