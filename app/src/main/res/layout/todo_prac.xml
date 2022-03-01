@@ -23,7 +23,7 @@
             android:id="@+id/alarmIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="13dp"
             android:layout_marginStart="8dp"
             android:scaleType="fitXY"
             android:contentDescription="@string/alarmIcon"
