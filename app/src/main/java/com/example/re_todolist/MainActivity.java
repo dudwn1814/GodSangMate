@@ -204,6 +204,10 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         }
                         data.add(group_todo);
 
+                        for(ExpandableListAdapter.Item i : group_todo.invisibleChildren){
+                            data.add(i);
+                        }
+
                         for (ArrayList<String> dbPersonalKey : personalKey) {
                             for (String personal_key : dbPersonalKey) {
                                 dbKey.add(personal_key);
@@ -211,10 +215,14 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         }
                         for (ExpandableListAdapter.Item personal_todo : todo_personal) {
                             data.add(personal_todo);
+                            for(ExpandableListAdapter.Item i : personal_todo.invisibleChildren){
+                                data.add(i);
+                            }
                         }
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         recyclerView.setAdapter(new ExpandableListAdapter(data, dbKey));
+                        //recyclerView.setAdapter(new ExpandableListAdapter(data));
                     }
 
                     @Override

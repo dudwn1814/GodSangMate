@@ -44,6 +44,11 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.dbkey = dbkey;
     }
 
+    public ExpandableListAdapter(List<Item> data) {
+        this.data = data;
+        this.dbkey = new ArrayList<String>();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
@@ -71,17 +76,29 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         groupCode="ABC123";
 
         final Item item = data.get(position);
-        final String dbItem = dbkey.get(position);
+        //final String dbItem = dbkey.get(position);
 
         switch (item.type) {
             case HEADER:
                 final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
                 itemController.refferalItem = item;
                 itemController.header_title.setText(item.title);
-                if (item.invisibleChildren == null) {
-                    itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_less_black_24dp);
-                } else {
+                //if (item.invisibleChildren == null) {
+                if (item.invisibleChildren.size() == 0) {
+                    //itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_less_black_24dp);
                     itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                } else {
+                    //itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                    itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                    /*
+                    int pos = data.indexOf(itemController.refferalItem);
+                    int index = pos + 1;
+                    for (Item i : item.invisibleChildren) {
+                        data.add(index, i);
+                        index++;
+                    }
+                     */
+                    item.invisibleChildren = null;
                 }
 
                 itemController.btn_expand_toggle.setOnClickListener(v -> {
