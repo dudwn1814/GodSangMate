@@ -25,10 +25,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.security.acl.Group;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
@@ -244,14 +248,18 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.checkBox.setChecked(item.done);
 
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                String writeDate = format.format(currentTime);
+
                 if (uid.equals(item.uid)) {
                     childItemController_p.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if (isChecked) {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
                                         child(uid).child(item.tdid).child("done").setValue(true);
                             } else {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
                                         child(uid).child(item.tdid).child("done").setValue(false);
                             }
                         }

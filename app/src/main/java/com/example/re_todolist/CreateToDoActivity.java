@@ -49,12 +49,12 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
-public class CreateToDoActivity extends AppCompatActivity{
+public class CreateToDoActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     DatabaseReference mDbRef;
     String groupCode, uid, activity, TDId;
-    boolean group ,repeat, alarm;
+    boolean group, repeat, alarm;
     String time;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -92,12 +92,11 @@ public class CreateToDoActivity extends AppCompatActivity{
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==1){
-                    group=true;
+                if (i == 1) {
+                    group = true;
                     timeLayout.setVisibility(View.VISIBLE);
-                }
-                else{
-                    group=false;
+                } else {
+                    group = false;
                     timeLayout.setVisibility(View.GONE);
                 }
             }
@@ -114,11 +113,10 @@ public class CreateToDoActivity extends AppCompatActivity{
         LinearLayout repeatLayer = findViewById(R.id.linearLayout);
         repeatChk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if ( isChecked ) {
+                if (isChecked) {
                     repeat = true;
                     repeatLayer.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     repeat = false;
                     repeatLayer.setVisibility(View.GONE);
                 }
@@ -132,11 +130,10 @@ public class CreateToDoActivity extends AppCompatActivity{
         TimePicker timePicker = findViewById(R.id.timePicker);
         alarmChk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if ( isChecked ) {
+                if (isChecked) {
                     alarm = true;
                     timePicker.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     alarm = false;
                     timePicker.setVisibility(View.GONE);
                 }
@@ -232,55 +229,20 @@ public class CreateToDoActivity extends AppCompatActivity{
             todoObj.setRepeat(repeat);
             todoObj.setUid(uid);
 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String writeDate = format.format(currentTime);
 
-            if(group){
+            if (group) {
                 todoObj.setAlarm(alarm);
-                if(alarm)   todoObj.setTime(time + am_pm.toUpperCase());
-                TDId=mDbRef.child("ToDoList").child(groupCode).child("Group").push().getKey();
+                if (alarm) todoObj.setTime(time + am_pm.toUpperCase());
+                TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").push().getKey();
                 todoObj.setTdid(TDId);
-                mDbRef.child("ToDoList").child(groupCode).child("Group").child(TDId).setValue(todoObj);
-            }
-            else{
-                TDId=mDbRef.child("ToDoList").child(groupCode).child("Personal").child(uid).push().getKey();
+                mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").child(TDId).setValue(todoObj);
+            } else {
+                TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).push().getKey();
                 todoObj.setTdid(TDId);
-                mDbRef.child("ToDoList").child(groupCode).child("Personal").child(uid).child(TDId).setValue(todoObj);
+                mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(TDId).setValue(todoObj);
             }
-
-            /*
-            mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                    groupCode = user.getG_code();
-
-                    mDbRef.child("ToDoList").child(uid).child(groupCode).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                String key = postSnapshot.getKey();
-                                String todoString = postSnapshot.child("TDId").getValue().toString();
-
-                                if (todoString != null && todoString.equals("tmp")) {
-                                    mDbRef.child("TodoList").child(uid).child(groupCode).child(key).child("TDId").setValue(key);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Log.v("TAG", "loadPost:onCancelled", error.toException());
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
-                            Toast.LENGTH_LONG).show();
-                }
-            });
-            */
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();
