@@ -30,9 +30,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             }
         });
 
+
         //RecyclerView
         List<ExpandableListAdapter.Item> data = new ArrayList<>();
         List<ExpandableListAdapter.Item> todo_personal = new ArrayList<>();
@@ -127,8 +132,12 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     }
                 });
 
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                String writeDate = format.format(currentTime);
+
                 // mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(날짜).addValueEventListener(new ValueEventListener() {
-                mDbRef.child("gsmate").child("ToDoList").child(groupCode).addValueEventListener(new ValueEventListener() {
+                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         dbKey.clear();
@@ -331,9 +340,13 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
     public void groupExit() {
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String writeDate = format.format(currentTime);
+
         /* user가 작성한 to_do 삭제하기 */
         //개인 투두 삭제
-        mDbRef.child("gsmate").child("ToDoList").child("Personal").child(uid).setValue(null);
+        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).setValue(null);
         //그룹 투두 삭제
 
         /*user의 그룹정보, 그룹 내 user 정보 제거*/

@@ -24,8 +24,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
@@ -73,7 +77,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
         uid = "user1";
-        groupCode="ABC123";
+        groupCode = "ABC123";
 
         final Item item = data.get(position);
         //final String dbItem = dbkey.get(position);
@@ -203,14 +207,18 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.checkBox.setChecked(item.done);
 
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                String writeDate = format.format(currentTime);
+
                 if (uid.equals(item.uid)) {
                     childItemController_p.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if (isChecked) {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
                                         child(uid).child(item.tdid).child("done").setValue(true);
                             } else {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
                                         child(uid).child(item.tdid).child("done").setValue(false);
                             }
                         }
@@ -309,7 +317,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //그룹 투두 받아올 때(no alarm, 누구도 수행 X)
-        public Item (int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done){
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done) {
             this.type = type;
             this.type = type;
             this.activity = activity;
@@ -321,7 +329,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //그룹 투두 받아올 때(no alarm, 누군가 투두 수행)
-        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member){
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member) {
             this.type = type;
             this.activity = activity;
             this.tdid = tdid;
@@ -333,7 +341,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //그룹 투두 받아올 때(alarm, 누구도 수행 X)
-        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done){
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done) {
             this.type = type;
             this.activity = activity;
             this.tdid = tdid;
@@ -345,7 +353,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //그룹 투두 받아올 때(alarm, 누군가 투두 수행)
-        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Object member){
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Object member) {
             this.type = type;
             this.activity = activity;
             this.tdid = tdid;
@@ -358,7 +366,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //개인 투두 받아올때
-        public Item (int type, String activity, String tdid, String uid, boolean repeat, boolean done){
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean done) {
             this.type = type;
             this.type = type;
             this.activity = activity;
