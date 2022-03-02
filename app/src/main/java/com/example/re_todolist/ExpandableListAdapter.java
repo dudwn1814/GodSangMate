@@ -1,13 +1,10 @@
 package com.example.re_todolist;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,24 +12,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.acl.Group;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Locale;
 
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
@@ -53,7 +44,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public ExpandableListAdapter(List<Item> data) {
         this.data = data;
-        this.dbkey = new ArrayList<String>();
+        this.dbkey = new ArrayList<>();
     }
 
     @NonNull
@@ -81,6 +72,11 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         uid = "user1";
         groupCode = "ABC123";
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String writeDate = format.format(date);
 
         final Item item = data.get(position);
         //final String dbItem = dbkey.get(position);
@@ -146,10 +142,11 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     childItemController_g.alarmIcon.setVisibility(View.INVISIBLE);
                 }
 
-                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").child(item.tdid).child("Member").addValueEventListener(new ValueEventListener() {
+                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(item.tdid).child("Member").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(!snapshot.exists()) childItemController_g.todoPerson.setVisibility(View.INVISIBLE);
+                        if (!snapshot.exists())
+                            childItemController_g.todoPerson.setVisibility(View.INVISIBLE);
                         else {
                             childItemController_g.checkBox.setChecked(snapshot.child(uid).exists());
                             long person = snapshot.getChildrenCount();
@@ -165,75 +162,54 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 });
 
                 /* 투두 체크시 member에 uid-nickname 추가*/
-                childItemController_g.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid)
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            GroupMember member = snapshot.getValue(GroupMember.class);
-                                            if (snapshot != null) {
-                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").
-                                                        child(item.tdid).child("Member").child(uid).setValue(member);
-                                            }
-                                        }
+                childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        GroupMember member = snapshot.getValue(GroupMember.class);
+                                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                                child(item.tdid).child("Member").child(uid).setValue(member);
+                                    }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                        }
-                                    });
-                        } else {
-                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").
-                                    child(item.tdid).child("Member").child(uid).setValue(null);
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    }
+                                });
+                    } else {
+                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                child(item.tdid).child("Member").child(uid).setValue(null);
+                    }
+                });
+
+                childItemController_g.deleteIcon.setOnClickListener(view -> {
+                    Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
+
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            ToDoPrac todo = snapshot.child("Group").child(item.tdid).getValue(ToDoPrac.class);
+
+                            if (todo != null) {
+                                String todoUid = todo.getUid();
+                                Toast.makeText(view.getContext(), todoUid, Toast.LENGTH_SHORT).show();
+
+                                if (todoUid.equals(uid)) {
+                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                            child(item.tdid).removeValue();
+                                }
+                                Toast.makeText(view.getContext(), "자신이 등록한 ToDo만 삭제 가능", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(view.getContext(), "삭제 오류",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 });
-
-
-                    /*
-                childItemController_g.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        new MaterialAlertDialogBuilder(view.getContext())
-                                .setTitle(item.activity)
-                                .setMessage(dbItem)
-                                .setNeutralButton("취소", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(view.getContext(), "취소",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(view.getContext(), "삭제",
-                                                Toast.LENGTH_SHORT).show();
-
-                                        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                                                groupCode = user.getG_code();
-
-                                                mDbRef.child("TodoList").child(uid).child(groupCode).child(dbItem).removeValue();
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Toast.makeText(view.getContext(), "그룹코드 가져오기 오류",
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-                                })
-                                .show();
-                        return false;
-                    }
-                });
-
-                 */
                 break;
 
             case PERSONALCHILD:
@@ -248,70 +224,38 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.checkBox.setChecked(item.done);
 
-                Date currentTime = Calendar.getInstance().getTime();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String writeDate = format.format(currentTime);
 
                 if (uid.equals(item.uid)) {
-                    childItemController_p.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (isChecked) {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
-                                        child(uid).child(item.tdid).child("done").setValue(true);
-                            } else {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
-                                        child(uid).child(item.tdid).child("done").setValue(false);
-                            }
+                    childItemController_p.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        if (isChecked) {
+                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
+                                    child(uid).child(item.tdid).child("done").setValue(true);
+                        } else {
+                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
+                                    child(uid).child(item.tdid).child("done").setValue(false);
                         }
                     });
                 } else {
                     childItemController_p.checkBox.setEnabled(false);
                 }
 
-                /*
-                childItemController_p.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        new MaterialAlertDialogBuilder(view.getContext())
-                                .setTitle(item.activity)
-                                .setMessage(dbItem)
-                                .setNeutralButton("취소", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(view.getContext(), "취소",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(view.getContext(), "삭제",
-                                                Toast.LENGTH_SHORT).show();
+                childItemController_p.deleteIcon.setOnClickListener(view -> {
+                    Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
 
-                                        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                                                groupCode = user.getG_code();
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
+                                    .child(item.tdid).removeValue();
+                        }
 
-                                                mDbRef.child("TodoList").child(uid).child(groupCode).child(dbItem).removeValue();
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Toast.makeText(view.getContext(), "그룹코드 가져오기 오류",
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-                                })
-                                .show();
-
-                        return false;
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(view.getContext(), "삭제 오류",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 });
-
-                 */
                 break;
         }
     }
@@ -328,7 +272,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private static class ListHeaderViewHolder extends RecyclerView.ViewHolder {
         public TextView header_title, todoPerson, repeatDay, alarmTime;
-        public ImageView btn_expand_toggle, alarmIcon;
+        public ImageView btn_expand_toggle, alarmIcon, deleteIcon;
         public Item refferalItem;
         public CheckBox checkBox;
 
@@ -341,6 +285,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             todoPerson = (TextView) itemView.findViewById(R.id.todoPerson);
             repeatDay = (TextView) itemView.findViewById(R.id.repeatDay);
             alarmTime = (TextView) itemView.findViewById(R.id.alarmTime);
+            deleteIcon = (ImageView) itemView.findViewById(R.id.deleteIcon);
         }
     }
 
@@ -349,7 +294,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public String title, activity, tdid, uid, time;
         public boolean repeat, alarm, done;
         public List<Item> invisibleChildren;
-       //Object member;
+        //Object member;
         Map<String, Map<String, String>> member;
 
         //header 생성

@@ -147,8 +147,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/repeatLayout"
         android:layout_marginStart="20dp"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <CheckBox
             android:id="@+id/alarmChk"

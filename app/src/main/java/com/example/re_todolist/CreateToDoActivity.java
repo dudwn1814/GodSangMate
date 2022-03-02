@@ -1,7 +1,5 @@
 package com.example.re_todolist;
 
-import static com.example.re_todolist.GroupName.groupcode;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,38 +8,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -111,15 +97,13 @@ public class CreateToDoActivity extends AppCompatActivity {
         repeat = false;
         CheckBox repeatChk = findViewById(R.id.repeatChk);
         LinearLayout repeatLayer = findViewById(R.id.linearLayout);
-        repeatChk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    repeat = true;
-                    repeatLayer.setVisibility(View.VISIBLE);
-                } else {
-                    repeat = false;
-                    repeatLayer.setVisibility(View.GONE);
-                }
+        repeatChk.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                repeat = true;
+                repeatLayer.setVisibility(View.VISIBLE);
+            } else {
+                repeat = false;
+                repeatLayer.setVisibility(View.GONE);
             }
         });
 
@@ -128,15 +112,13 @@ public class CreateToDoActivity extends AppCompatActivity {
         //alarm = Boolean.FALSE;
         CheckBox alarmChk = findViewById(R.id.alarmChk);
         TimePicker timePicker = findViewById(R.id.timePicker);
-        alarmChk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    alarm = true;
-                    timePicker.setVisibility(View.VISIBLE);
-                } else {
-                    alarm = false;
-                    timePicker.setVisibility(View.GONE);
-                }
+        alarmChk.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                alarm = true;
+                timePicker.setVisibility(View.VISIBLE);
+            } else {
+                alarm = false;
+                timePicker.setVisibility(View.GONE);
             }
         });
 
@@ -229,8 +211,11 @@ public class CreateToDoActivity extends AppCompatActivity {
             todoObj.setRepeat(repeat);
             todoObj.setUid(uid);
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            String writeDate = format.format(currentTime);
+            //DB에 입력한 날짜 저장
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String writeDate = format.format(date);
 
             if (group) {
                 todoObj.setAlarm(alarm);
@@ -254,7 +239,7 @@ public class CreateToDoActivity extends AppCompatActivity {
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 //        Boolean dailyNotify = sharedPref.getBoolean(SettingsActivity.KEY_PREF_DAILY_NOTIFICATION, true);
-        Boolean dailyNotify = true; // 무조건 알람을 사용
+        boolean dailyNotify = true; // 무조건 알람을 사용
 
         PackageManager pm = this.getPackageManager();
         ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);

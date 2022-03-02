@@ -14,12 +14,13 @@ public class ToDoPrac {
     //Object member;
     Map<String, Map<String, String>> member;
 
-    public ToDoPrac(){
+    public ToDoPrac() {
         this.done = false;
-    };
+    }
+
 
     //그룹 투두 data 받아올 때(no alarm, 누구도 수행 X), 개인 투두 받아올때
-    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done){
+    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done) {
         this.activity = activity;
         this.tdid = tdid;
         this.uid = uid;
@@ -29,8 +30,7 @@ public class ToDoPrac {
     }
 
     //그룹 투두 data 받아올 때(no alarm, 누군가 투두 수행)
-    //public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member){
-    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Map<String, Map<String, String>> member){
+    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Map<String, Map<String, String>> member) {
         this.activity = activity;
         this.tdid = tdid;
         this.uid = uid;
@@ -41,7 +41,7 @@ public class ToDoPrac {
     }
 
     //그룹 투두 data 받아올 때(alarm, 누구도 수행 X)
-    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done){
+    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done) {
         this.activity = activity;
         this.tdid = tdid;
         this.uid = uid;
@@ -52,8 +52,7 @@ public class ToDoPrac {
     }
 
     //그룹 투두 data 받아올 때(alarm, 누군가 투두 수행)
-    //public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Object member){
-    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member){
+    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member) {
         this.activity = activity;
         this.tdid = tdid;
         this.uid = uid;

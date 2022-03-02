@@ -1,13 +1,11 @@
 package com.example.re_todolist;
 
 import android.app.ActivityOptions;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,24 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
@@ -84,14 +76,11 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         //달성률 공유하기
         ImageButton b_share = findViewById(R.id.imageButton);
 
-        b_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ShareActivity.class);
-                intent.putExtra("achieve", achieve_p);
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, circleProgressBar_personal, "transition");
-                startActivity(intent, options.toBundle());
-            }
+        b_share.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+            intent.putExtra("achieve", achieve_p);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, circleProgressBar_personal, "transition");
+            startActivity(intent, options.toBundle());
         });
 
 
@@ -115,15 +104,16 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 //groupCode = user.getG_code();
 
                 LinkedHashMap<String, String> memberInfo = new LinkedHashMap<>();
-                //mDbRef.child("gsmate").child("GroupMember").child(groupCode).orderByChild("nickname").addValueEventListener(new ValueEventListener() {
                 mDbRef.child("gsmate").child("GroupMember").child(groupCode).orderByChild("nickname").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot d_snapshot : snapshot.getChildren()) {
                             GroupMember member = d_snapshot.getValue(GroupMember.class);
-                            String m_Uid = member.getUid();
-                            String m_nickname = member.getNickname();
-                            memberInfo.put(m_Uid, m_nickname);
+                            if (member != null) {
+                                String m_Uid = member.getUid();
+                                String m_nickname = member.getNickname();
+                                memberInfo.put(m_Uid, m_nickname);
+                            }
                         }
                     }
 
@@ -132,11 +122,11 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     }
                 });
 
-                Date currentTime = Calendar.getInstance().getTime();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String writeDate = format.format(currentTime);
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String writeDate = format.format(date);
 
-                // mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(날짜).addValueEventListener(new ValueEventListener() {
                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -152,33 +142,34 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         for (DataSnapshot postSnapshot : snapshot.child("Group").getChildren()) {
                             String key = postSnapshot.getKey();
                             ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
-                            String activity = todo.getActivity();
-                            boolean repeat = todo.isRepeat();
-                            boolean alarm = todo.isAlarm();
-                            String tdid = todo.getTdid();
-                            String uid = todo.getUid();
-                            boolean done = todo.isDone();
-                            Map<String, Map<String, String>> member = todo.getMember();
 
-                            if (alarm) {
-                                String time = todo.getTime();
-                                if (member != null) {
-                                    group_todo.invisibleChildren
-                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done));
+                            if (todo != null) {
+                                String activity = todo.getActivity();
+                                boolean repeat = todo.isRepeat();
+                                boolean alarm = todo.isAlarm();
+                                String tdid = todo.getTdid();
+                                String uid = todo.getUid();
+                                boolean done = todo.isDone();
+                                Map<String, Map<String, String>> member = todo.getMember();
+
+                                if (alarm) {
+                                    String time = todo.getTime();
+                                    if (member != null) {
+                                        group_todo.invisibleChildren
+                                                .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done));
+                                    } else {
+                                        group_todo.invisibleChildren
+                                                .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done, member));
+                                    }
                                     dbGroupKey.add(key);
                                 } else {
-                                    group_todo.invisibleChildren
-                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done, member));
-                                    dbGroupKey.add(key);
-                                }
-                            } else {
-                                if (member != null) {
-                                    group_todo.invisibleChildren
-                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done));
-                                    dbGroupKey.add(key);
-                                } else {
-                                    group_todo.invisibleChildren
-                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done, member));
+                                    if (member != null) {
+                                        group_todo.invisibleChildren
+                                                .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done));
+                                    } else {
+                                        group_todo.invisibleChildren
+                                                .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done, member));
+                                    }
                                     dbGroupKey.add(key);
                                 }
                             }
@@ -194,39 +185,34 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             for (DataSnapshot postSnapshot : snapshot.child("Personal").child(muid).getChildren()) {
                                 String key = postSnapshot.getKey();
                                 ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
-                                String activity = todo.getActivity();
-                                boolean repeat = todo.isRepeat();
-                                String tdid = todo.getTdid();
-                                String uid = todo.getUid();
-                                boolean done = todo.isDone();
 
-                                personal_todo.invisibleChildren
-                                        .add(new ExpandableListAdapter.Item(ExpandableListAdapter.PERSONALCHILD, activity, tdid, uid, repeat, done));
-                                dbPersonalKey.add(key);
+                                if (todo != null) {
+                                    String activity = todo.getActivity();
+                                    boolean repeat = todo.isRepeat();
+                                    String tdid = todo.getTdid();
+                                    String uid = todo.getUid();
+                                    boolean done = todo.isDone();
+
+                                    personal_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.PERSONALCHILD, activity, tdid, uid, repeat, done));
+                                    dbPersonalKey.add(key);
+                                }
                             }
                             personalKey.add(dbPersonalKey);
                             todo_personal.add(personal_todo);
                         }
 
-                        for (String group_key : dbGroupKey) {
-                            dbKey.add(group_key);
-                        }
+                        dbKey.addAll(dbGroupKey);
                         data.add(group_todo);
 
-                        for(ExpandableListAdapter.Item i : group_todo.invisibleChildren){
-                            data.add(i);
-                        }
+                        data.addAll(group_todo.invisibleChildren);
 
                         for (ArrayList<String> dbPersonalKey : personalKey) {
-                            for (String personal_key : dbPersonalKey) {
-                                dbKey.add(personal_key);
-                            }
+                            dbKey.addAll(dbPersonalKey);
                         }
                         for (ExpandableListAdapter.Item personal_todo : todo_personal) {
                             data.add(personal_todo);
-                            for(ExpandableListAdapter.Item i : personal_todo.invisibleChildren){
-                                data.add(i);
-                            }
+                            data.addAll(personal_todo.invisibleChildren);
                         }
 
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -240,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     }
                 });
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
@@ -269,8 +256,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 mDbRef.child("gsmate").child("GroupList").child(groupCode).child("name").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String value = dataSnapshot.getValue(String.class);
-                        groupName = value;
+                        groupName = dataSnapshot.getValue(String.class);
                         TextView title = findViewById(R.id.ToDoTitle);
                         title.setText(groupName);
                     }
@@ -319,18 +305,10 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 startActivity(Intent.createChooser(intent, "Group Invitation"));
                 return true;
             case R.id.groupExit:
-                alert_confirm.setMessage("\'" + groupName + "\' 그룹을 탈퇴하시겠습니까?");
-                alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        groupExit();
-                    }
-                });
+                alert_confirm.setMessage("'" + groupName + "' 그룹을 탈퇴하시겠습니까?");
+                alert_confirm.setPositiveButton("확인", (dialog, which) -> groupExit());
 
-                alert_confirm.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                alert_confirm.setNegativeButton("취소", (dialog, which) -> {
                 });
                 AlertDialog alert = alert_confirm.create();
                 alert.show();
@@ -340,9 +318,10 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
     public void groupExit() {
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String writeDate = format.format(currentTime);
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String writeDate = format.format(date);
 
         /* user가 작성한 to_do 삭제하기 */
         //개인 투두 삭제
