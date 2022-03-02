@@ -6,6 +6,11 @@ public class GroupMember {
 
     public GroupMember() { }
 
+    public GroupMember(String uid, String nickname) {
+        this.uid = uid;
+        this.nickname = nickname;
+    }
+
     public String getUid() { return uid; }
 
     public void setUid(String uid) { this.uid = uid; }

@@ -37,7 +37,7 @@
             android:layout_marginTop="1dp"
             android:layout_marginStart="20dp"
             android:padding="3dp"
-            android:text="@string/todoPerson"
+            android:text=""
             android:textSize="17dp"
             android:textStyle="bold"
             android:textColor="#ff5252" />

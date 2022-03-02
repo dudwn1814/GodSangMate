@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             String tdid = todo.getTdid();
                             String uid = todo.getUid();
                             boolean done = todo.isDone();
-                            Object member = todo.getMember();
+                            Map<String, Map<String, String>> member = todo.getMember();
 
                             if (alarm) {
                                 String time = todo.getTime();
@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     public void groupExit() {
         /* user가 작성한 to_do 삭제하기 */
         //개인 투두 삭제
-        mDbRef.child("gsmate").child("ToDoList").child("Personal").child(uid).setValue(null);
+        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Personal").child(uid).setValue(null);
         //그룹 투두 삭제
 
         /*user의 그룹정보, 그룹 내 user 정보 제거*/

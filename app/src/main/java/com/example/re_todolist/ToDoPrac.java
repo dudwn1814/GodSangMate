@@ -1,5 +1,7 @@
 package com.example.re_todolist;
 
+import java.util.Map;
+
 public class ToDoPrac {
     //투두, 반복-요일, 알람-시간, TodoID, uid, 완료여부
     String activity;
@@ -9,7 +11,8 @@ public class ToDoPrac {
     String tdid;
     String uid;
     boolean done;
-    Object member;
+    //Object member;
+    Map<String, Map<String, String>> member;
 
     public ToDoPrac(){
         this.done = false;
@@ -26,7 +29,8 @@ public class ToDoPrac {
     }
 
     //그룹 투두 data 받아올 때(no alarm, 누군가 투두 수행)
-    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member){
+    //public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member){
+    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Map<String, Map<String, String>> member){
         this.activity = activity;
         this.tdid = tdid;
         this.uid = uid;
@@ -48,7 +52,8 @@ public class ToDoPrac {
     }
 
     //그룹 투두 data 받아올 때(alarm, 누군가 투두 수행)
-    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Object member){
+    //public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Object member){
+    public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member){
         this.activity = activity;
         this.tdid = tdid;
         this.uid = uid;
@@ -83,11 +88,11 @@ public class ToDoPrac {
         this.alarm = alarm;
     }
 
-    public Object getMember() {
+    public Map<String, Map<String, String>> getMember() {
         return member;
     }
 
-    public void setMember(Object member) {
+    public void setMember(Map<String, Map<String, String>> member) {
         this.member = member;
     }
 
