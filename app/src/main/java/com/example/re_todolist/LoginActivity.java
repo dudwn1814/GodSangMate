@@ -65,15 +65,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    //로그인
+                if( user!= null){
+                    //그룹 없으면 그룹선택
                     Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
                     startActivity(intent);
                     finish();
-                } else {
+                }
+                else {
                     //로그아웃
                 }
-            }
+            };
         };
     }
 
@@ -104,5 +105,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    private void moveNextPage(FirebaseUser user){
+        if( user!= null){
+        //그룹 없으면 그룹선택
+            Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
+            startActivity(intent);
+            finish();
+        //닉네임 없으면 닉네임 입력
+        //메인으로 이동
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
+        else {
+            //로그아웃
+        }
     }
 }

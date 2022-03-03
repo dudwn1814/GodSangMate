@@ -340,6 +340,23 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         //개인 투두 삭제
         mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).setValue(null);
         //그룹 투두 삭제
+        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").orderByChild("uid").equalTo(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                           ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
+                            if (todo != null) {
+                                String tdid = todo.getTdid();
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
 
         /*user의 그룹정보, 그룹 내 user 정보 제거*/
         mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").setValue(null);
@@ -349,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         /* groupMember 삭제되면 groupList에서도 삭제하기
            =>그룹 멤버 0명일 때, 그룹 정보는 유지하다가 이후 같은 코드를 갖는 새 그룹이 생긴다면 덮어쓰기 */
+        /*
         mDbRef.child("gsmate").child("GroupMember").orderByValue().equalTo(groupCode)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -361,9 +379,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
+         */
 
 
         Intent intent = new Intent(getApplicationContext(), Groupmenu.class);
