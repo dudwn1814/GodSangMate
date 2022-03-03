@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         ArrayList<String> dbGroupKey = new ArrayList<>();
         List<ArrayList> personalKey = new ArrayList<>();
 
+
         ExpandableListAdapter.Item group_todo = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "그룹");
 
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
@@ -123,14 +124,11 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
-/*
+
                 long now = System.currentTimeMillis();
                 Date date = new Date(now);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 String writeDate = format.format(date);
- */
-                Date now = new Date();
-                String writeDate = now.toString();
 
                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
                     @Override

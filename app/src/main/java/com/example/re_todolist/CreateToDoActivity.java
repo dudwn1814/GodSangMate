@@ -99,6 +99,8 @@ public class CreateToDoActivity extends AppCompatActivity {
         repeat = false;
         CheckBox repeatChk = findViewById(R.id.repeatChk);
         LinearLayout repeatLayer = findViewById(R.id.linearLayout);
+        repeat=repeatChk.isChecked();
+        /*
         repeatChk.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 repeat = true;
@@ -108,6 +110,8 @@ public class CreateToDoActivity extends AppCompatActivity {
                 repeatLayer.setVisibility(View.GONE);
             }
         });
+
+         */
 
 
         //알람 체크
@@ -138,7 +142,7 @@ public class CreateToDoActivity extends AppCompatActivity {
             activity = (todoText.getText().toString().isEmpty() ? "" : todoText.getText().toString());
             int hour, hour_24, minute;
             String am_pm;
-            String minute_s;
+            String hour_s, minute_s;
             if (Build.VERSION.SDK_INT >= 23) {
                 hour_24 = picker.getHour();
                 minute = picker.getMinute();
@@ -150,16 +154,22 @@ public class CreateToDoActivity extends AppCompatActivity {
             if (hour_24 > 12) {
                 am_pm = "오후";
                 hour = hour_24 - 12;
-            } else {
+            }
+            else if(hour_24 == 12){
+                am_pm="오후";
+                hour = hour_24;
+            }
+            else {
                 hour = hour_24;
                 am_pm = "오전";
             }
 
+            if(hour < 10) hour_s = "0" + hour;
+            else hour_s=hour+"";
             if(minute < 10) minute_s = "0" + minute;
             else minute_s = minute+"";
 
-            String time_prac = am_pm+" "+hour+":"+minute_s;
-            Log.e("test", time_prac);
+            String time_prac = am_pm+" "+hour_s+":"+minute_s;
 
 
             // 현재 지정된 시간으로 알람 시간 설정
@@ -190,19 +200,21 @@ public class CreateToDoActivity extends AppCompatActivity {
             editor.putLong("알림 시간", (long) calendar.getTimeInMillis());
             editor.apply();
 
+
             long now = System.currentTimeMillis();
-            long alarm_time = calendar.getTimeInMillis();
             Date date = new Date(now);
-            Date alarms = new Date(alarm_time);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String writeDate = format.format(date);
-            //String writeDate2 = date.toString();
-            //SimpleDateFormat times = new SimpleDateFormat("hh:mm");
-            //String time = times.format(alarms);
 
-            Log.e("test", writeDate+" "+format.format(date));
+/*
+            long alarm_time = calendar.getTimeInMillis();
+            Date alarms = new Date(alarm_time);
+            SimpleDateFormat times = new SimpleDateFormat("hh:mm");
+            String time = times.format(alarms);
+ */
 
-            /*
+
+
             if (group) {
                 todoObj.setAlarm(alarm);
                 if (alarm) todoObj.setTime(time_prac);
@@ -216,7 +228,6 @@ public class CreateToDoActivity extends AppCompatActivity {
                 mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(TDId).setValue(todoObj);
             }
 
-             */
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();

@@ -76,8 +76,7 @@
             android:id="@+id/alarmTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오전 7:00"
-            android:visibility="gone"
+            android:text="@string/defaultTime"
             android:textColor="#757575"
             android:textSize="15sp" />
     </LinearLayout>
