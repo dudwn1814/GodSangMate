@@ -2,6 +2,7 @@ package com.example.re_todolist;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -23,16 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+//import com.tooltip.Tooltip;
 
-import java.security.acl.Group;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Locale;
 
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
@@ -81,6 +79,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         uid = "user1";
         groupCode = "ABC123";
+
+        Date now = new Date();
+        //String writeDate = now.toString();
+        String writeDate = "2022-03-02";
 
         final Item item = data.get(position);
         //final String dbItem = dbkey.get(position);
@@ -141,28 +143,54 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 if (item.alarm) {
                     childItemController_g.alarmIcon.setVisibility(View.VISIBLE);
-                    //childItemController.alarmTime.setText(item.time);
+                    childItemController_g.alarmTime.setVisibility(View.VISIBLE);
+                    childItemController_g.alarmTime.setText(item.time);
                 } else {
                     childItemController_g.alarmIcon.setVisibility(View.INVISIBLE);
+                    childItemController_g.alarmTime.setVisibility(View.INVISIBLE);
                 }
 
-                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").child(item.tdid).child("Member").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(!snapshot.exists()) childItemController_g.todoPerson.setVisibility(View.INVISIBLE);
-                        else {
-                            childItemController_g.checkBox.setChecked(snapshot.child(uid).exists());
-                            long person = snapshot.getChildrenCount();
-                            String count = person + "";
-                            childItemController_g.todoPerson.setText(count);
-                            childItemController_g.todoPerson.setVisibility(View.VISIBLE);
-                        }
-                    }
+                if(item.member == null){
+                    childItemController_g.todoPerson.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    childItemController_g.checkBox.setChecked(item.member.keySet().contains(uid));
+                    childItemController_g.todoPerson.setText(item.member.size()+"");
+                    childItemController_g.todoPerson.setVisibility(View.VISIBLE);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
+                    childItemController_g.todoPerson.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String msg = "- 완료 멤버 -\n";
+                            for(String nickname : item.member.values()){
+                                msg += nickname+" ";
+                            }
+                            TooltipCompat.setTooltipText(view, msg);
+                        }
+                    });
+
+
+
+                    /*
+                    childItemController_g.todoPerson.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            String msg = "-투 두 완료 멤버- \n";
+                            for(String nickname : item.member.values()){
+                                msg += nickname+" ";
+                            }
+                            Tooltip tooltip = new Tooltip.Builder(childItemController_g.todoPerson)
+                                    .setText(msg)
+                                    .setBackgroundColor(Color.parseColor("#B2B2B2B2"))
+                                    .show();
+                            return false;
+                        }
+                    });
+
+                     */
+
+                }
+
 
                 /* 투두 체크시 member에 uid-nickname 추가*/
                 childItemController_g.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -174,7 +202,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             GroupMember member = snapshot.getValue(GroupMember.class);
                                             if (snapshot != null) {
-                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").
+                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
                                                         child(item.tdid).child("Member").child(uid).setValue(member);
                                             }
                                         }
@@ -184,7 +212,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         }
                                     });
                         } else {
-                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child("Group").
+                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
                                     child(item.tdid).child("Member").child(uid).setValue(null);
                         }
                     }
@@ -248,9 +276,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.checkBox.setChecked(item.done);
 
-                Date currentTime = Calendar.getInstance().getTime();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String writeDate = format.format(currentTime);
+                //Date currentTime = Calendar.getInstance().getTime();
 
                 if (uid.equals(item.uid)) {
                     childItemController_p.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -350,7 +376,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public boolean repeat, alarm, done;
         public List<Item> invisibleChildren;
        //Object member;
-        Map<String, Map<String, String>> member;
+       //Map<String, Map<String, String>> member;
+       LinkedHashMap<String, String> member;
 
         //header 생성
         public Item(int type, String title) {
@@ -372,7 +399,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         //그룹 투두 받아올 때(no alarm, 누군가 투두 수행)
         //public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member) {
-        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Map<String, Map<String, String>> member) {
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, LinkedHashMap<String, String> member) {
             this.type = type;
             this.activity = activity;
             this.tdid = tdid;
@@ -397,7 +424,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         //그룹 투두 받아올 때(alarm, 누군가 투두 수행)
         //public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member) {
-        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member) {
+        public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, LinkedHashMap<String, String> member) {
             this.type = type;
             this.activity = activity;
             this.tdid = tdid;

@@ -12,7 +12,7 @@ public class ToDoPrac {
     String uid;
     boolean done;
     //Object member;
-    Map<String, Map<String, String>> member;
+    //Map<String, Map<String, String>> member;
 
     public ToDoPrac(){
         this.done = false;
@@ -30,6 +30,7 @@ public class ToDoPrac {
 
     //그룹 투두 data 받아올 때(no alarm, 누군가 투두 수행)
     //public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member){
+    /*
     public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Map<String, Map<String, String>> member){
         this.activity = activity;
         this.tdid = tdid;
@@ -39,6 +40,8 @@ public class ToDoPrac {
         this.done = done;
         this.member = member;
     }
+
+     */
 
     //그룹 투두 data 받아올 때(alarm, 누구도 수행 X)
     public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done){
@@ -53,6 +56,7 @@ public class ToDoPrac {
 
     //그룹 투두 data 받아올 때(alarm, 누군가 투두 수행)
     //public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Object member){
+    /*
     public ToDoPrac(String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member){
         this.activity = activity;
         this.tdid = tdid;
@@ -63,6 +67,8 @@ public class ToDoPrac {
         this.done = done;
         this.member = member;
     }
+
+     */
 
     public String getActivity() {
         return activity;
@@ -88,6 +94,7 @@ public class ToDoPrac {
         this.alarm = alarm;
     }
 
+    /*
     public Map<String, Map<String, String>> getMember() {
         return member;
     }
@@ -95,6 +102,8 @@ public class ToDoPrac {
     public void setMember(Map<String, Map<String, String>> member) {
         this.member = member;
     }
+
+     */
 
     public String getTime() {
         return time;

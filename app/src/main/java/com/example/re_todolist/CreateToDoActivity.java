@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.LogPrinter;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -184,6 +185,7 @@ public class CreateToDoActivity extends AppCompatActivity {
             activity = (todoText.getText().toString().isEmpty() ? "" : todoText.getText().toString());
             int hour, hour_24, minute;
             String am_pm;
+            String minute_s;
             if (Build.VERSION.SDK_INT >= 23) {
                 hour_24 = picker.getHour();
                 minute = picker.getMinute();
@@ -192,12 +194,19 @@ public class CreateToDoActivity extends AppCompatActivity {
                 minute = picker.getCurrentMinute();
             }
             if (hour_24 > 12) {
-                am_pm = "PM";
+                am_pm = "오후";
                 hour = hour_24 - 12;
             } else {
                 hour = hour_24;
-                am_pm = "AM";
+                am_pm = "오전";
             }
+
+            if(minute < 10) minute_s = "0" + minute;
+            else minute_s = minute+"";
+
+            String time_prac = am_pm+" "+hour+":"+minute_s;
+            Log.e("test", time_prac);
+
 
             // 현재 지정된 시간으로 알람 시간 설정
             Calendar calendar = Calendar.getInstance();
@@ -234,7 +243,7 @@ public class CreateToDoActivity extends AppCompatActivity {
 
             if (group) {
                 todoObj.setAlarm(alarm);
-                if (alarm) todoObj.setTime(time + am_pm.toUpperCase());
+                if (alarm) todoObj.setTime(time_prac);
                 TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").push().getKey();
                 todoObj.setTdid(TDId);
                 mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").child(TDId).setValue(todoObj);
@@ -246,8 +255,10 @@ public class CreateToDoActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();
+
         });
     }
+
 
 
     void diaryNotification(Calendar calendar) {

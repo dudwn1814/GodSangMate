@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.security.acl.Group;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -158,27 +159,38 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             String tdid = todo.getTdid();
                             String uid = todo.getUid();
                             boolean done = todo.isDone();
-                            Map<String, Map<String, String>> member = todo.getMember();
+                            //Map<String, Map<String, String>> member = todo.getMember();
+
+                            LinkedHashMap<String, String> member = new LinkedHashMap<>();
+
+                            for(DataSnapshot memberSnapshot : postSnapshot.child("Member").getChildren()){
+                                GroupMember groupMember = memberSnapshot.getValue(GroupMember.class);
+                                String mUid = groupMember.getUid();
+                                String nickname = groupMember.getNickname();
+                                member.put(mUid, nickname);
+                            }
 
                             if (alarm) {
                                 String time = todo.getTime();
-                                if (member != null) {
-                                    group_todo.invisibleChildren
-                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done));
-                                    dbGroupKey.add(key);
-                                } else {
+                                if (member.size() != 0) {
                                     group_todo.invisibleChildren
                                             .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done, member));
                                     dbGroupKey.add(key);
-                                }
-                            } else {
-                                if (member != null) {
-                                    group_todo.invisibleChildren
-                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done));
-                                    dbGroupKey.add(key);
                                 } else {
                                     group_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, time, done));
+                                    dbGroupKey.add(key);
+
+                                }
+                            } else {
+                                if (member.size() != 0) {
+                                    group_todo.invisibleChildren
                                             .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done, member));
+                                    dbGroupKey.add(key);
+
+                                } else {
+                                    group_todo.invisibleChildren
+                                            .add(new ExpandableListAdapter.Item(ExpandableListAdapter.GROUPCHILD, activity, tdid, uid, repeat, alarm, done));
                                     dbGroupKey.add(key);
                                 }
                             }
@@ -355,7 +367,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mDbRef.child("gsmate").child("UsersGroup").child(uid).setValue(null);
         mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).setValue(null);
 
-        /* groupMember 삭제되면 groupList에서도 삭제하기 */
+        /* groupMember 삭제되면 groupList에서도 삭제하기  
+           =>그룹 멤버 0명일 때, 그룹 정보는 유지하다가 이후 같은 코드를 갖는 새 그룹이 생긴다면 덮어쓰기 */
         mDbRef.child("gsmate").child("GroupMember").orderByValue().equalTo(groupCode)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
