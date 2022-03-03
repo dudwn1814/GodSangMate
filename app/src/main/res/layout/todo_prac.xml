@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="3dp">
+    android:layout_margin="3dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,18 +14,18 @@
             android:id="@+id/activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="ToDoActivity"
-            android:textSize="20dp"/>
+            android:paddingStart="5dp"
+            android:text="@string/defaultActivity"
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/alarmIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="13dp"
             android:layout_marginStart="8dp"
-            android:scaleType="fitXY"
+            android:layout_marginTop="13dp"
             android:contentDescription="@string/alarmIcon"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_alarm_black_24dp" />
 
         <TextView
@@ -34,29 +33,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="1dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="1dp"
             android:padding="3dp"
             android:text=""
-            android:textSize="17dp"
-            android:textStyle="bold"
-            android:textColor="#ff5252" />
+            android:textColor="#ff5252"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/deleteIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="13dp"
+            android:contentDescription="@string/alarmIcon"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_clear_black_24dp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="40dp">
+        android:layout_marginStart="40dp"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/repeatDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="매일"
+            android:layout_marginEnd="10dp"
+            android:text="@string/everyday"
             android:textColor="#757575"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/alarmTime"
             android:layout_width="wrap_content"
@@ -64,7 +79,7 @@
             android:text="오전 7:00"
             android:visibility="gone"
             android:textColor="#757575"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
 </LinearLayout>

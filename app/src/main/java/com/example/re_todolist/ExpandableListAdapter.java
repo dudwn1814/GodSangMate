@@ -51,7 +51,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public ExpandableListAdapter(List<Item> data) {
         this.data = data;
-        this.dbkey = new ArrayList<String>();
+        this.dbkey = new ArrayList<>();
     }
 
     @NonNull
@@ -81,8 +81,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         groupCode = "ABC123";
 
         Date now = new Date();
-        //String writeDate = now.toString();
-        String writeDate = "2022-03-02";
+        String writeDate = now.toString();
 
         final Item item = data.get(position);
         //final String dbItem = dbkey.get(position);
@@ -92,21 +91,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
                 itemController.refferalItem = item;
                 itemController.header_title.setText(item.title);
-                //if (item.invisibleChildren == null) {
                 if (item.invisibleChildren.size() == 0) {
-                    //itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_less_black_24dp);
                     itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_more_black_24dp);
                 } else {
-                    //itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_more_black_24dp);
                     itemController.btn_expand_toggle.setImageResource(R.drawable.ic_expand_less_black_24dp);
-                    /*
-                    int pos = data.indexOf(itemController.refferalItem);
-                    int index = pos + 1;
-                    for (Item i : item.invisibleChildren) {
-                        data.add(index, i);
-                        index++;
-                    }
-                     */
                     item.invisibleChildren = null;
                 }
 
@@ -375,8 +363,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public String title, activity, tdid, uid, time;
         public boolean repeat, alarm, done;
         public List<Item> invisibleChildren;
-       //Object member;
-       //Map<String, Map<String, String>> member;
+
        LinkedHashMap<String, String> member;
 
         //header 생성
@@ -398,7 +385,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //그룹 투두 받아올 때(no alarm, 누군가 투두 수행)
-        //public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, Object member) {
         public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, boolean done, LinkedHashMap<String, String> member) {
             this.type = type;
             this.activity = activity;
@@ -423,7 +409,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         //그룹 투두 받아올 때(alarm, 누군가 투두 수행)
-        //public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, Map<String, Map<String, String>> member) {
         public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean alarm, String time, boolean done, LinkedHashMap<String, String> member) {
             this.type = type;
             this.activity = activity;
