@@ -1,7 +1,13 @@
 package com.example.re_todolist;
 
 import android.app.ActivityOptions;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,11 +33,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
@@ -42,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     String groupCode, groupName, uid;
     AlertDialog.Builder alert_confirm;
     int achieve_g, achieve_p;
-
+    Calendar calendar;
 
     public void setAchieve_g(int achieve_g) {
         this.achieve_g = achieve_g;
@@ -314,6 +323,97 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return true;
     }
 
+    private void setAlarm() {
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
+        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserAccount user = snapshot.getValue(UserAccount.class);
+                groupCode = user.getG_code();
+
+                mDbRef.child("gsmate").child("Alarm").child(groupCode).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        groupCode = user.getG_code();
+                        for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                            AlarmPrac alarm = datasnapshot.getValue(AlarmPrac.class);
+                            if (alarm != null) {
+                                String todo = alarm.getTdid();
+                                mDbRef.child("gsmate").child("Alarm").child(groupCode).child(todo).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        AlarmPrac alarm = datasnapshot.getValue(AlarmPrac.class);
+                                        String alarmTimes = alarm.getAlarm_time();
+                                        String activity = alarm.getActivity();
+                                        boolean repeat = alarm.isRepeat();
+                                        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+                                        //String str = "2020-03-01 12:00:01";
+                                        try {
+                                            Date date = sd.parse(alarmTimes);
+                                            calendar.setTime(date);
+                                            moveAlarm(calendar, activity, repeat);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(getApplicationContext(), "알람시간 가져오기 오류",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getApplicationContext(), "그룹코드 내부 리스트 가져오기 오류",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void moveAlarm(Calendar calendar, String activity, Boolean repeat) {
+//        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+//        Boolean dailyNotify = sharedPref.getBoolean(SettingsActivity.KEY_PREF_DAILY_NOTIFICATION, true);
+
+        PackageManager pm = this.getPackageManager();
+        ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
+        Intent alarmIntent = new Intent(this, AlarmBroadcastReceiver.class);
+        alarmIntent.putExtra("activity", activity);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+
+        // 사용자가 매일 알람을 허용했다면
+        if (repeat) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            Toast.makeText(getApplicationContext(), "반복 알림이 설정됐습니다", Toast.LENGTH_SHORT).show();
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            Toast.makeText(getApplicationContext(), "알림이 한번만 울립니다.", Toast.LENGTH_SHORT).show();
+        }
+        // 부팅 후 실행되는 리시버 사용가능하게 설정
+        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
 
     private void getGroupDatafromDB() {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();

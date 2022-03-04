@@ -15,6 +15,10 @@ public class AlarmPrac {
         this.alarm_time = alarm_time;
     }
 
+    public String getActivity() {
+        return activity;
+    }
+
     public void setActivity(String activity) {
         this.activity = activity;
     }
