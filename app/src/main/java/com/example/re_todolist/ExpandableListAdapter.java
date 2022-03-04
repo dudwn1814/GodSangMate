@@ -178,54 +178,70 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                      */
                 }
 
-                /* 투두 체크시 member에 uid-nickname 추가*/
-                childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked) {
-                        mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid)
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        GroupMember member = snapshot.getValue(GroupMember.class);
-                                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
-                                                child(item.tdid).child("Member").child(uid).setValue(member);
-                                    }
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                uid = firebaseUser.getUid();
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                    }
-                                });
-                    } else {
-                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
-                                child(item.tdid).child("Member").child(uid).setValue(null);
-                    }
-                });
+                mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                        groupCode = user.getG_code();
 
-                childItemController_g.deleteIcon.setOnClickListener(view -> {
-                    Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
+                        /* 투두 체크시 member에 uid-nickname 추가*/
+                        childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                            if (isChecked) {
+                                mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid)
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                GroupMember member = snapshot.getValue(GroupMember.class);
+                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                                        child(item.tdid).child("Member").child(uid).setValue(member);
+                                            }
 
-                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            ToDoPrac todo = snapshot.child("Group").child(item.tdid).getValue(ToDoPrac.class);
-
-                            if (todo != null) {
-                                String todoUid = todo.getUid();
-                                Toast.makeText(view.getContext(), todoUid, Toast.LENGTH_SHORT).show();
-
-                                if (todoUid.equals(uid)) {
-                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
-                                            child(item.tdid).removeValue();
-                                }
-                                Toast.makeText(view.getContext(), "자신이 등록한 ToDo만 삭제 가능", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                            }
+                                        });
+                            } else {
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                        child(item.tdid).child("Member").child(uid).setValue(null);
                             }
-                        }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(view.getContext(), "삭제 오류",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
+                        childItemController_g.deleteIcon.setOnClickListener(view -> {
+                            Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
+
+                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    ToDoPrac todo = snapshot.child("Group").child(item.tdid).getValue(ToDoPrac.class);
+
+                                    if (todo != null) {
+                                        String todoUid = todo.getUid();
+                                        Toast.makeText(view.getContext(), todoUid, Toast.LENGTH_SHORT).show();
+
+                                        if (todoUid.equals(uid)) {
+                                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                                    child(item.tdid).removeValue();
+                                        }
+                                        Toast.makeText(view.getContext(), "자신이 등록한 ToDo만 삭제 가능", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Toast.makeText(view.getContext(), "삭제 오류",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        //error
+                    }
                 });
                 break;
 
@@ -242,8 +258,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 childItemController_p.checkBox.setChecked(item.done);
 
 
-                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                uid = firebaseUser.getUid();
+
 
                 if (uid.equals(item.uid)) {
                     childItemController_p.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {

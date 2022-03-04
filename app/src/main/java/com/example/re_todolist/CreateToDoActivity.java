@@ -23,13 +23,17 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -201,19 +205,32 @@ public class CreateToDoActivity extends AppCompatActivity {
             String time = times.format(alarms);
  */
 
+            mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                    groupCode = user.getG_code();
 
-            if (group) {
-                todoObj.setAlarm(alarm);
-                if (alarm) todoObj.setTime(time_prac);
-                //if (alarm) todoObj.setTime(time);
-                TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").push().getKey();
-                todoObj.setTdid(TDId);
-                mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").child(TDId).setValue(todoObj);
-            } else {
-                TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).push().getKey();
-                todoObj.setTdid(TDId);
-                mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(TDId).setValue(todoObj);
-            }
+                    if (group) {
+                        todoObj.setAlarm(alarm);
+                        if (alarm) todoObj.setTime(time_prac);
+                        //if (alarm) todoObj.setTime(time);
+                        TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").push().getKey();
+                        todoObj.setTdid(TDId);
+                        mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").child(TDId).setValue(todoObj);
+                    } else {
+                        TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).push().getKey();
+                        todoObj.setTdid(TDId);
+                        mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(TDId).setValue(todoObj);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(view.getContext(), "삭제 오류",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
 
 
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
