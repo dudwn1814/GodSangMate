@@ -20,6 +20,7 @@ import com.dinuscxj.progressbar.CircleProgressBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
         alert_confirm = new AlertDialog.Builder(this);
-        uid = "user1";
-        groupCode = "ABC123";
+        //uid = "user1";
+        //groupCode = "ABC123";
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -108,8 +109,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                //groupCode = user.getG_code();
+                UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                groupCode = user.getG_code();
 
                 LinkedHashMap<String, String> memberInfo = new LinkedHashMap<>();
                 mDbRef.child("gsmate").child("GroupMember").child(groupCode).orderByChild("nickname").addValueEventListener(new ValueEventListener() {
@@ -249,20 +250,37 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
 
         //다음날 넘어갈때 못한 투두 넘기기
-        mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!String.valueOf(task.getResult().getValue()).equals(writeDate)) {
-                    //방문일이 오늘이 아니거나 없는 경우
-                    Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
-                    Intent intent = new Intent(getApplicationContext(), PopupActivity.class);
-                    intent.putExtra("data", "Test Popup");
-                    startActivityForResult(intent, 1);
-                    mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").setValue(writeDate);
-                } else {
-                    //방문일이 오늘인 경우
-                    Log.d("yesterday_Todo", "오늘 방문함" + String.valueOf(task.getResult().getValue()));
-                }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                groupCode = user.getG_code();
+
+
+                mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!String.valueOf(task.getResult().getValue()).equals(writeDate)) {
+                            //방문일이 오늘이 아니거나 없는 경우
+                            Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
+                            Intent intent = new Intent(getApplicationContext(), PopupActivity.class);
+                            intent.putExtra("data", "Test Popup");
+                            startActivityForResult(intent, 1);
+                            mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").setValue(writeDate);
+                        } else {
+                            //방문일이 오늘인 경우
+                            Log.d("yesterday_Todo", "오늘 방문함" + String.valueOf(task.getResult().getValue()));
+                        }
+                    }
+
+                });
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -287,14 +305,14 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
 
     private void getGroupDatafromDB() {
-        //FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        //uid = firebaseUser.getUid();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
 
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                //groupCode = user.getG_code();
+                groupCode = user.getG_code();
 
                 mDbRef.child("gsmate").child("GroupList").child(groupCode).child("name").addValueEventListener(new ValueEventListener() {
                     @Override
