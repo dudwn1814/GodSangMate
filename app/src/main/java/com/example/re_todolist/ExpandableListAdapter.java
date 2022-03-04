@@ -163,8 +163,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     });
                 }
 
-                /* 투두 체크시 member에 uid-nickname 추가*/
+                if(uid.equals(item.uid)) childItemController_g.deleteIcon.setVisibility(View.VISIBLE);
+                else    childItemController_g.deleteIcon.setVisibility(View.INVISIBLE);
 
+                /* 투두 체크시 member에 uid-nickname 추가*/
                 childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
                         @Override
@@ -189,8 +191,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
                                             child(item.tdid).child("Member").child(uid).setValue(null);
                                 }
-                            }
-                            else    Log.e("test", "그룹코드 받아오기 실패");
+                            } else Log.e("test", "그룹코드 받아오기 실패");
                         }
 
                         @Override
@@ -226,28 +227,44 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_g.deleteIcon.setOnClickListener(view -> {
                     Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
-
-                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
+                    mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            ToDoPrac todo = snapshot.child("Group").child(item.tdid).getValue(ToDoPrac.class);
+                            groupCode = snapshot.getValue(String.class);
+                            if (groupCode != null) {
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                        child(item.tdid).removeValue();
+                                /*
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        ToDoPrac todo = snapshot.child("Group").child(item.tdid).getValue(ToDoPrac.class);
 
-                            if (todo != null) {
-                                String todoUid = todo.getUid();
-                                Toast.makeText(view.getContext(), todoUid, Toast.LENGTH_SHORT).show();
+                                        if (todo != null) {
+                                            String todoUid = todo.getUid();
+                                            Toast.makeText(view.getContext(), todoUid, Toast.LENGTH_SHORT).show();
 
-                                if (todoUid.equals(uid)) {
-                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
-                                            child(item.tdid).removeValue();
-                                }
-                                Toast.makeText(view.getContext(), "자신이 등록한 ToDo만 삭제 가능", Toast.LENGTH_SHORT).show();
-                            }
+                                            if (todoUid.equals(uid)) {
+                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                                        child(item.tdid).removeValue();
+                                            }
+                                            Toast.makeText(view.getContext(), "자신이 등록한 ToDo만 삭제 가능", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Toast.makeText(view.getContext(), "삭제 오류",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                                 */
+                            } else Log.e("test", "그룹코드 받아오기 실패");
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(view.getContext(), "삭제 오류",
-                                    Toast.LENGTH_LONG).show();
                         }
                     });
                 });
@@ -267,34 +284,45 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
                 if (uid.equals(item.uid)) {
+                    childItemController_p.deleteIcon.setVisibility(View.VISIBLE);
                     childItemController_p.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                        if (isChecked) {
-                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
-                                    child(uid).child(item.tdid).child("done").setValue(true);
-                        } else {
-                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
-                                    child(uid).child(item.tdid).child("done").setValue(false);
-                        }
+                        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                groupCode = snapshot.getValue(String.class);
+                                if (groupCode != null) {
+                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
+                                                        child(uid).child(item.tdid).child("done").setValue(isChecked);
+                                } else Log.e("test", "그룹코드 받아오기 실패");
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+
                     });
                 } else {
                     childItemController_p.checkBox.setEnabled(false);
+                    childItemController_p.deleteIcon.setVisibility(View.INVISIBLE);
                 }
 
                 childItemController_p.deleteIcon.setOnClickListener(view -> {
                     Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
-                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
-                                    .child(item.tdid).removeValue();
-                        }
+                        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                groupCode = snapshot.getValue(String.class);
+                                if (groupCode != null) {
+                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
+                                            .child(item.tdid).removeValue();
+                                } else Log.e("test", "그룹코드 받아오기 실패");
+                            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(view.getContext(), "삭제 오류",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
                 });
                 break;
         }
@@ -395,7 +423,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //개인 투두 받아올때
         public Item(int type, String activity, String tdid, String uid, boolean repeat, boolean done) {
             this.type = type;
-            this.type = type;
             this.activity = activity;
             this.tdid = tdid;
             this.uid = uid;
@@ -404,22 +431,4 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    void getGroupCode(){
-        mAuth = FirebaseAuth.getInstance();
-        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
-        mDbRef.child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                 groupCode = snapshot.getValue(String.class);
-                if (groupCode != null) {
-                    Log.e("test", "그룹코드 받아오기 성공"+groupCode);
-                }
-                else    Log.e("test", "그룹코드 받아오기 실패");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
 }

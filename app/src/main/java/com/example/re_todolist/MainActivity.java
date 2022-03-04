@@ -41,6 +41,17 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     DatabaseReference mDbRef;
     String groupCode, groupName, uid;
     AlertDialog.Builder alert_confirm;
+    int achieve_g, achieve_p;
+
+
+    public void setAchieve_g(int achieve_g) {
+        this.achieve_g = achieve_g;
+    }
+
+    public void setAchieve_p(int achieve_p) {
+        this.achieve_p = achieve_p;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         });
 
         //달성률
-        int achieve_g = 50;
-        int achieve_p = 70;
+        achieve_g = 50;
+        achieve_p = 70;
         CircleProgressBar circleProgressBar_group = findViewById(R.id.circlebar_group);
         CircleProgressBar circleProgressBar_personal = findViewById(R.id.circlebar_personal);
 
