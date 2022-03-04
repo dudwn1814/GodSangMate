@@ -78,8 +78,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
-        uid = "user1";
-        groupCode = "ABC123";
+        //uid = "user1";
+        //groupCode = "ABC123";
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -241,6 +241,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.checkBox.setChecked(item.done);
 
+
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                uid = firebaseUser.getUid();
 
                 if (uid.equals(item.uid)) {
                     childItemController_p.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {

@@ -27,6 +27,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -54,11 +55,11 @@ public class CreateToDoActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
-        //FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        //uid = firebaseUser.getUid();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
 
-        uid = "user1";
-        groupCode = "ABC123";
+        //uid = "user1";
+        //groupCode = "ABC123";
 
         //메인 페이지로 이동
         Button cancelBtn = findViewById(R.id.cancel_button);

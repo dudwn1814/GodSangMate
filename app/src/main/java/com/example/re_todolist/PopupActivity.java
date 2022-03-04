@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,8 +47,11 @@ public class PopupActivity extends Activity {
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
-        uid = "user1";
-        groupCode = "ABC123";
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
+
+        //uid = "user1";
+        //groupCode = "ABC123";
 
         Date dDate = new Date();
         dDate = new Date(dDate.getTime() + (1000 * 60 * 60 * 24 * -1));
@@ -70,30 +74,45 @@ public class PopupActivity extends Activity {
 
         ArrayList<String> yesterday_tdid = new ArrayList<>();
         ArrayList<String> notDone_td = new ArrayList<>();
-        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(yesterday).child("Personal").child(uid).addValueEventListener(new ValueEventListener() {
+
+        mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                yesterday_tdid.clear();
-                notDone_td.clear();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                groupCode = user.getG_code();
 
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
+                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(yesterday).child("Personal").child(uid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        yesterday_tdid.clear();
+                        notDone_td.clear();
 
-                    if (todo != null && !todo.isDone()) {
-                        //오늘 tdid임
-                        yesterday_tdid.add(todo.getTdid());
-                        notDone_td.add(todo.getActivity());
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
+
+                            if (todo != null && !todo.isDone()) {
+                                //오늘 tdid임
+                                yesterday_tdid.add(todo.getTdid());
+                                notDone_td.add(todo.getActivity());
+                            }
+                        }
+                        //recyclerview 연결
+                        RecyclerView recyclerView = findViewById(R.id.recyclerView_yesterday);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        recyclerView.setAdapter(new RecyclerAdapter(yesterday_tdid, notDone_td));
                     }
-                }
-                //recyclerview 연결
-                RecyclerView recyclerView = findViewById(R.id.recyclerView_yesterday);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                recyclerView.setAdapter(new RecyclerAdapter(yesterday_tdid, notDone_td));
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.v("TAG", "loadPost:onCancelled", error.toException());
+                    }
+                });
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.v("TAG", "loadPost:onCancelled", error.toException());
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
