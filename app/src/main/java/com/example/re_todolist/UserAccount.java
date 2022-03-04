@@ -11,6 +11,27 @@ public class UserAccount {
     public UserAccount() {
     }
 
+    public UserAccount(String uid, String emailID, String password){
+        this.uid = uid;
+        this.emailID = emailID;
+        this.password = password;
+    }
+
+    public UserAccount(String uid, String emailID, String password, String g_code){
+        this.uid = uid;
+        this.emailID = emailID;
+        this.password = password;
+        this.g_code = g_code;
+    }
+
+    public UserAccount(String uid, String emailID, String password, String g_code, String nickname){
+        this.uid = uid;
+        this.emailID = emailID;
+        this.password = password;
+        this.g_code = g_code;
+        this.nickname = nickname;
+    }
+
     public String getUid() {
         return uid;
     }

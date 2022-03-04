@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+
+import java.util.LinkedHashMap;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText id;
@@ -31,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseRemoteConfig firebaseRemoteConfig;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private DatabaseReference mDbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
+        //firebaseAuth.signOut();
 
         id = (EditText) findViewById(R.id.loginActivity_edittext_id);
         password = (EditText) findViewById(R.id.loginActivity_edittext_password);
@@ -65,16 +74,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if( user!= null){
-                    //그룹 없으면 그룹선택
-                    Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
+                if (user != null) {
+                    moveNextPage(user);
+                } else {
                     //로그아웃
                 }
-            };
+            }
+
+            ;
         };
     }
 
@@ -84,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
+
                             //로그인 실패한부분
                             //Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             alert_confirm.setPositiveButton("확인", null);
@@ -107,19 +115,37 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
-    private void moveNextPage(FirebaseUser user){
-        if( user!= null){
-        //그룹 없으면 그룹선택
-            Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
-            startActivity(intent);
-            finish();
-        //닉네임 없으면 닉네임 입력
-        //메인으로 이동
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        }
-        else {
-            //로그아웃
-        }
+    private void moveNextPage(FirebaseUser user) {
+        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
+        String uid = user.getUid();
+        mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //그룹 없으면 그룹선택
+                if(dataSnapshot.child("g_code").getValue() == null){
+                    Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
+                    startActivity(intent);
+                    finish();
+                }
+                //닉네임 없으면 닉네임 입력
+                else if(dataSnapshot.child("nickname").getValue() == null){
+                    UserAccount userAccount = dataSnapshot.getValue(UserAccount.class);
+                    String groupCode = userAccount.getG_code();
+                    Intent intent = new Intent(LoginActivity.this, NicknameActivity.class);
+                    intent.putExtra("g_code", groupCode);
+                    startActivity(intent);
+                    finish();
+                }
+                //메인으로 이동
+                else{
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 }

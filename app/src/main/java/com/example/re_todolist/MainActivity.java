@@ -357,6 +357,19 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 AlertDialog alert = alert_confirm.create();
                 alert.show();
                 return true;
+
+            case R.id.logOut:
+                alert_confirm.setMessage("로그아웃 하시겠습니까?");
+                alert_confirm.setPositiveButton("확인", (dialog, which) -> {
+                    mAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                });
+                alert_confirm.setNegativeButton("취소", (dialog, which) -> {
+                });
+                AlertDialog alertView = alert_confirm.create();
+                alertView.show();
+                return true;
         }
         return false;
     }

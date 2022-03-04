@@ -93,7 +93,7 @@ public class PartGroupActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(PartGroupActivity.this, NicknameActivity.class);
                             intent.putExtra("g_code", groupCode);
-                            intent.putExtra("name", groupName);
+                            //intent.putExtra("name", groupName);
                             startActivity(intent);
                         }
                     });

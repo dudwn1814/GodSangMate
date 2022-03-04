@@ -48,4 +48,6 @@
     <string name="everyday">매일</string>
     <string name="defaultTime">오전 7:00</string>
     <string name="defaultActivity">ToDoActivity</string>
+
+    <string name="exitIcon">창닫기</string>
 </resources>

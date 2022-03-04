@@ -1,5 +1,6 @@
 package com.example.re_todolist;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class ShareActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
 
     private static final String DEFAULT_PATTERN = "%d%%";
-    ImageButton button;
+    ImageButton button, exit;
     LinearLayout layout;
 
     @Override
@@ -33,6 +34,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
 
         button = findViewById(R.id.share);
         layout = findViewById(R.id.layout);
+        exit = findViewById(R.id.exitIcon);
 
         Intent intent = getIntent();
         int achieve = intent.getExtras().getInt("achieve");
@@ -44,6 +46,16 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
             @Override
             public void onClick(View view) {
                 captureScreen(layout);
+            }
+        });
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ShareActivity.this, MainActivity.class);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ShareActivity.this, circle1, "transition");
+                startActivity(intent, options.toBundle());
+                finish();
             }
         });
     }

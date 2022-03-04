@@ -141,25 +141,13 @@ public class NicknameActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         String uid = firebaseUser.getUid();
 
-        /* 그룹 최종 생성 단계 */
-        /*
-        GroupInfo group = new GroupInfo();
-        group.setG_code(group_code);
-        group.setName(group_name);
-        mDbRef.child("GroupList").child(group.getG_code()).setValue(group); */
 
         /* UserAccount에 groupInfo 저장 */
-        //mDbRef.child("UserAccount").child(uid).child("g_code").setValue(group_code);
         mDbRef.child("UserAccount").child(uid).child("nickname").setValue(nickname);
 
 
         /* 그룹 단위 멤버 uid-닉네임 저장 */
-        //GroupMember member = new GroupMember();
-        //member.setUid(uid);
-        //member.setUid("user1");
-        //member.setNickname(nickname);
         mDbRef.child("GroupMember").child(group_code).child(uid).child("nickname").setValue(nickname);
-        //mDbRef.child("GroupMember").child(group_code).child("user1").setValue(member);
 
         Intent intent = new Intent(NicknameActivity.this, MainActivity.class);
         startActivity(intent);

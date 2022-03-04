@@ -96,22 +96,13 @@ public class CreateToDoActivity extends AppCompatActivity {
         });
 
         //반복 체크
-        repeat = false;
+        //repeat = false;
         CheckBox repeatChk = findViewById(R.id.repeatChk);
         LinearLayout repeatLayer = findViewById(R.id.linearLayout);
-        repeat=repeatChk.isChecked();
-        /*
         repeatChk.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                repeat = true;
-                repeatLayer.setVisibility(View.VISIBLE);
-            } else {
-                repeat = false;
-                repeatLayer.setVisibility(View.GONE);
-            }
+            repeat=repeatChk.isChecked();
         });
 
-         */
 
 
         //알람 체크

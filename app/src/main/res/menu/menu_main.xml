@@ -15,4 +15,11 @@
         android:title="그룹 탈퇴"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/logOut"
+        android:orderInCategory="100"
+        android:title="로그아웃"
+        app:showAsAction="never" />
+
+
 </menu>
