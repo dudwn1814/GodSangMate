@@ -142,20 +142,19 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     childItemController_g.alarmTime.setVisibility(View.INVISIBLE);
                 }
 
-                if(item.member == null){
+                if (item.member == null) {
                     childItemController_g.todoPerson.setVisibility(View.INVISIBLE);
-                }
-                else{
+                } else {
                     childItemController_g.checkBox.setChecked(item.member.keySet().contains(uid));
-                    childItemController_g.todoPerson.setText(item.member.size()+"");
+                    childItemController_g.todoPerson.setText(item.member.size() + "");
                     childItemController_g.todoPerson.setVisibility(View.VISIBLE);
 
                     childItemController_g.todoPerson.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             String msg = "- 완료 멤버 -\n";
-                            for(String nickname : item.member.values()){
-                                msg += nickname+" ";
+                            for (String nickname : item.member.values()) {
+                                msg += nickname + " ";
                             }
                             TooltipCompat.setTooltipText(view, msg);
                         }
@@ -251,7 +250,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         } else {
                             mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
                                     child(uid).child(item.tdid).child("done").setValue(false);
-                            }
+                        }
                     });
                 } else {
                     childItemController_p.checkBox.setEnabled(false);
@@ -265,6 +264,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
                                     .child(item.tdid).removeValue();
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             Toast.makeText(view.getContext(), "삭제 오류",
@@ -311,7 +311,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public boolean repeat, alarm, done;
         public List<Item> invisibleChildren;
 
-       LinkedHashMap<String, String> member;
+        LinkedHashMap<String, String> member;
 
         //header 생성
         public Item(int type, String title) {

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#eeeeee"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#eeeeee"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -32,9 +32,9 @@
                     android:id="@+id/yesterday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="50dp"
+                    android:gravity="center"
                     android:text="전날 못한 개인 투두"
                     android:textSize="20sp" />
 
@@ -43,7 +43,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_yesterday"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="300dp" />
 
         </LinearLayout>
 
@@ -59,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="취소"
-                android:onClick="mOnCancelClose"/>
+                android:onClick="mOnCancelClose"
+                android:text="취소" />
 
             <Button
                 android:id="@+id/button_ok"
@@ -69,8 +69,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="60dp"
-                android:text="확인"
-                android:onClick="mOnClose"/>
+                android:onClick="mOnClose"
+                android:text="확인" />
 
         </LinearLayout>
 

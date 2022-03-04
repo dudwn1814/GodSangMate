@@ -27,46 +27,47 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private List<String> itemList=new ArrayList<>();
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private List<String> itemList = new ArrayList<>();
 
-    public RecyclerAdapter(ArrayList<String> yesterday_tdid, ArrayList<String> notDone_td){
+    public RecyclerAdapter(ArrayList<String> yesterday_tdid, ArrayList<String> notDone_td) {
         itemList.clear();
 
-        for(int i=0; i<notDone_td.size(); i++){
+        for (int i = 0; i < notDone_td.size(); i++) {
             itemList.add(notDone_td.get(i));
             Log.d("notDone", notDone_td.get(i));
         }
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         CheckBox item;
-        public ViewHolder(View itemView){
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            item= itemView.findViewById(R.id.recycler_item);
+            item = itemView.findViewById(R.id.recycler_item);
         }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view=LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_recycler_view,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.item_recycler_view, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
-        ViewHolder holder=(ViewHolder)viewHolder;
+        ViewHolder holder = (ViewHolder) viewHolder;
 
-            holder.item.setText(itemList.get(i));
+        holder.item.setText(itemList.get(i));
 
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(holder.item.isChecked()){
+                if (holder.item.isChecked()) {
                     Log.v("CHECKBOX_TEST", "checkbox test" + holder.item.getText());
                 }
             }

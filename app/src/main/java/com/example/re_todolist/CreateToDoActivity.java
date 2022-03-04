@@ -100,9 +100,8 @@ public class CreateToDoActivity extends AppCompatActivity {
         CheckBox repeatChk = findViewById(R.id.repeatChk);
         LinearLayout repeatLayer = findViewById(R.id.linearLayout);
         repeatChk.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            repeat=repeatChk.isChecked();
+            repeat = repeatChk.isChecked();
         });
-
 
 
         //알람 체크
@@ -137,30 +136,27 @@ public class CreateToDoActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= 23) {
                 hour_24 = picker.getHour();
                 minute = picker.getMinute();
-            }
-            else {
+            } else {
                 hour_24 = picker.getCurrentHour();
                 minute = picker.getCurrentMinute();
             }
             if (hour_24 > 12) {
                 am_pm = "오후";
                 hour = hour_24 - 12;
-            }
-            else if(hour_24 == 12){
-                am_pm="오후";
+            } else if (hour_24 == 12) {
+                am_pm = "오후";
                 hour = hour_24;
-            }
-            else {
+            } else {
                 hour = hour_24;
                 am_pm = "오전";
             }
 
-            if(hour < 10) hour_s = "0" + hour;
-            else hour_s=hour+"";
-            if(minute < 10) minute_s = "0" + minute;
-            else minute_s = minute+"";
+            if (hour < 10) hour_s = "0" + hour;
+            else hour_s = hour + "";
+            if (minute < 10) minute_s = "0" + minute;
+            else minute_s = minute + "";
 
-            String time_prac = am_pm+" "+hour_s+":"+minute_s;
+            String time_prac = am_pm + " " + hour_s + ":" + minute_s;
 
 
             // 현재 지정된 시간으로 알람 시간 설정
@@ -205,7 +201,6 @@ public class CreateToDoActivity extends AppCompatActivity {
  */
 
 
-
             if (group) {
                 todoObj.setAlarm(alarm);
                 if (alarm) todoObj.setTime(time_prac);
@@ -227,7 +222,6 @@ public class CreateToDoActivity extends AppCompatActivity {
     }
 
 
-
     void diaryNotification(Calendar calendar, boolean repeat, boolean alarm, String activity) {
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -238,7 +232,7 @@ public class CreateToDoActivity extends AppCompatActivity {
         PackageManager pm = this.getPackageManager();
         ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        alarmIntent.putExtra("activity",activity);
+        alarmIntent.putExtra("activity", activity);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
@@ -252,26 +246,24 @@ public class CreateToDoActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
-                Toast.makeText(getApplicationContext(),"반복 알림이 설정됐습니다",Toast.LENGTH_SHORT).show();
-            }
-            else {
+                Toast.makeText(getApplicationContext(), "반복 알림이 설정됐습니다", Toast.LENGTH_SHORT).show();
+            } else {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
-                Toast.makeText(getApplicationContext(),"알림이 한번만 울립니다.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "알림이 한번만 울립니다.", Toast.LENGTH_SHORT).show();
             }
             // 부팅 후 실행되는 리시버 사용가능하게 설정
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP);
 
-        }
-        else { //Disable Daily Notifications
+        } else { //Disable Daily Notifications
             if (PendingIntent.getBroadcast(this, 0, alarmIntent, 0) != null && alarmManager != null) {
                 alarmManager.cancel(pendingIntent);
-                Toast.makeText(this,"Notifications were disabled",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Notifications were disabled", Toast.LENGTH_SHORT).show();
             }
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,

@@ -250,17 +250,16 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         //다음날 넘어갈때 못한 투두 넘기기
         mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!String.valueOf(task.getResult().getValue()).equals(writeDate)) {
                     //방문일이 오늘이 아니거나 없는 경우
-                   Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
+                    Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
                     Intent intent = new Intent(getApplicationContext(), PopupActivity.class);
                     intent.putExtra("data", "Test Popup");
                     startActivityForResult(intent, 1);
                     mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").setValue(writeDate);
-                }
-                else {
+                } else {
                     //방문일이 오늘인 경우
                     Log.d("yesterday_Todo", "오늘 방문함" + String.valueOf(task.getResult().getValue()));
                 }
@@ -388,8 +387,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot datasnapshot : snapshot.getChildren()) {
-                           ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
+                        for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                            ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
                             if (todo != null) {
                                 String tdid = todo.getTdid();
                                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
