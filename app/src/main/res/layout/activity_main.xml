@@ -67,15 +67,18 @@
                 android:src="@drawable/ic_launch_black_24dp"
                 tools:ignore="TouchTargetSizeCheck" />
 
-            <TextView
-                android:id="@+id/alarmTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="25sp" />
+            <ImageButton
+                android:id="@+id/alarmButton"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="13dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/shareBtn"
+                android:src="@drawable/ic_launch_black_24dp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+
 
         </LinearLayout>
 

@@ -82,6 +82,12 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
 
+        //알람 울리기 허용
+        ImageButton alrm = findViewById(R.id.alarmButton);
+        alrm.setOnClickListener(view -> {
+            setAlarm();
+        });
+
 
         //todo 작성 페이지로 이동
         ImageButton fab = findViewById(R.id.writeBtn);
