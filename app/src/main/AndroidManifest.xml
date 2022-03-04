@@ -32,12 +32,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.RE_ToDoList">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.RE_ToDoList"></activity>
 
         <activity android:name=".LoginActivity" />
         <!--
@@ -68,6 +63,10 @@
             android:parentActivityName=".GroupName" />  -->
 
         <activity android:name=".GroupNum" />
+
+        <activity
+            android:name=".PopupActivity"
+            android:theme="@android:style/Theme.Dialog" />
 
         <activity android:name=".NicknameActivity"></activity>
 
