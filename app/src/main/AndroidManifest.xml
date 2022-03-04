@@ -81,8 +81,6 @@
         <activity android:name=".PopupActivity" />
         <!--android:theme="@android:style/Theme.Dialog" />-->
 
-        <activity android:name=".LoadingActivity" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
