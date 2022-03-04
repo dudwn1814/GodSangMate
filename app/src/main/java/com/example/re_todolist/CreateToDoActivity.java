@@ -179,7 +179,6 @@ public class CreateToDoActivity extends AppCompatActivity {
             String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
             Toast.makeText(getApplicationContext(), date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
-            diaryNotification(calendar, repeat, alarm, activity);
 
             //투두 객체 생성
             ToDoPrac todoObj = new ToDoPrac();
@@ -187,23 +186,20 @@ public class CreateToDoActivity extends AppCompatActivity {
             todoObj.setRepeat(repeat);
             todoObj.setUid(uid);
 
-            //DB에 입력한 날짜 저장
-            SharedPreferences.Editor editor = getSharedPreferences(activity, MODE_PRIVATE).edit();
-            editor.putLong("알림 시간", (long) calendar.getTimeInMillis());
-            editor.apply();
+            //알람 객체 생성
+            AlarmPrac alarmObj = new AlarmPrac();
+            alarmObj.setActivity(activity);
+            alarmObj.setRepeat(repeat);
 
+            Date cal = calendar.getTime();
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String alarm_time = sd.format(cal);
 
             long now = System.currentTimeMillis();
             Date date = new Date(now);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String writeDate = format.format(date);
 
-/*
-            long alarm_time = calendar.getTimeInMillis();
-            Date alarms = new Date(alarm_time);
-            SimpleDateFormat times = new SimpleDateFormat("hh:mm");
-            String time = times.format(alarms);
- */
 
             mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -214,11 +210,16 @@ public class CreateToDoActivity extends AppCompatActivity {
 
                     if (group) {
                         todoObj.setAlarm(alarm);
-                        if (alarm) todoObj.setTime(time_prac);
+                        if (alarm) {
+                            todoObj.setTime(time_prac);
+                            alarmObj.setAlarm_time(alarm_time);
+                        }
                         //if (alarm) todoObj.setTime(time);
                         TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").push().getKey();
                         todoObj.setTdid(TDId);
+                        alarmObj.setTdid(TDId);
                         mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").child(TDId).setValue(todoObj);
+                        mDbRef.child("Alarm").child(groupCode).child(TDId).setValue(alarmObj);
                     } else {
                         TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).push().getKey();
                         todoObj.setTdid(TDId);
@@ -233,60 +234,9 @@ public class CreateToDoActivity extends AppCompatActivity {
                 }
             });
 
-
             Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();
 
         });
-    }
-
-
-    void diaryNotification(Calendar calendar, boolean repeat, boolean alarm, String activity) {
-//        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-//        Boolean dailyNotify = sharedPref.getBoolean(SettingsActivity.KEY_PREF_DAILY_NOTIFICATION, true);
-        Boolean dailyNotify = alarm;
-        // 무조건 알람을 사용
-
-        PackageManager pm = this.getPackageManager();
-        ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        alarmIntent.putExtra("activity", activity);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-
-        // 사용자가 매일 알람을 허용했다면
-        if (dailyNotify) {
-            if (repeat) {
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                        AlarmManager.INTERVAL_DAY, pendingIntent);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                }
-                Toast.makeText(getApplicationContext(), "반복 알림이 설정됐습니다", Toast.LENGTH_SHORT).show();
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                }
-                Toast.makeText(getApplicationContext(), "알림이 한번만 울립니다.", Toast.LENGTH_SHORT).show();
-            }
-            // 부팅 후 실행되는 리시버 사용가능하게 설정
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-
-        } else { //Disable Daily Notifications
-            if (PendingIntent.getBroadcast(this, 0, alarmIntent, 0) != null && alarmManager != null) {
-                alarmManager.cancel(pendingIntent);
-                Toast.makeText(this, "Notifications were disabled", Toast.LENGTH_SHORT).show();
-            }
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
     }
 }

@@ -76,7 +76,7 @@
             android:name=".CreateToDoActivity"
             android:parentActivityName=".MainActivity"></activity>
 
-        <activity android:name=".Alarm_page"></activity>
+        <activity android:name=".RingActivity"></activity>
 
         <activity android:name=".PopupActivity" />
         <!--android:theme="@android:style/Theme.Dialog" />-->

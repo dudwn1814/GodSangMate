@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Alarm_page extends MainActivity {
+public class RingActivity extends MainActivity {
     Button dismiss = findViewById(R.id.dismiss);
     ImageView clock = findViewById(R.id.clock);;
 

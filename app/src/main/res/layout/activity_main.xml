@@ -66,6 +66,17 @@
                 android:contentDescription="@string/shareBtn"
                 android:src="@drawable/ic_launch_black_24dp"
                 tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/alarmTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="25sp" />
+
         </LinearLayout>
 
         <LinearLayout
