@@ -8,8 +8,8 @@
     <!-- 알람 관련 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:allowBackup="true"
@@ -22,8 +22,7 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.RE_ToDoList.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.RE_ToDoList.NoActionBar"></activity>
 
         <activity
             android:name=".MainActivity"
@@ -71,11 +70,13 @@
 
         <activity
             android:name=".CreateToDoActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
 
-        <activity android:name=".Alarm_page">
-        </activity>
+        <activity android:name=".Alarm_page"></activity>
+
+        <activity
+            android:name=".PopupActivity"
+            android:theme="@android:style/Theme.Dialog" />
 
 
         <provider
@@ -88,7 +89,8 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <receiver android:name=".DeviceBootReceiver"
+        <receiver
+            android:name=".DeviceBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
