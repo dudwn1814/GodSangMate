@@ -2,6 +2,8 @@ package com.example.re_todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,30 +18,68 @@ import com.google.firebase.database.ValueEventListener;
 public class LoadingActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDbRef;
-    FirebaseUser user = firebaseAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
-        firebaseAuth = FirebaseAuth.getInstance();
-        String uid = user.getUid();
-        mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    startActivity(new Intent(LoadingActivity.this, MainActivity.class));
-                    finish();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        if(user==null)  startActivity(new Intent(LoadingActivity.this, LoginActivity.class));
+        else {
+            mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
+            firebaseAuth = FirebaseAuth.getInstance();
+            String uid = user.getUid();
+
+            mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        UserAccount userA = dataSnapshot.getValue(UserAccount.class);
+                        String groupCode = userA.getG_code();
+                        mDbRef.child("GroupList").child(groupCode).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                GroupInfo group = snapshot.getValue(GroupInfo.class);
+                                String groupName = group.getName();
+
+                                mDbRef.child("GroupMember").child(groupCode).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        long person = snapshot.getChildrenCount();
+
+                                        Log.e("test", groupCode + " " + groupName + " " + person);
+                                    /*
+                                    Intent intent = new Intent(LoadingActivity.this, MainActivity.class);
+                                    intent.putExtra("groupCode", groupCode);
+                                    intent.putExtra("groupName", groupName);
+                                    intent.putExtra("memberCount", person);
+                                    startActivity(intent);
+                                    finish();
+
+                                     */
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Log.v("TAG", "loadPost:onCancelled", error.toException());
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+
+                    }
                 }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
     }
-
-        Intent intent = getIntent();
-        int achieve = intent.getExtras().getInt("achieve");
-
-    }
+}
