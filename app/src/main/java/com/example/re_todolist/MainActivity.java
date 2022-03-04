@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,8 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
-import java.security.acl.Group;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         alert_confirm = new AlertDialog.Builder(this);
         uid = "user1";
         groupCode = "ABC123";
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String writeDate = format.format(date);
 
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
@@ -124,11 +129,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
-
-                long now = System.currentTimeMillis();
-                Date date = new Date(now);
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                String writeDate = format.format(date);
 
                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -246,8 +246,38 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         Toast.LENGTH_LONG).show();
             }
         });
+
+
+        //다음날 넘어갈때 못한 투두 넘기기
+        mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!String.valueOf(task.getResult().getValue()).equals(writeDate)) {
+                    //방문일이 오늘이 아니거나 없는 경우
+                    Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
+                    Intent intent = new Intent(getApplicationContext(), PopupActivity.class);
+                    intent.putExtra("data", "Test Popup");
+                    startActivityForResult(intent, 1);
+                    mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").setValue(writeDate);
+                } else {
+                    //방문일이 오늘인 경우
+                    Log.d("yesterday_Todo", "오늘 방문함" + String.valueOf(task.getResult().getValue()));
+                }
+            }
+        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                //데이터 받기
+                String result = data.getStringExtra("result");
+                Toast.makeText(getApplicationContext(), result + "받음", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -357,8 +387,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot datasnapshot : snapshot.getChildren()) {
-                           ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
+                        for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                            ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
                             if (todo != null) {
                                 String tdid = todo.getTdid();
                                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
