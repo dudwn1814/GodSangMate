@@ -82,8 +82,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //uid = "user1";
         //groupCode = "ABC123";
 
-        getGroupCode();
-
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -133,6 +131,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 final ListHeaderViewHolder childItemController_g = (ListHeaderViewHolder) holder;
                 childItemController_g.checkBox.setText(item.activity);
 
+
                 if (item.repeat) childItemController_g.repeatDay.setVisibility(View.VISIBLE);
                 else childItemController_g.repeatDay.setVisibility(View.GONE);
 
@@ -165,9 +164,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
 
                 /* 투두 체크시 member에 uid-nickname 추가*/
-                /*
+
                 childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    mDbRef.child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+                    mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             groupCode = snapshot.getValue(String.class);
@@ -198,9 +197,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                         }
                     });
+                });
 
-
-                 */
+                /*
                 childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
                         mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid)
@@ -221,6 +220,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                 child(item.tdid).child("Member").child(uid).setValue(null);
                     }
                 });
+
+                 */
 
 
                 childItemController_g.deleteIcon.setOnClickListener(view -> {
@@ -410,7 +411,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                  groupCode = snapshot.getValue(String.class);
-
                 if (groupCode != null) {
                     Log.e("test", "그룹코드 받아오기 성공"+groupCode);
                 }
