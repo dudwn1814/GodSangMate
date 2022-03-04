@@ -205,10 +205,11 @@ public class CreateToDoActivity extends AppCompatActivity {
             String time = times.format(alarms);
  */
 
-            mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+            mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                    Log.d("GCODETEST", user.toString());
                     groupCode = user.getG_code();
 
                     if (group) {
