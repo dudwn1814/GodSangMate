@@ -78,8 +78,6 @@
                 android:src="@drawable/ic_launch_black_24dp"
                 tools:ignore="TouchTargetSizeCheck" />
 
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -87,46 +85,37 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/border"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/achieve_group"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:textAlignment="center"
                     android:text="@string/groupText"
                     android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/achieve_personal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="140dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/personAchievement"
-                    android:textSize="13sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal">
 
                 <com.dinuscxj.progressbar.CircleProgressBar
                     android:id="@+id/circlebar_group"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="50dp"
-                    android:layout_marginBottom="5dp"
+
                     app:progress_end_color="#ABF200"
                     app:progress_start_color="#FFBB00"
                     app:progress_stroke_cap="round"
@@ -134,12 +123,31 @@
                     app:progress_text_size="30sp"
                     app:style="solid_line" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/achieve_personal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:textAlignment="center"
+                    android:text="@string/personAchievement"
+                    android:textSize="13sp" />
+
                 <com.dinuscxj.progressbar.CircleProgressBar
                     android:id="@+id/circlebar_personal"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginStart="70dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="50dp"
                     android:transitionName="transition"
                     app:progress_end_color="#ABF200"
                     app:progress_start_color="#FFBB00"
@@ -149,7 +157,37 @@
                     app:style="solid_line" />
 
             </LinearLayout>
+        </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/groupAchieveInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:layout_marginTop="5dp"
+                    android:textAlignment="center"
+                    android:text="나의 달성률 : 100%"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/personalAchieveInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:layout_marginTop="5dp"
+                    android:textAlignment="center"
+                    android:text="@string/personalAchieveInfo"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

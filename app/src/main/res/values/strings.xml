@@ -9,8 +9,10 @@
     <string name="menuBtn">…</string>
     <string name="personText">(1명의 인원이 참가하고 있습니다)</string>
     <string name="achievement">달성률</string>
-    <string name="groupText">그룹별</string>
-    <string name="personAchievement">개인별</string>
+    <string name="groupText">그룹</string>
+    <string name="personAchievement">개인</string>
+    <string name="groupAchieveInfo">:) 나의 달성률 : 100%</string>
+    <string name="personalAchieveInfo">7/10</string>
     <string name="ToDoTitle">To Do List</string>
     <string name="TodoAddBtn">TODO</string>
     <string name="ShareBtn">TODO</string>

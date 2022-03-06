@@ -51,8 +51,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     String groupCode, groupName, uid, writeDate;
     AlertDialog.Builder alert_confirm;
     Calendar calendar;
-    int achieve_g, achieve_p;
+    int achieve_g, achieve_p, achieve_gp;
     CircleProgressBar circleProgressBar_group, circleProgressBar_personal;
+    TextView groupAchieveInfo, personalAchieveInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +95,13 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         circleProgressBar_group = findViewById(R.id.circlebar_group);
         circleProgressBar_personal = findViewById(R.id.circlebar_personal);
+        groupAchieveInfo = findViewById(R.id.groupAchieveInfo);
+        personalAchieveInfo = findViewById(R.id.personalAchieveInfo);
+
 
         computeAchieveG();
         computeAchieveP();
+        computeAchieveGP();
 
         //circleProgressBar_group.setProgress(achieve_g);
         //circleProgressBar_personal.setProgress(achieve_p);
@@ -578,55 +583,13 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return String.format(DEFAULT_PATTERN, (int) ((float) progress / (float) max * 100));
     }
 
-    //개인 달성률 계산
-    public void computeAchieveP() {
-
-        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                groupCode = snapshot.getValue(String.class);
-                if (groupCode != null) {
-                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            float max;        //유저의 개인 투두 전체
-                            float progress;   //유저가 체크한 개인 투두
-                            max = (float) snapshot.getChildrenCount();
-                            if (max == 0) achieve_p = 0;
-                            else {
-                                progress = 0;
-                                for (DataSnapshot todoSnapshot : snapshot.getChildren()) {
-                                    ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
-                                    Boolean done = todo.isDone();
-                                    if (done) progress++;
-                                }
-                                achieve_p = (int) ( progress / max * 100);
-                            }
-                            circleProgressBar_personal.setProgress(achieve_p);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                        }
-                    });
-                } else Log.e("test", "그룹코드 받아오기 실패");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
     //그룹 달성률 계산
     public void computeAchieveG() {
-
         mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 groupCode = snapshot.getValue(String.class);
                 if (groupCode != null) {
-
                     mDbRef.child("gsmate").child("GroupMember").child(groupCode).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -645,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                         for (DataSnapshot todoSnapshot : snapshot.getChildren()) {
                                             progress += (int) todoSnapshot.child("Member").getChildrenCount();
                                         }
-                                        achieve_g = (int) ( progress / fullCount * 100 );
+                                        achieve_g = (int) (progress / fullCount * 100);
                                         circleProgressBar_group.setProgress(achieve_g);
                                     }
                                 }
@@ -668,5 +631,85 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             }
         });
     }
+
+    //개인의 그룹 달성률 계산
+    public void computeAchieveGP() {
+        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                groupCode = snapshot.getValue(String.class);
+                if (groupCode != null) {
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            float max;        //그룹 투두 전체
+                            max = (float) snapshot.getChildrenCount();
+                            if (max == 0) achieve_gp = 0;
+                            else {
+                                float progress = 0;    //실행한 인원수
+                                for (DataSnapshot todoSnapshot : snapshot.getChildren()) {
+                                    for(DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
+                                        GroupMember member = memberSnapshot.getValue(GroupMember.class);
+                                        if(uid.equals(member.getUid())) progress = progress+1;
+                                    }
+                                }
+                                achieve_g = (int) (progress / max * 100);
+                            }
+                            groupAchieveInfo.setText("나의 달성률 : "+achieve_g+"%");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                } else Log.e("test","그룹코드 받아오기 실패");
+            }
+
+            @Override
+            public void onCancelled (@NonNull DatabaseError databaseError){
+            }
+        });
+    }
+
+    //개인 달성률 계산
+    public void computeAchieveP() {
+        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                groupCode = snapshot.getValue(String.class);
+                if (groupCode != null) {
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            float max = 0;        //유저의 개인 투두 전체
+                            float progress = 0;   //유저가 체크한 개인 투두
+                            max = (float) snapshot.getChildrenCount();
+                            if (max == 0) achieve_p = 0;
+                            else {
+                                for (DataSnapshot todoSnapshot : snapshot.getChildren()) {
+                                    ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
+                                    Boolean done = todo.isDone();
+                                    if (done) progress++;
+                                }
+                                achieve_p = (int) (progress / max * 100);
+                            }
+                            personalAchieveInfo.setText((int)progress+"/"+(int)max);
+                            circleProgressBar_personal.setProgress(achieve_p);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                } else Log.e("test", "그룹코드 받아오기 실패");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+
 
 }
