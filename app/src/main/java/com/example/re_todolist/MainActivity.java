@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,9 +52,10 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     String groupCode, groupName, uid, writeDate;
     AlertDialog.Builder alert_confirm;
     Calendar calendar;
-    int achieve_g, achieve_p, achieve_gp;
+    int achieve_g, achieve_p, achieve_gp, achieve;
     CircleProgressBar circleProgressBar_group, circleProgressBar_personal;
     TextView groupAchieveInfo, personalAchieveInfo;
+    LinearLayout achievementLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,18 +105,13 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         computeAchieveP();
         computeAchieveGP();
 
-        //circleProgressBar_group.setProgress(achieve_g);
-        //circleProgressBar_personal.setProgress(achieve_p);
-
 
         //달성률 공유하기
         ImageButton b_share = findViewById(R.id.imageButton);
+        achievementLayer = findViewById(R.id.achievementLayer);
 
         b_share.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ShareActivity.class);
-            intent.putExtra("achieve", achieve_p);
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, circleProgressBar_personal, "transition");
-            startActivity(intent, options.toBundle());
+            computeAchieve();
         });
 
 
@@ -583,7 +580,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return String.format(DEFAULT_PATTERN, (int) ((float) progress / (float) max * 100));
     }
 
-    //그룹 달성률 계산
+    //평균 그룹 달성률 계산
     public void computeAchieveG() {
         mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
             @Override
@@ -609,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                             progress += (int) todoSnapshot.child("Member").getChildrenCount();
                                         }
                                         achieve_g = (int) (progress / fullCount * 100);
-                                        circleProgressBar_group.setProgress(achieve_g);
+                                        groupAchieveInfo.setText("평균 달성률 : "+achieve_g+"%");
                                     }
                                 }
 
@@ -653,9 +650,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                         if(uid.equals(member.getUid())) progress = progress+1;
                                     }
                                 }
-                                achieve_g = (int) (progress / max * 100);
+                                achieve_gp = (int) (progress / max * 100);
                             }
-                            groupAchieveInfo.setText("나의 달성률 : "+achieve_g+"%");
+                            circleProgressBar_group.setProgress(achieve_gp);
                         }
 
                         @Override
@@ -710,6 +707,54 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         });
     }
 
+    //개인의 그룹 달성률 계산
+    public void computeAchieve() {
+        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String groupCode = snapshot.getValue(String.class);
+                if (groupCode != null) {
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            float group = (float) snapshot.child("Group").getChildrenCount();
+                            float personal = (float) snapshot.child("Personal").child(uid).getChildrenCount();
+                            float whole = group+personal;
 
+                            if (whole == 0) achieve = 0;
+                            else {
+                                float progress_g = 0;    //실행한 그룹 투두 수
+                                for (DataSnapshot todoSnapshot : snapshot.child("Group").getChildren()) {
+                                    for(DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
+                                        GroupMember member = memberSnapshot.getValue(GroupMember.class);
+                                        if(uid.equals(member.getUid())) progress_g = progress_g+1;
+                                    }
+                                }
+                                float progress_p = 0;    //실행한 개인 투두 수
+                                for(DataSnapshot todoSnapshot : snapshot.child("Personal").child(uid).getChildren()){
+                                    ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
+                                    if(todo.isDone())   progress_p = progress_p+1;
+                                }
+                                float progress = progress_g+progress_p;
+                                achieve = (int) (progress / whole * 100);
+                            }
+                            Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+                            intent.putExtra("achieve", achieve);
+                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, achievementLayer, "transition");
+                            startActivity(intent, options.toBundle());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                } else Log.e("test","그룹코드 받아오기 실패");
+            }
+
+            @Override
+            public void onCancelled (@NonNull DatabaseError databaseError){
+            }
+        });
+    }
 
 }

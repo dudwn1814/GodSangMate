@@ -53,7 +53,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShareActivity.this, MainActivity.class);
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ShareActivity.this, circle1, "transition");
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ShareActivity.this, layout, "transition");
                 startActivity(intent, options.toBundle());
                 finish();
             }

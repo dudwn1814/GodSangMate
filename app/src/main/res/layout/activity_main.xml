@@ -85,6 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/border"
+            android:transitionName="transition"
+            android:id="@+id/achievementLayer"
             android:orientation="vertical"
             >
         <LinearLayout
@@ -148,7 +150,6 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="50dp"
-                    android:transitionName="transition"
                     app:progress_end_color="#ABF200"
                     app:progress_start_color="#FFBB00"
                     app:progress_stroke_cap="round"
@@ -173,7 +174,7 @@
 
                     android:layout_marginTop="5dp"
                     android:textAlignment="center"
-                    android:text="나의 달성률 : 100%"
+                    android:text="평균 달성률 : 100%"
                     android:textSize="13sp" />
 
                 <TextView
