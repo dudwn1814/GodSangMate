@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
         alert_confirm = new AlertDialog.Builder(this);
-        //uid = "user1";
-        //groupCode = "ABC123";
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -186,9 +184,11 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
                                 for (DataSnapshot memberSnapshot : postSnapshot.child("Member").getChildren()) {
                                     GroupMember groupMember = memberSnapshot.getValue(GroupMember.class);
-                                    String mUid = groupMember.getUid();
-                                    String nickname = groupMember.getNickname();
-                                    member.put(mUid, nickname);
+                                    if (groupMember != null) {
+                                        String mUid = groupMember.getUid();
+                                        String nickname = groupMember.getNickname();
+                                        member.put(mUid, nickname);
+                                    }
                                 }
 
                                 if (alarm) {
@@ -280,25 +280,71 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                groupCode = user.getG_code();
 
+                groupCode = user.getG_code();
 
                 mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (!String.valueOf(task.getResult().getValue()).equals(writeDate)) {
                             //방문일이 오늘이 아니거나 없는 경우
-                            Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
-                            Intent intent = new Intent(getApplicationContext(), PopupActivity.class);
-                            intent.putExtra("data", "Test Popup");
-                            startActivityForResult(intent, 1);
-                            mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").setValue(writeDate);
+
+                            Date dDate = new Date();
+                            dDate = new Date(dDate.getTime() + (1000 * 60 * 60 * 24 * -1));
+                            SimpleDateFormat dSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+                            String yesterday = dSdf.format(dDate);
+
+                            mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    UserAccount user = dataSnapshot.getValue(UserAccount.class);
+                                    groupCode = user.getG_code();
+
+                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(yesterday).child("Personal").child(uid).addValueEventListener(new ValueEventListener() {
+                                        int yesterday_done = 0;
+
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                                ToDoPrac todo = postSnapshot.getValue(ToDoPrac.class);
+
+                                                if (!todo.isRepeat() && !todo.isDone()) {
+                                                    yesterday_done++;
+                                                    Log.d("yesterday_Todo", yesterday_done + "in func");
+                                                }
+                                            }
+
+                                            Log.d("yesterday_Todo", yesterday_done + "");
+                                            if (yesterday_done <= 0) {
+                                                //전날 미완인 투두가 하나도 없을 경우
+                                                Log.d("yesterday_Todo", "다 완료한 투두이거나, 반복인 투두만 있음");
+                                            } else {
+                                                Log.d("yesterday_Todo", "방문일이 오늘이 아닌 경우" + String.valueOf(task.getResult().getValue()));
+                                                Intent intent = new Intent(getApplicationContext(), PopupActivity.class);
+                                                intent.putExtra("data", "Test Popup");
+                                                startActivityForResult(intent, 1);
+                                            }
+                                            mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).child("lastVisit").setValue(writeDate);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Log.v("TAG", "loadPost:onCancelled", error.toException());
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
                         } else {
                             //방문일이 오늘인 경우
                             Log.d("yesterday_Todo", "오늘 방문함" + String.valueOf(task.getResult().getValue()));
                         }
                     }
-
                 });
             }
 
@@ -648,25 +694,25 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             else {
                                 float progress = 0;    //실행한 인원수
                                 for (DataSnapshot todoSnapshot : snapshot.getChildren()) {
-                                    for(DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
+                                    for (DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
                                         GroupMember member = memberSnapshot.getValue(GroupMember.class);
-                                        if(uid.equals(member.getUid())) progress = progress+1;
+                                        if (uid.equals(member.getUid())) progress = progress + 1;
                                     }
                                 }
                                 achieve_g = (int) (progress / max * 100);
                             }
-                            groupAchieveInfo.setText("나의 달성률 : "+achieve_g+"%");
+                            groupAchieveInfo.setText("나의 달성률 : " + achieve_g + "%");
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
-                } else Log.e("test","그룹코드 받아오기 실패");
+                } else Log.e("test", "그룹코드 받아오기 실패");
             }
 
             @Override
-            public void onCancelled (@NonNull DatabaseError databaseError){
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
@@ -688,12 +734,14 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             else {
                                 for (DataSnapshot todoSnapshot : snapshot.getChildren()) {
                                     ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
-                                    Boolean done = todo.isDone();
-                                    if (done) progress++;
+                                    if (todo != null) {
+                                        boolean done = todo.isDone();
+                                        if (done) progress++;
+                                    }
                                 }
                                 achieve_p = (int) (progress / max * 100);
                             }
-                            personalAchieveInfo.setText((int)progress+"/"+(int)max);
+                            personalAchieveInfo.setText((int) progress + "/" + (int) max);
                             circleProgressBar_personal.setProgress(achieve_p);
                         }
 
@@ -709,7 +757,5 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             }
         });
     }
-
-
 
 }

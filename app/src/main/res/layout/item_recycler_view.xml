@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <CheckBox
         android:id="@+id/recycler_item"
@@ -13,11 +13,5 @@
         android:text="@string/defaultActivity"
         android:textSize="20sp" />
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="전날의 투두"
-        android:id="@+id/recycler_item"/>-->
 
 </LinearLayout>
