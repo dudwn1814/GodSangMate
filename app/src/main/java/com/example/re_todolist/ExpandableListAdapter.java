@@ -1,14 +1,11 @@
 package com.example.re_todolist;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,21 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-//import com.tooltip.Tooltip;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+//import com.tooltip.Tooltip;
 
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
@@ -79,8 +75,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
         uid = mAuth.getUid();
-        //uid = "user1";
-        //groupCode = "ABC123";
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -163,8 +157,9 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     });
                 }
 
-                if(uid.equals(item.uid)) childItemController_g.deleteIcon.setVisibility(View.VISIBLE);
-                else    childItemController_g.deleteIcon.setVisibility(View.INVISIBLE);
+                if (uid.equals(item.uid))
+                    childItemController_g.deleteIcon.setVisibility(View.VISIBLE);
+                else childItemController_g.deleteIcon.setVisibility(View.INVISIBLE);
 
                 /* 투두 체크시 member에 uid-nickname 추가*/
                 childItemController_g.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -291,8 +286,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 groupCode = snapshot.getValue(String.class);
                                 if (groupCode != null) {
-                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
-                                                        child(uid).child(item.tdid).child("done").setValue(isChecked);
+                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").
+                                            child(uid).child(item.tdid).child("done").setValue(isChecked);
                                 } else Log.e("test", "그룹코드 받아오기 실패");
                             }
 
@@ -309,20 +304,20 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.deleteIcon.setOnClickListener(view -> {
                     Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
-                        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                groupCode = snapshot.getValue(String.class);
-                                if (groupCode != null) {
-                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
-                                            .child(item.tdid).removeValue();
-                                } else Log.e("test", "그룹코드 받아오기 실패");
-                            }
+                    mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            groupCode = snapshot.getValue(String.class);
+                            if (groupCode != null) {
+                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
+                                        .child(item.tdid).removeValue();
+                            } else Log.e("test", "그룹코드 받아오기 실패");
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
                 });
                 break;
         }
