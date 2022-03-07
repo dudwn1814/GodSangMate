@@ -407,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return true;
     }
 
+
     private void setAlarm() {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         uid = firebaseUser.getUid();
@@ -432,11 +433,18 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                         String activity = alarm.getActivity();
                                         boolean repeat = alarm.isRepeat();
                                         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+                                        Date date = null;
                                         //String str = "2020-03-01 12:00:01";
+
                                         try {
-                                            Date date = sd.parse(alarmTimes);
-                                            calendar.setTime(date);
-                                            moveAlarm(calendar, activity, repeat);
+                                            if (alarmTimes != null) {
+                                                date = sd.parse(alarmTimes);
+
+                                                Log.d("알람 파싱", "날짜"+ date);
+                                                Calendar calendar = Calendar.getInstance();
+                                                calendar.setTime(date);
+                                                moveAlarm(calendar, activity, repeat);
+                                            }
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -611,6 +619,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                     if (todo != null) {
                                         String tdid = todo.getTdid();
                                         mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
+                                        mDbRef.child("gsmate").child("Alarm").child(groupCode).child(tdid).setValue(null);
                                     }
                                 }
                             }

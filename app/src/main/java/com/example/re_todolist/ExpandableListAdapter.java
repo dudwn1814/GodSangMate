@@ -237,6 +237,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                                 Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
                                                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
                                                         child(item.tdid).removeValue();
+                                                mDbRef.child("gsmate").child("Alarm").child(groupCode).child(item.tdid).removeValue();
                                             }
                                         })
                                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
