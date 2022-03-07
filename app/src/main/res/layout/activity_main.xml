@@ -225,6 +225,15 @@
                     android:contentDescription="@string/writeBtn"
                     android:src="@drawable/ic_baseline_add_24" />
 
+                <TextView
+                    android:id="@+id/countTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:text="초기화까지 00:00:00 남았습니다"
+                    android:textSize="12sp" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

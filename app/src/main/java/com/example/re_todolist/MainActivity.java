@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,6 +82,40 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             setAlarm();
         });
 
+        //남은 시간 출력
+        // TODO: 2022-03-07 지속시간은 일단 24시간으로..
+        CountDownTimer countDownTimer = new CountDownTimer(3600000*24,1000) {
+            @Override
+            public void onTick(long l) {
+                SimpleDateFormat countDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+                Date countDate = new Date();
+
+                String nowDate = countDateFormat.format(countDate);
+                Log.d("TimeCheck", nowDate);
+                String endDate = "24:00:00";
+                Log.d("TimeCheck", endDate);
+
+                try {
+                    Date inputDate = countDateFormat.parse(nowDate);
+                    Date currDate = countDateFormat.parse(endDate);
+
+                    long diffSec = (currDate.getTime() -inputDate.getTime()) / 1000;
+                    long countHour = diffSec/3600;
+                    long countMin = (diffSec - (3600 * countHour))/60;
+                    long countSec = (diffSec - (3600 * countHour)) - (60 * countMin);
+
+                    TextView countTime = findViewById(R.id.countTime);
+                    countTime.setText("초기화까지 " + countHour+":"+countMin+":"+countSec+" 남았습니다");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
 
         //todo 작성 페이지로 이동
         ImageButton fab = findViewById(R.id.writeBtn);
