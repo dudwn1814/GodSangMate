@@ -1,6 +1,7 @@
 package com.example.re_todolist;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -227,8 +229,24 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             groupCode = snapshot.getValue(String.class);
                             if (groupCode != null) {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
-                                        child(item.tdid).removeValue();
+                                new MaterialAlertDialogBuilder(view.getContext())
+                                        .setTitle('"'+ item.activity+ "\" 을(를) 삭제하시겠습니까?")
+                                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
+                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                                        child(item.tdid).removeValue();
+                                            }
+                                        })
+                                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Toast.makeText(view.getContext(), "취소", Toast.LENGTH_SHORT);
+                                            }
+                                        })
+                                        .show();
+
                                 /*
                                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -309,8 +327,24 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             groupCode = snapshot.getValue(String.class);
                             if (groupCode != null) {
-                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
-                                        .child(item.tdid).removeValue();
+                                new MaterialAlertDialogBuilder(view.getContext())
+                                        .setTitle('"'+ item.activity+ "\" 을(를) 삭제하시겠습니까?")
+                                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
+                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
+                                                        .child(item.tdid).removeValue();
+                                            }
+                                        })
+                                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Toast.makeText(view.getContext(), "취소", Toast.LENGTH_SHORT);
+                                            }
+                                        })
+                                        .show();
+
                             } else Log.e("test", "그룹코드 받아오기 실패");
                         }
 
