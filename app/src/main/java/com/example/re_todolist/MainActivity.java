@@ -38,6 +38,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Document;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         resetAlarm(this);
 
 
-
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         //남은 시간 출력
         // TODO: 2022-03-07 지속시간은 일단 24시간으로..
-        CountDownTimer countDownTimer = new CountDownTimer(3600000*24,1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(3600000 * 24, 1000) {
             @Override
             public void onTick(long l) {
                 SimpleDateFormat countDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
@@ -112,13 +113,13 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     Date inputDate = countDateFormat.parse(nowDate);
                     Date currDate = countDateFormat.parse(endDate);
 
-                    long diffSec = (currDate.getTime() -inputDate.getTime()) / 1000;
-                    long countHour = diffSec/3600;
-                    long countMin = (diffSec - (3600 * countHour))/60;
+                    long diffSec = (currDate.getTime() - inputDate.getTime()) / 1000;
+                    long countHour = diffSec / 3600;
+                    long countMin = (diffSec - (3600 * countHour)) / 60;
                     long countSec = (diffSec - (3600 * countHour)) - (60 * countMin);
 
                     TextView countTime = findViewById(R.id.countTime);
-                    countTime.setText("초기화까지 " + countHour+":"+countMin+":"+countSec+" 남았습니다");
+                    countTime.setText("초기화까지 " + countHour + ":" + countMin + ":" + countSec + " 남았습니다");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -453,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                             if (alarmTimes != null) {
                                                 date = sd.parse(alarmTimes);
 
-                                                Log.d("알람 파싱", "날짜"+ date);
+                                                Log.d("알람 파싱", "날짜" + date);
                                                 Calendar calendar = Calendar.getInstance();
                                                 calendar.setTime(date);
                                                 moveAlarm(calendar, activity, repeat);
@@ -813,59 +814,59 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         });
     }
 
-    //개인의 그룹 달성률 계산
+    //개인의 전체 달성률 계산
     public void computeAchieve() {
-        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
+        mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String groupCode = snapshot.getValue(String.class);
-                if (groupCode != null) {
-                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            float group = (float) snapshot.child("Group").getChildrenCount();
-                            float personal = (float) snapshot.child("Personal").child(uid).getChildrenCount();
-                            float whole = group + personal;
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DataSnapshot snapshot = task.getResult();
+                    String groupCode;
 
-                            if (whole == 0) achieve = 0;
-                            else {
-                                float progress_g = 0;    //실행한 그룹 투두 수
-                                for (DataSnapshot todoSnapshot : snapshot.child("Group").getChildren()) {
-                                    for (DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
-                                        GroupMember member = memberSnapshot.getValue(GroupMember.class);
-                                        if (uid.equals(member.getUid()))
-                                            progress_g = progress_g + 1;
+                    groupCode = snapshot.getValue(String.class);
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DataSnapshot snapshot = task.getResult();
+                                float group = (float) snapshot.child("Group").getChildrenCount();
+                                float personal = (float) snapshot.child("Personal").child(uid).getChildrenCount();
+                                float whole = group + personal;
+
+                                if (whole == 0) achieve = 0;
+                                else {
+                                    float progress_g = 0;    //실행한 그룹 투두 수
+                                    for (DataSnapshot todoSnapshot : snapshot.child("Group").getChildren()) {
+                                        for (DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
+                                            GroupMember member = memberSnapshot.getValue(GroupMember.class);
+                                            if (uid.equals(member.getUid()))
+                                                progress_g = progress_g + 1;
+                                        }
                                     }
+                                    float progress_p = 0;    //실행한 개인 투두 수
+                                    for (DataSnapshot todoSnapshot : snapshot.child("Personal").child(uid).getChildren()) {
+                                        ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
+                                        if (todo.isDone()) progress_p = progress_p + 1;
+                                    }
+                                    float progress = progress_g + progress_p;
+                                    achieve = (int) (progress / whole * 100);
                                 }
-                                float progress_p = 0;    //실행한 개인 투두 수
-                                for (DataSnapshot todoSnapshot : snapshot.child("Personal").child(uid).getChildren()) {
-                                    ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
-                                    if (todo.isDone()) progress_p = progress_p + 1;
-                                }
-                                float progress = progress_g + progress_p;
-                                achieve = (int) (progress / whole * 100);
+                                Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+                                intent.putExtra("achieve", achieve);
+                                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, achievementLayer, "transition");
+                                startActivity(intent, options.toBundle());
                             }
-                            Intent intent = new Intent(MainActivity.this, ShareActivity.class);
-                            intent.putExtra("achieve", achieve);
-                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, achievementLayer, "transition");
-                            startActivity(intent, options.toBundle());
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
-                } else Log.e("test", "그룹코드 받아오기 실패");
+                }
+
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
         });
     }
 
-    public static void resetAlarm(Context context){
-        AlarmManager resetAlarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+    public static void resetAlarm(Context context) {
+        AlarmManager resetAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent resetIntent = new Intent(context, DateChangeBroadcastReceiver.class);
         PendingIntent resetSender = PendingIntent.getBroadcast(context, 0, resetIntent, 0);
 
@@ -873,12 +874,12 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         Calendar resetCal = Calendar.getInstance();
         resetCal.setTimeInMillis(System.currentTimeMillis());
         resetCal.set(Calendar.HOUR_OF_DAY, 0);
-        resetCal.set(Calendar.MINUTE,0);
+        resetCal.set(Calendar.MINUTE, 0);
         resetCal.set(Calendar.SECOND, 0);
 
         //다음날 0시에 맞추기 위해 24시간을 뜻하는 상수인 AlarmManager.INTERVAL_DAY를 더해줌.
         resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis()
-                +AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
+                + AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
 
     }
 

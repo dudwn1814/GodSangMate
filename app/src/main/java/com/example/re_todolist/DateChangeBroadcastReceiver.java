@@ -58,6 +58,7 @@ public class DateChangeBroadcastReceiver extends BroadcastReceiver {
                             String uid = uidSnapshot.getKey();
                             for (DataSnapshot personalToDo : uidSnapshot.getChildren()) {
                                 ToDoPrac todo = personalToDo.getValue(ToDoPrac.class);
+                                todo.setDone(false);
                                 if (todo != null) {
                                     if (todo.isRepeat())
                                         mDbRef.child("ToDoList").child(groupCode).child(today).child("Personal").child(uid).child(todo.getTdid()).setValue(todo);
