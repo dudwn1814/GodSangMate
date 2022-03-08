@@ -211,7 +211,9 @@ public class CreateToDoActivity extends AppCompatActivity {
                         todoObj.setTdid(TDId);
                         alarmObj.setTdid(TDId);
                         mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Group").child(TDId).setValue(todoObj);
-                        mDbRef.child("Alarm").child(groupCode).child(TDId).setValue(alarmObj);
+                        if(alarm) {
+                            mDbRef.child("Alarm").child(groupCode).child(TDId).setValue(alarmObj);
+                        }
                     } else {
                         TDId = mDbRef.child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).push().getKey();
                         todoObj.setTdid(TDId);

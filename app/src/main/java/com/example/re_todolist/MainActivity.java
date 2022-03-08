@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,6 +95,40 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             setAlarm();
         });
 
+        //남은 시간 출력
+        // TODO: 2022-03-07 지속시간은 일단 24시간으로..
+        CountDownTimer countDownTimer = new CountDownTimer(3600000*24,1000) {
+            @Override
+            public void onTick(long l) {
+                SimpleDateFormat countDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+                Date countDate = new Date();
+
+                String nowDate = countDateFormat.format(countDate);
+                Log.d("TimeCheck", nowDate);
+                String endDate = "24:00:00";
+                Log.d("TimeCheck", endDate);
+
+                try {
+                    Date inputDate = countDateFormat.parse(nowDate);
+                    Date currDate = countDateFormat.parse(endDate);
+
+                    long diffSec = (currDate.getTime() -inputDate.getTime()) / 1000;
+                    long countHour = diffSec/3600;
+                    long countMin = (diffSec - (3600 * countHour))/60;
+                    long countSec = (diffSec - (3600 * countHour)) - (60 * countMin);
+
+                    TextView countTime = findViewById(R.id.countTime);
+                    countTime.setText("초기화까지 " + countHour+":"+countMin+":"+countSec+" 남았습니다");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
 
         //todo 작성 페이지로 이동
         ImageButton fab = findViewById(R.id.writeBtn);
@@ -385,6 +420,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         return true;
     }
 
+
     private void setAlarm() {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         uid = firebaseUser.getUid();
@@ -410,11 +446,18 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                         String activity = alarm.getActivity();
                                         boolean repeat = alarm.isRepeat();
                                         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+                                        Date date = null;
                                         //String str = "2020-03-01 12:00:01";
+
                                         try {
-                                            Date date = sd.parse(alarmTimes);
-                                            calendar.setTime(date);
-                                            moveAlarm(calendar, activity, repeat);
+                                            if (alarmTimes != null) {
+                                                date = sd.parse(alarmTimes);
+
+                                                Log.d("알람 파싱", "날짜"+ date);
+                                                Calendar calendar = Calendar.getInstance();
+                                                calendar.setTime(date);
+                                                moveAlarm(calendar, activity, repeat);
+                                            }
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -589,6 +632,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                         if (todo != null) {
                                             String tdid = todo.getTdid();
                                             mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
+                                            mDbRef.child("gsmate").child("Alarm").child(groupCode).child(tdid).setValue(null);
                                         }
                                     }
                                 }
@@ -604,7 +648,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                     mDbRef.child("gsmate").child("UsersGroup").child(uid).setValue(null);
                     mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).setValue(null);
 
-                    /* groupMember 삭제되면 groupList에서도 삭제하기 */
+                    /* groupMember 삭제되면 groupList에서도 삭제하기
+                    =>그룹 멤버 0명일 때, 그룹 정보는 유지하다가 이후 같은 코드를 갖는 새 그룹이 생긴다면 덮어쓰기 */
                     /*
                     mDbRef.child("gsmate").child("GroupMember").orderByKey().equalTo(groupCode).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
