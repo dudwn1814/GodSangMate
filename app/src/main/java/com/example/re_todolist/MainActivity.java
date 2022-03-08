@@ -3,10 +3,13 @@ package com.example.re_todolist;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -66,6 +69,16 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mDbRef = FirebaseDatabase.getInstance().getReference();
 
         alert_confirm = new AlertDialog.Builder(this);
+
+        /*
+        BroadcastReceiver br = new DateChangeBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_DATE_CHANGED);
+        this.registerReceiver(br, filter);
+         */
+        resetAlarm(this);
+
+
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -561,55 +574,55 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                groupCode = user.getG_code();
-                /* user가 작성한 to_do 삭제하기 */
-                //개인 투두 삭제
-                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).setValue(null);
-                //그룹 투두 삭제
-                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").orderByChild("uid").equalTo(uid)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
-                                    ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
-                                    if (todo != null) {
-                                        String tdid = todo.getTdid();
-                                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
+                groupCode = dataSnapshot.child("g_code").getValue(String.class);
+                if (groupCode != null) {
+                    /* user가 작성한 to_do 삭제하기 */
+                    //개인 투두 삭제
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).setValue(null);
+                    //그룹 투두 삭제
+                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").orderByChild("uid").equalTo(uid)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                                        ToDoPrac todo = datasnapshot.getValue(ToDoPrac.class);
+                                        if (todo != null) {
+                                            String tdid = todo.getTdid();
+                                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(tdid).setValue(null);
+                                        }
                                     }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
 
-                /*user의 그룹정보, 그룹 내 user 정보 제거*/
-                mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").setValue(null);
-                mDbRef.child("gsmate").child("UserAccount").child(uid).child("nickname").setValue(null);
-                mDbRef.child("gsmate").child("UsersGroup").child(uid).setValue(null);
-                mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).setValue(null);
+                    /* user의 그룹정보, 그룹 내 user 정보 제거 */
+                    mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").setValue(null);
+                    mDbRef.child("gsmate").child("UserAccount").child(uid).child("nickname").setValue(null);
+                    mDbRef.child("gsmate").child("UsersGroup").child(uid).setValue(null);
+                    mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).setValue(null);
 
-        /* groupMember 삭제되면 groupList에서도 삭제하기
-           =>그룹 멤버 0명일 때, 그룹 정보는 유지하다가 이후 같은 코드를 갖는 새 그룹이 생긴다면 덮어쓰기 */
-        /*
-        mDbRef.child("gsmate").child("GroupMember").orderByValue().equalTo(groupCode)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        GroupMember value = snapshot.getValue(GroupMember.class);
-                        if (value == null) {
-                            mDbRef.child("gsmate").child("GroupList").child(groupCode).setValue(null);
-                        }
-                    }
+                    /* groupMember 삭제되면 groupList에서도 삭제하기 */
+                    /*
+                    mDbRef.child("gsmate").child("GroupMember").orderByKey().equalTo(groupCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    GroupMember value = snapshot.getValue(GroupMember.class);
+                                    Log.e("test", snapshot.getValue()+"");
+                                    if (value == null) {
+                                        mDbRef.child("gsmate").child("GroupList").child(groupCode).setValue(null);
+                                    }
+                                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-         */
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
 
+                     */
+                } else Log.e("test", "그룹코드 받아오기 실패");
 
                 Intent intent = new Intent(getApplicationContext(), Groupmenu.class);
                 startActivity(intent);
@@ -652,8 +665,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                             progress += (int) todoSnapshot.child("Member").getChildrenCount();
                                         }
                                         achieve_g = (int) (progress / fullCount * 100);
-                                        groupAchieveInfo.setText("평균 달성률 : "+achieve_g+"%");
                                     }
+                                    groupAchieveInfo.setText("평균 달성률 : " + achieve_g + "%");
                                 }
 
                                 @Override
@@ -767,23 +780,24 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             float group = (float) snapshot.child("Group").getChildrenCount();
                             float personal = (float) snapshot.child("Personal").child(uid).getChildrenCount();
-                            float whole = group+personal;
+                            float whole = group + personal;
 
                             if (whole == 0) achieve = 0;
                             else {
                                 float progress_g = 0;    //실행한 그룹 투두 수
                                 for (DataSnapshot todoSnapshot : snapshot.child("Group").getChildren()) {
-                                    for(DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
+                                    for (DataSnapshot memberSnapshot : todoSnapshot.child("Member").getChildren()) {
                                         GroupMember member = memberSnapshot.getValue(GroupMember.class);
-                                        if(uid.equals(member.getUid())) progress_g = progress_g+1;
+                                        if (uid.equals(member.getUid()))
+                                            progress_g = progress_g + 1;
                                     }
                                 }
                                 float progress_p = 0;    //실행한 개인 투두 수
-                                for(DataSnapshot todoSnapshot : snapshot.child("Personal").child(uid).getChildren()){
+                                for (DataSnapshot todoSnapshot : snapshot.child("Personal").child(uid).getChildren()) {
                                     ToDoPrac todo = todoSnapshot.getValue(ToDoPrac.class);
-                                    if(todo.isDone())   progress_p = progress_p+1;
+                                    if (todo.isDone()) progress_p = progress_p + 1;
                                 }
-                                float progress = progress_g+progress_p;
+                                float progress = progress_g + progress_p;
                                 achieve = (int) (progress / whole * 100);
                             }
                             Intent intent = new Intent(MainActivity.this, ShareActivity.class);
@@ -796,13 +810,31 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
-                } else Log.e("test","그룹코드 받아오기 실패");
+                } else Log.e("test", "그룹코드 받아오기 실패");
             }
 
             @Override
-            public void onCancelled (@NonNull DatabaseError databaseError){
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    public static void resetAlarm(Context context){
+        AlarmManager resetAlarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent resetIntent = new Intent(context, DateChangeBroadcastReceiver.class);
+        PendingIntent resetSender = PendingIntent.getBroadcast(context, 0, resetIntent, 0);
+
+        // 자정 시간
+        Calendar resetCal = Calendar.getInstance();
+        resetCal.setTimeInMillis(System.currentTimeMillis());
+        resetCal.set(Calendar.HOUR_OF_DAY, 0);
+        resetCal.set(Calendar.MINUTE,0);
+        resetCal.set(Calendar.SECOND, 0);
+
+        //다음날 0시에 맞추기 위해 24시간을 뜻하는 상수인 AlarmManager.INTERVAL_DAY를 더해줌.
+        resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis()
+                +AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
+
     }
 
 }

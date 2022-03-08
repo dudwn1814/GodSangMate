@@ -49,9 +49,7 @@
             android:name=".JoinActivity"
             android:parentActivityName=".LoginActivity" />
 
-        <activity
-            android:name=".Groupmenu"
-            android:parentActivityName=".LoginActivity" />
+        <activity android:name=".Groupmenu" />
 
         <activity
             android:name=".GroupName"

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +21,19 @@ import com.dinuscxj.progressbar.CircleProgressBar;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class ShareActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
 
     private static final String DEFAULT_PATTERN = "%d%%";
     ImageButton button, exit;
     LinearLayout layout;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,18 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         button = findViewById(R.id.share);
         layout = findViewById(R.id.layout);
         exit = findViewById(R.id.exitIcon);
+        textView = findViewById(R.id.date);
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd");
+        String today = format.format(date);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        String day = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.NARROW_FORMAT, Locale.KOREAN);
+
+        textView.setText(today+"("+day+")");
 
         Intent intent = getIntent();
         int achieve = intent.getExtras().getInt("achieve");
@@ -75,8 +95,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         if (bitmap == null) {
             Toast.makeText(getApplicationContext(), "변환 오류",
                     Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             try {
                 File cachePath = new File(getApplicationContext().getCacheDir(), "images");
                 cachePath.mkdirs(); // don't forget to make the directory
