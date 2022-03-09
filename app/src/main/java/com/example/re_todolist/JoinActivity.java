@@ -209,6 +209,7 @@ public class JoinActivity extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), "가입되었습니다.",
                             Toast.LENGTH_LONG).show();
+                    mAuth.signOut();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                 } else {
