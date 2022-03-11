@@ -93,7 +93,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".AlarmBroadcastReceiver">
+        <receiver android:name=".AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
