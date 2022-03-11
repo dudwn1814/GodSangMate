@@ -3,7 +3,9 @@
     package="com.example.re_todolist">
 
     <!-- 인터넷 사용 권한 -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 알람 관련 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 알람 관련 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -17,13 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RE_ToDoList">
 
-
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.RE_ToDoList.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

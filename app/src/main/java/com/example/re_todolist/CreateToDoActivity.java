@@ -159,7 +159,7 @@ public class CreateToDoActivity extends AppCompatActivity {
             // 현재 지정된 시간으로 알람 시간 설정
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, hour_24+12);
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
             calendar.set(Calendar.SECOND, 0);
 
