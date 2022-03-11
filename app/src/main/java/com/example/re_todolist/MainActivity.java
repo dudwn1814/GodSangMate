@@ -2,6 +2,7 @@ package com.example.re_todolist;
 
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,12 +47,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements CircleProgressBar.ProgressFormatter {
+    private static int ONE_MINUTE = 5626;
 
     private static final String DEFAULT_PATTERN = "%d%%";
     FirebaseAuth mAuth;
@@ -63,10 +67,29 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     TextView groupAchieveInfo, personalAchieveInfo;
     LinearLayout achievementLayer;
 
+    private AlarmManager alarmManager;
+    private GregorianCalendar mCalender;
+
+    private NotificationManager notificationManager;
+    NotificationCompat.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //*******************
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        mCalender = new GregorianCalendar();
+
+        Log.v("HelloAlarmActivity", mCalender.getTime().toString());
+
+        setContentView(R.layout.activity_main);
+        setAlarm();
+
 
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
@@ -403,6 +426,31 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         });
     }
 
+    private void setAlarm() {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(MainActivity.this, AlarmRecevier.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, receiverIntent, 0);
+
+        String from = "2022-03-11 17:14:00"; //임의로 날짜와 시간을 지정
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datetime = null;
+        try {
+            datetime = dateFormat.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
+
+        Log.d("alarmCHECK", "setAlarm 들어옴");
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -422,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
 
-    private void setAlarm() {
+    /* private void setAlarm() {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         uid = firebaseUser.getUid();
         mDbRef.child("gsmate").child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
@@ -488,7 +536,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                         Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }*/
 
     public void moveAlarm(Calendar calendar, String activity, Boolean repeat) {
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);

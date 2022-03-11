@@ -75,7 +75,7 @@
         <activity android:name=".PopupActivity" />
         <!--android:theme="@android:style/Theme.Dialog" />-->
 
-        <provider
+        <!--<provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.re_todolist.fileprovider"
             android:exported="false"
@@ -97,11 +97,19 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
+        </receiver>-->
+
+        <!--<service android:name=".AlarmService" />
+
+        <receiver android:name=".DateChangeBroadcastReceiver" />-->
+
+        <receiver android:name=".AlarmRecevier"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
-
-        <service android:name=".AlarmService" />
-
-        <receiver android:name=".DateChangeBroadcastReceiver" />
 
     </application>
 
