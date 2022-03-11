@@ -27,8 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
-<activity
+
+        <!--<activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.RE_ToDoList">
@@ -36,30 +36,45 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        -->
+        </activity>-->
+
         <activity android:name=".LoginActivity" />
+
         <activity
             android:name=".MainActivity"
             android:parentActivityName=".NicknameActivity" />
+
+
         <activity
             android:name=".JoinActivity"
             android:parentActivityName=".LoginActivity" />
+
         <activity android:name=".Groupmenu" />
+
         <activity
             android:name=".GroupName"
             android:parentActivityName=".Groupmenu" />
+
         <activity
             android:name=".PartGroupActivity"
             android:parentActivityName=".Groupmenu" />
+
+
         <activity android:name=".GroupNum" />
+
         <activity android:name=".NicknameActivity" />
+
         <activity android:name=".ShareActivity" />
+
         <activity
             android:name=".CreateToDoActivity"
             android:parentActivityName=".MainActivity" />
+
         <activity android:name=".RingActivity" />
-        <activity android:name=".PopupActivity" /> <!-- android:theme="@android:style/Theme.Dialog" /> -->
+
+        <activity android:name=".PopupActivity" />
+        <!--android:theme="@android:style/Theme.Dialog" />-->
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.re_todolist.fileprovider"
@@ -77,7 +92,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmReceiver">
+
+        <receiver android:name=".AlarmBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -86,6 +102,7 @@
         <service android:name=".AlarmService" />
 
         <receiver android:name=".DateChangeBroadcastReceiver" />
+
     </application>
 
 </manifest>
