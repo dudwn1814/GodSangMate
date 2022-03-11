@@ -439,37 +439,25 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             AlarmPrac alarm = datasnapshot.getValue(AlarmPrac.class);
                             if (alarm != null) {
                                 String todo = alarm.getTdid();
-                                mDbRef.child("gsmate").child("Alarm").child(groupCode).child(todo).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        AlarmPrac alarm = datasnapshot.getValue(AlarmPrac.class);
-                                        String alarmTimes = alarm.getAlarm_time();
-                                        String activity = alarm.getActivity();
-                                        boolean repeat = alarm.isRepeat();
-                                        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
-                                        Date date = null;
-                                        //String str = "2020-03-01 12:00:01";
+                                String alarmTimes = alarm.getAlarm_time();
+                                String activity = alarm.getActivity();
+                                boolean repeat = alarm.isRepeat();
+                                SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+                                Date date = null;
+                                //String str = "2020-03-01 12:00:01";
 
-                                        try {
-                                            if (alarmTimes != null) {
-                                                date = sd.parse(alarmTimes);
+                                try {
+                                    if (alarmTimes != null) {
+                                        date = sd.parse(alarmTimes);
 
-                                                Log.d("알람 파싱", "날짜" + date);
-                                                Calendar calendar = Calendar.getInstance();
-                                                calendar.setTime(date);
-                                                moveAlarm(calendar, activity, repeat);
-                                            }
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
+                                        Log.d("알람 파싱", "날짜" + date);
+                                        Calendar calendar = Calendar.getInstance();
+                                        calendar.setTime(date);
+                                        moveAlarm(calendar, activity, repeat);
                                     }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                        Toast.makeText(getApplicationContext(), "알람시간 가져오기 오류",
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
