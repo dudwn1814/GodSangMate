@@ -40,9 +40,7 @@
 
         <activity android:name=".LoginActivity" />
 
-        <activity
-            android:name=".MainActivity"
-            android:parentActivityName=".NicknameActivity" />
+        <activity android:name=".MainActivity"/>
 
 
         <activity
