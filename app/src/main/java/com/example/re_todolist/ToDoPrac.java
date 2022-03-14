@@ -8,6 +8,7 @@ public class ToDoPrac {
     boolean repeat;
     boolean alarm;
     String time;
+    String alarmTime;
     String tdid;
     String uid;
     boolean done;
@@ -27,6 +28,7 @@ public class ToDoPrac {
         this.repeat = repeat;
         this.alarm = alarm;
         this.done = done;
+        this.alarmTime = alarmTime;
     }
 
     //그룹 투두 data 받아올 때(no alarm, 누군가 투두 수행)
@@ -53,6 +55,7 @@ public class ToDoPrac {
         this.alarm = alarm;
         this.time = time;
         this.done = done;
+        this.alarmTime = alarmTime;
     }
 
     //그룹 투두 data 받아올 때(alarm, 누군가 투두 수행)
@@ -93,6 +96,14 @@ public class ToDoPrac {
 
     public void setAlarm(boolean alarm) {
         this.alarm = alarm;
+    }
+
+    public String getAlarmTime() {
+        return alarmTime;
+    }
+
+    public void setAlarmTime(String alarmTime) {
+        this.alarmTime = alarmTime;
     }
 
     /*

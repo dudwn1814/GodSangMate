@@ -66,11 +66,18 @@
 
         <activity android:name=".ShareActivity" />
 
+        <activity android:name=".AlarmPage"
+            android:showOnLockScreen="true"
+            android:parentActivityName=".MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" />
+        </intent-filter>
+        </activity>
+
         <activity
             android:name=".CreateToDoActivity"
             android:parentActivityName=".MainActivity" />
 
-        <activity android:name=".RingActivity" />
 
         <activity android:name=".PopupActivity" />
         <!--android:theme="@android:style/Theme.Dialog" />-->

@@ -3,6 +3,8 @@ package com.example.re_todolist;
 import static com.example.re_todolist.App.CHANNEL_ID;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -36,25 +38,55 @@ public class AlarmService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle bundle = intent.getExtras();
         String activity = bundle.getString("activity");
-        Intent notificationIntent = new Intent(this, RingActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        int intentID = bundle.getInt("intentID");
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        Intent fullScreenIntent = new Intent(this, AlarmPage.class);
+        fullScreenIntent.putExtra("activity", activity);
+
+        fullScreenIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, intentID,
+                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder full_builder = new NotificationCompat.Builder(this, "default");
+
+        //OREO API 26 이상에서는 채널 필요
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            full_builder.setSmallIcon(R.drawable.ic_launcher_foreground);//mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+            this.startForegroundService(fullScreenIntent);
+
+            String channelID = activity;
+            String channelName = "매일 알람 채널";
+            String description = "매일 정해진 시간에 알람합니다.";
+            int importance = NotificationManager.IMPORTANCE_HIGH; //소리와 알림메시지를 같이 보여줌
+
+            NotificationChannel channel = new NotificationChannel(activity, channelName, importance);
+            channel.setDescription(description);
+
+            if (notificationManager != null) {
+                // 노티피케이션 채널을 시스템에 등록
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        full_builder
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setContentIntent(fullScreenPendingIntent)
                 .setContentTitle("갓생메이트와 약속한 그룹 TODO")
-                .setContentText("<"+activity+">"+" 해야 할 시간입니다!")
-                .setSmallIcon(R.drawable.ic_alarm_black_24dp)
-                .setContentIntent(pendingIntent)
+                .setContentText("<" + activity + ">" + " 해야 할 시간입니다!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .build();
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setFullScreenIntent(fullScreenPendingIntent, true);
 
+        notificationManager.notify(intentID, full_builder.build());
         mediaPlayer.start();
-
         long[] pattern = { 0, 100, 1000 };
         vibrator.vibrate(pattern, 0);
-
-        startForeground(1, notification);
-
         return START_STICKY;
     }
 

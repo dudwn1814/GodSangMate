@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -32,6 +33,11 @@ public class DateChangeBroadcastReceiver extends BroadcastReceiver {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String today = format.format(date);
         String yesterday = dSdf.format(dDate);
+        Calendar alcalendar = Calendar.getInstance();
+        alcalendar.add(Calendar.DATE, 1);
+        SimpleDateFormat alformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nextalarm = alformat.format(alcalendar);
+
 
         mDbRef.child("ToDoList").addValueEventListener(new ValueEventListener() {
             @Override
@@ -43,13 +49,20 @@ public class DateChangeBroadcastReceiver extends BroadcastReceiver {
                             if (groupToDo != null) {
                                 if (groupToDo.child("repeat").getValue(Boolean.class).equals(Boolean.TRUE)) {
                                     ToDoPrac todo = new ToDoPrac();
+                                    AlarmPrac alarm = new AlarmPrac();
+
                                     todo.setTdid(groupToDo.getKey());
                                     todo.setActivity(groupToDo.child("activity").getValue(String.class));
                                     todo.setUid(groupToDo.child("uid").getValue(String.class));
                                     todo.setRepeat(true);
                                     todo.setAlarm(groupToDo.child("alarm").getValue(Boolean.class));
-                                    if (todo.isAlarm())
+
+                                    alarm.setTdid(groupToDo.getKey());
+                                    alarm.setActivity(groupToDo.child("activity").getValue(String.class));
+                                    if (todo.isAlarm()) {
                                         todo.setTime(groupToDo.child("time").getValue(String.class));
+                                        alarm.setAlarm_time(nextalarm);
+                                    }
                                     mDbRef.child("ToDoList").child(groupCode).child(today).child("Group").child(todo.getTdid()).setValue(todo);
                                 }
                             }

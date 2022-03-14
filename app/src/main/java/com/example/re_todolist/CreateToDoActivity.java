@@ -204,6 +204,7 @@ public class CreateToDoActivity extends AppCompatActivity {
                         todoObj.setAlarm(alarm);
                         if (alarm) {
                             todoObj.setTime(time_prac);
+                            todoObj.setAlarmTime(alarm_time);
                             alarmObj.setAlarm_time(alarm_time);
                         }
                         //if (alarm) todoObj.setTime(time);
