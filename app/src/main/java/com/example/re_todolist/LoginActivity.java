@@ -120,8 +120,10 @@ public class LoginActivity extends AppCompatActivity {
         mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("emailID").getValue() == null){
+                }
                 //그룹 없으면 그룹선택
-                if(dataSnapshot.child("g_code").getValue() == null){
+                else if(dataSnapshot.child("g_code").getValue() == null){
                     Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
                     startActivity(intent);
                     finish();

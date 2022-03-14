@@ -11,7 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="24sp"
         android:text="JOIN US"
+        android:textStyle="bold"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -20,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
         app:errorEnabled="false"
         app:endIconMode="clear_text"
         app:errorIconDrawable="@null"
@@ -40,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
         app:endIconMode="clear_text"
         app:errorIconDrawable="@null"
         android:hint="@string/PW"
@@ -59,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
         app:endIconMode="clear_text"
         app:errorIconDrawable="@null"
         android:hint="@string/re_PW"
@@ -79,6 +86,8 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_gravity="center"
+        android:padding="15dp"
+        android:textStyle="bold"
         android:text="@string/create">
     </Button>
 
