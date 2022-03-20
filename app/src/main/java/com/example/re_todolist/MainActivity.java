@@ -183,6 +183,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 groupCode = user.getG_code();
 
                 LinkedHashMap<String, String> memberInfo = new LinkedHashMap<>();
+
+                memberInfo.put(user.getUid(), user.getNickname());
+
                 mDbRef.child("gsmate").child("GroupMember").child(groupCode).orderByChild("nickname").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -191,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             if (member != null) {
                                 String m_Uid = member.getUid();
                                 String m_nickname = member.getNickname();
-                                memberInfo.put(m_Uid, m_nickname);
+                                if(!m_Uid.equals(uid)) memberInfo.put(m_Uid, m_nickname);
                             }
                         }
                     }
