@@ -17,7 +17,6 @@ import android.os.Vibrator;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.re_todolist.RingActivity;
 
 public class AlarmService extends Service {
     private MediaPlayer mediaPlayer;
@@ -85,7 +84,7 @@ public class AlarmService extends Service {
 
         notificationManager.notify(intentID, full_builder.build());
         mediaPlayer.start();
-        long[] pattern = { 0, 100, 1000 };
+        long[] pattern = {0, 100, 1000};
         vibrator.vibrate(pattern, 0);
         return START_STICKY;
     }
