@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RE_ToDoList</string>
+    <string name="app_name">갓생메이트</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -32,7 +32,7 @@
     <string name="b_register">계정이 없으신가요?</string>
     <string name="create">계정 생성</string>
     <string name="logo">logo</string>
-    <string name="login">LOG IN</string>
+    <string name="login">LOG IN 📝</string>
 
     <string name="enter_code">참가 그룹의 코드를 입력하세요</string>
     <string name="b_next">다음</string>
