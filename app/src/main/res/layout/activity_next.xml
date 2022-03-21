@@ -34,7 +34,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginBottom="50dp"
                     android:gravity="center_horizontal"
-                    android:text="전날 못한 개인 투두"
+                    android:text="✔ 어제 완료하지 못한 ToDo ✔"
                     android:textColor="#ff333333"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
                 android:onClick="mOnClose"
-                android:text="확인" />
+                android:text="추가" />
 
         </LinearLayout>
 

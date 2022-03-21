@@ -70,12 +70,24 @@
             android:layout_marginTop="50dp"
             android:layout_marginBottom="50dp"
             android:transitionName="transition"
-            app:progress_end_color="#ABF200"
-            app:progress_start_color="#FFBB00"
+            app:progress_end_color="@color/colorPrimaryDark"
+            app:progress_start_color="#62757f"
             app:progress_stroke_cap="round"
             app:progress_stroke_width="20dp "
             app:progress_text_size="30sp"
+            app:progress_background_color="#fafafa"
+            app:progress_text_color="@color/colorPrimaryDark"
             app:style="solid_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:text="copyrightⓒ 2022 All rights reserved by GSMATE"
+            android:textAlignment="center"
+            android:textSize="10sp" />
     </LinearLayout>
 
     <ImageButton
@@ -87,5 +99,14 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_send_black_24dp"
         android:text="공유하기"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="아래의 달성률은 사용자가 완료해야할 전체 ToDo 대비 실행한 ToDo의 비율을 나타냅니다."
+        android:textSize="10sp" />
+
 
 </LinearLayout>

@@ -47,7 +47,7 @@ public class GroupNum extends AppCompatActivity {
 
 
         Group_name.setText(groupName + "의");
-        Group_code.setText(groupCode + "입니다.");
+        Group_code.setText(groupCode);
 
 
         FirebaseUser firebaseUser = mAuth.getCurrentUser();

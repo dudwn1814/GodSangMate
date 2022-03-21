@@ -90,11 +90,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
 
-        //알람 울리기 허용
-        ImageButton alrm = findViewById(R.id.alarmButton);
-        alrm.setOnClickListener(view -> {
-            setAlarm();
-        });
+        setAlarm();
 
         //남은 시간 출력
         // TODO: 2022-03-07 지속시간은 일단 24시간으로..
@@ -518,9 +514,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
     private void getGroupDatafromDB() {
-        mAuth = FirebaseAuth.getInstance();
-        mDbRef = FirebaseDatabase.getInstance().getReference();
-
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         uid = firebaseUser.getUid();
 

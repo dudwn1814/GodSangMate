@@ -36,8 +36,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="1dp"
             android:padding="3dp"
-            android:text=""
-            android:textColor="#ff5252"
+            android:text="3"
+            android:textColor="#ffae00"
             android:textSize="17sp"
             android:textStyle="bold" />
 
