@@ -14,9 +14,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/loading_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/loading_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.RE_ToDoList">
 
@@ -41,7 +41,7 @@
 
         <activity android:name=".LoginActivity" />
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
 
 
         <activity
@@ -65,12 +65,13 @@
 
         <activity android:name=".ShareActivity" />
 
-        <activity android:name=".AlarmPage"
-            android:showOnLockScreen="true"
-            android:parentActivityName=".MainActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
-        </intent-filter>
+        <activity
+            android:name=".AlarmPage"
+            android:parentActivityName=".MainActivity"
+            android:showOnLockScreen="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </activity>
 
         <activity
