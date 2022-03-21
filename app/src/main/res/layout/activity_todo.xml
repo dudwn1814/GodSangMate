@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="320dp"
         android:layout_marginTop="5dp"
-        android:background="#65B8FB"
         android:text="@string/cancelBtn"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

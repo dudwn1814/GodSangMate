@@ -59,7 +59,12 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginEvent();
+                if (id.getText().toString().length() == 0 || password.getText().toString().length() == 0) {
+                    alert_confirm.setMessage("입력 정보를 다시 확인해주세요.");
+                    alert_confirm.setPositiveButton("확인", null);
+                    AlertDialog alert = alert_confirm.create();
+                    alert.show();
+                } else loginEvent();
             }
         });
         signup.setOnClickListener(new View.OnClickListener() {
@@ -120,16 +125,16 @@ public class LoginActivity extends AppCompatActivity {
         mDbRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("emailID").getValue() == null){
+                if (dataSnapshot.child("emailID").getValue() == null) {
                 }
                 //그룹 없으면 그룹선택
-                else if(dataSnapshot.child("g_code").getValue() == null){
+                else if (dataSnapshot.child("g_code").getValue() == null) {
                     Intent intent = new Intent(LoginActivity.this, Groupmenu.class);
                     startActivity(intent);
                     finish();
                 }
                 //닉네임 없으면 닉네임 입력
-                else if(dataSnapshot.child("nickname").getValue() == null){
+                else if (dataSnapshot.child("nickname").getValue() == null) {
                     UserAccount userAccount = dataSnapshot.getValue(UserAccount.class);
                     String groupCode = userAccount.getG_code();
                     Intent intent = new Intent(LoginActivity.this, NicknameActivity.class);
@@ -138,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 }
                 //메인으로 이동
-                else{
+                else {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 }
