@@ -4,6 +4,7 @@
 
     <!-- 인터넷 사용 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- 알람 관련 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -40,7 +41,7 @@
 
         <activity android:name=".LoginActivity" />
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
 
 
         <activity
@@ -64,12 +65,13 @@
 
         <activity android:name=".ShareActivity" />
 
-        <activity android:name=".AlarmPage"
-            android:showOnLockScreen="true"
-            android:parentActivityName=".MainActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
-        </intent-filter>
+        <activity
+            android:name=".AlarmPage"
+            android:parentActivityName=".MainActivity"
+            android:showOnLockScreen="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </activity>
 
         <activity
