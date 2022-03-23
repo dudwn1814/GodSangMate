@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +49,7 @@ public class CreateToDoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo);
+        getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
@@ -58,10 +60,14 @@ public class CreateToDoActivity extends AppCompatActivity {
         //groupCode = "ABC123";
 
         //메인 페이지로 이동
-        Button cancelBtn = findViewById(R.id.cancel_button);
-        cancelBtn.setOnClickListener(view -> {
-            Intent mainIntent = new Intent(CreateToDoActivity.this, MainActivity.class);
-            startActivity(mainIntent);
+        MaterialToolbar toolbar;
+        toolbar = findViewById(R.id.topAppBar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(CreateToDoActivity.this, MainActivity.class);
+                startActivity(mainIntent);
+            }
         });
 
         //spinner 연결(그룹/개인)

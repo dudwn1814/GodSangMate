@@ -5,15 +5,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="#aaffffff"
         android:orientation="vertical"
         android:padding="20dp">
 
@@ -24,15 +17,16 @@
             android:gravity="center_horizontal"
             android:text="@string/choiceGroup"
             android:textColor="#ff333333"
-            android:textSize="18dp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/menu01Button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="70dp"
             android:text="새 그룹 생성하기"
+            android:textColor="@color/primaryLightColor"
             android:textSize="18dp"
             android:textStyle="bold" />
 
@@ -42,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="기존 그룹 입장하기"
+            android:textColor="@color/primaryLightColor"
             android:textSize="18dp"
             android:textStyle="bold" />
 

@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="#ffffff"
             android:orientation="vertical">
 
             <LinearLayout
@@ -24,7 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="#ffffff"
                 android:orientation="horizontal">
 
                 <TextView
@@ -60,6 +58,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="mOnCancelClose"
+                android:textColor="@color/primaryLightColor"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:textStyle="bold"
                 android:text="취소" />
 
             <Button
@@ -68,6 +69,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
                 android:onClick="mOnClose"
+                android:textColor="@color/primaryLightColor"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:textStyle="bold"
                 android:text="추가" />
 
         </LinearLayout>

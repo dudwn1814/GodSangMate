@@ -66,6 +66,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="250dp"
-        android:text="확인" />
+        android:text="확인"
+        android:textColor="@color/primaryLightColor"
+        android:textStyle="bold"/>
 
 </RelativeLayout>

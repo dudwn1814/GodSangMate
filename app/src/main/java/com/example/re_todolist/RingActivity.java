@@ -20,6 +20,7 @@ public class RingActivity extends MainActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_page);
+        getSupportActionBar().hide();
 
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override

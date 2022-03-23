@@ -9,10 +9,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="270dp"
         android:gravity="center_horizontal"
         android:text="그룹 이름을 입력하세요"
-        android:textColor="#ff333333"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="70dp"
         android:gravity="center_horizontal"
         android:text="새 그룹 생성하기"
         android:textColor="#ff333333"
@@ -54,14 +54,16 @@
                 android:id="@+id/nameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="그룹명:"
-                android:textColor="#ff222222"
-                android:textSize="16dp" />
+                android:text="그룹명 : "
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/nameInput"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"
                 android:inputType="text"
                 android:layout_alignBaseline="@id/nameLabel" />
         </LinearLayout>
@@ -75,5 +77,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="220dp"
-        android:text="다음" />
+        android:text="다음"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryLightColor"/>
 </RelativeLayout>

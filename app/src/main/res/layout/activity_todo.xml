@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="320dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/cancelBtn"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        android:background="@color/primaryLightColor">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primaryLightColor"
+            app:title="갓생메이트"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/todoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/makeTodoText"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="23sp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textColor="#ff333333"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/textInput"
@@ -42,30 +51,30 @@
         android:id="@+id/spinner"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginStart="280dp"
-        android:layout_marginTop="150dp" />
+        android:layout_marginStart="280dp" />
 
     <LinearLayout
         android:id="@+id/repeatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinner"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="30dp"
         android:orientation="vertical">
 
         <CheckBox
             android:id="@+id/repeatChk"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="@string/repeatCheck" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/timeLinearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/repeatLayout"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -73,13 +82,13 @@
             android:id="@+id/alarmChk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="@string/alarmCheck" />
 
         <TimePicker
             android:id="@+id/timePicker"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="55dp"
             android:timePickerMode="spinner"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/button"
@@ -95,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/timeLinearLayout"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="60dp"
         android:background="#65B8FB"
         android:text="@string/submitBtn"
         android:textColor="#FFFFFF"
@@ -107,4 +116,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+</LinearLayout>

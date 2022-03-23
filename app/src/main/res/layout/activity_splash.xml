@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.re_todolist.SplashActivity">
+    tools:context="com.example.re_todolist.SplashActivity"
+    android:background="#e6e4e3">
 
     <ImageView
         android:src="@drawable/loading_icon"

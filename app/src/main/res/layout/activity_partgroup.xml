@@ -42,6 +42,9 @@
         android:layout_gravity="center"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:textColor="@color/primaryLightColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:text="@string/b_next" />
 
 

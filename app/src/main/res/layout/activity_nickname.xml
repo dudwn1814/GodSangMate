@@ -26,6 +26,8 @@
         app:errorEnabled="false"
         app:endIconMode="clear_text"
         app:errorIconDrawable="@null"
+        app:errorTextAppearance="@style/TextField.HelperText"
+        app:helperTextTextAppearance="@style/TextField.HelperText"
         android:id="@+id/nickname"
         >
 
@@ -44,6 +46,9 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_gravity="center"
+        android:textColor="@color/primaryLightColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:text="@string/b_start">
     </Button>
 

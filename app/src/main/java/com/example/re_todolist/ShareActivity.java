@@ -39,6 +39,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
+        getSupportActionBar().hide();
 
         button = findViewById(R.id.share);
         layout = findViewById(R.id.layout);
