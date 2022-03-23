@@ -1,6 +1,5 @@
 package com.example.re_todolist;
 
-import android.app.ActionBar;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -15,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -75,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         mAuth = FirebaseAuth.getInstance();
         mDbRef = FirebaseDatabase.getInstance().getReference();
-
         alert_confirm = new AlertDialog.Builder(this);
 
 
@@ -126,8 +123,15 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         //그룹 이름, 인원 수 가져오기
         getGroupDatafromDB();
+        //반복 투두 가져오기
+        getRepeatTodo();
+        //날짜 바뀔때 새로고침(투두 삭제가 안됨)
+        BroadcastReceiver br = new DateChangeBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_DATE_CHANGED);
+        this.registerReceiver(br, filter);
 
-        //resetAlarm(this);
+
         setAlarm();
 
         //남은 시간 출력
@@ -517,39 +521,33 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         PackageManager pm = this.getPackageManager();
         if (System.currentTimeMillis() <= calendar.getTimeInMillis()) {
-                /*
-                Log.d("시간", activity);
-                ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
-                Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-                alarmIntent.putExtra("activity", activity);
-                //PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ++intentID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                //PendingIntent pendingIntent = PendingIntent.getBroadcast(this, intentID++, alarmIntent, 0);
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Log.d("시간", activity);
+            ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
+            Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+            alarmIntent.putExtra("activity", activity);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ++intentID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
 
-                // 사용자가 매일 알람을 허용했다면
+            // 사용자가 매일 알람을 허용했다면
 
-                if (repeat) {
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                            AlarmManager.INTERVAL_DAY, pendingIntent);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                    }
-                    Toast.makeText(getApplicationContext(), "반복 알림이 설정됐습니다", Toast.LENGTH_SHORT).show();
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                    }
-                    Toast.makeText(getApplicationContext(), "알림이 한번만 울립니다.", Toast.LENGTH_SHORT).show();
+            if (repeat) {
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        AlarmManager.INTERVAL_DAY, pendingIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
-                // 부팅 후 실행되는 리시버 사용가능하게 설정
-                pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
-                 */
+                Toast.makeText(getApplicationContext(), "반복 알림이 설정됐습니다", Toast.LENGTH_SHORT).show();
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                }
+                Toast.makeText(getApplicationContext(), "알림이 한번만 울립니다.", Toast.LENGTH_SHORT).show();
+            }
+            // 부팅 후 실행되는 리시버 사용가능하게 설정
+            pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         }
-
-
     }
 
     private void getGroupDatafromDB() {
@@ -663,20 +661,19 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
                     /* groupMember 삭제되면 groupList에서도 삭제하기*/
                     mDbRef.child("gsmate").child("GroupMember").child(groupCode).child(uid).setValue(null);
-                    //mDbRef.child("gsmate").child("GroupMember").orderByKey().equalTo(groupCode).addListenerForSingleValueEvent(new ValueEventListener() {
                     mDbRef.child("gsmate").child("GroupMember").child(groupCode).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    GroupMember value = snapshot.getValue(GroupMember.class);
-                                    if (value == null) {
-                                        mDbRef.child("gsmate").child("GroupList").child(groupCode).setValue(null);
-                                    }
-                                }
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            GroupMember value = snapshot.getValue(GroupMember.class);
+                            if (value == null) {
+                                mDbRef.child("gsmate").child("GroupList").child(groupCode).setValue(null);
+                            }
+                        }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                }
-                            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
                 } else Log.e("test", "그룹코드 받아오기 실패");
 
                 /* user의 그룹정보, 그룹 내 user 정보 제거 */
@@ -880,7 +877,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
         });
     }
-
+/*
     public static void resetAlarm(Context context) {
         AlarmManager resetAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent resetIntent = new Intent(context, DateChangeBroadcastReceiver.class);
@@ -898,5 +895,78 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         //resetAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis() + AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
         resetAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, resetCal.getTimeInMillis() + AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, resetSender);
     }
+*/
+    public void getRepeatTodo() {
+        mDbRef.child("gsmate").child("LastVisit").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DataSnapshot snapshot = task.getResult();
+                    String lastVisit = snapshot.getValue(String.class);
+                    if (!lastVisit.equals(writeDate)) {
+                            /*
+                            Calendar alcalendar = Calendar.getInstance();
+                            alcalendar.add(Calendar.DATE, 1);
+                            SimpleDateFormat alformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String nextalarm = alformat.format(alcalendar);
+                             */
 
+                        mDbRef.child("gsmate").child("ToDoList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    DataSnapshot snapshot = task.getResult();
+                                    for (DataSnapshot group : snapshot.getChildren()) {
+                                        String groupCode = group.getKey();
+                                        if (groupCode != null) {
+                                            if (group.child(lastVisit).getValue() != null) {
+                                                for (DataSnapshot groupToDo : group.child(lastVisit).child("Group").getChildren()) {
+                                                    if (groupToDo != null) {
+                                                        Log.e("test",groupToDo.toString());
+                                                        if (groupToDo.child("repeat").getValue(Boolean.class).equals(Boolean.TRUE)) {
+                                                            ToDoPrac todo = new ToDoPrac();
+                                                            todo.setTdid(groupToDo.getKey());
+                                                            todo.setActivity(groupToDo.child("activity").getValue(String.class));
+                                                            todo.setUid(groupToDo.child("uid").getValue(String.class));
+                                                            todo.setRepeat(true);
+                                                            todo.setAlarm(groupToDo.child("alarm").getValue(Boolean.class));
+
+                                                            if (todo.isAlarm()) {
+                                                                todo.setTime(groupToDo.child("time").getValue(String.class));
+
+                                                                AlarmPrac alarm = new AlarmPrac();
+                                                                alarm.setTdid(groupToDo.getKey());
+                                                                alarm.setActivity(groupToDo.child("activity").getValue(String.class));
+                                                                //alarm.setAlarm_time(nextalarm);
+                                                                //alarm 등록??
+                                                            }
+                                                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(todo.getTdid()).setValue(todo);
+                                                        }
+                                                    }
+                                                }
+                                                for (DataSnapshot uidSnapshot : group.child(lastVisit).child("Personal").getChildren()) {
+                                                    String uid = uidSnapshot.getKey();
+                                                    for (DataSnapshot personalToDo : uidSnapshot.getChildren()) {
+                                                        ToDoPrac todo = personalToDo.getValue(ToDoPrac.class);
+                                                        todo.setDone(false);
+                                                        if (todo != null) {
+                                                            if (todo.isRepeat())
+                                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(todo.getTdid()).setValue(todo);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        mDbRef.child("gsmate").child("LastVisit").setValue(writeDate);
+                    }
+                } else mDbRef.child("gsmate").child("LastVisit").setValue(writeDate);
+            }
+        });
+    }
 }
+
