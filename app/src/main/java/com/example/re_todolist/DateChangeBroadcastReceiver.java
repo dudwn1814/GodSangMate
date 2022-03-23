@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -24,6 +25,8 @@ public class DateChangeBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("test","receiver");
+        Toast.makeText(context, "리시버", Toast.LENGTH_SHORT).show();
         mDbRef = FirebaseDatabase.getInstance().getReference("gsmate");
         long now = System.currentTimeMillis();
         Date date = new Date(now);
