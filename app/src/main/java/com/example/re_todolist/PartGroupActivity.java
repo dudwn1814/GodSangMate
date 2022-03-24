@@ -92,6 +92,7 @@ public class PartGroupActivity extends AppCompatActivity {
                             intent.putExtra("g_code", groupCode);
                             //intent.putExtra("name", groupName);
                             startActivity(intent);
+                            finish();
                         }
                     });
 

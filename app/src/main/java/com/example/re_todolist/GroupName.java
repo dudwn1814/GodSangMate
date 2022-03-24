@@ -97,7 +97,7 @@ public class GroupName extends AppCompatActivity {
                     /* UserAccount에 groupInfo 저장 */
                     //todo: 그룹 code 저장하는거 중복쓰
                     //Log.d("groupCodeCheck", "GroupName");
-                    //mDbRef.child("UserAccount").child(uid).child("g_code").setValue(groupcode);
+                    mDbRef.child("UserAccount").child(uid).child("g_code").setValue(groupcode);
 
                     /* GroupMember에 uid 저장 */
                     mDbRef.child("GroupMember").child(groupcode).child(uid).child("uid").setValue(uid);
