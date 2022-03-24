@@ -8,30 +8,28 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="17sp"
         android:layout_gravity="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/enter_code"
-        />
+        android:textSize="17sp" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/gCode"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="10dp"
-        app:endIconMode="clear_text"
-        android:id="@+id/gcode">
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
-            />
+            android:inputType="textCapCharacters" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -42,10 +40,10 @@
         android:layout_gravity="center"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:text="@string/b_next"
         android:textColor="@color/primaryLightColor"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="@string/b_next" />
+        android:textStyle="bold" />
 
 
 </LinearLayout>

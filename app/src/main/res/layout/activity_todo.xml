@@ -8,9 +8,9 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/primaryLightColor"
         android:paddingTop="5dp"
-        android:paddingBottom="3dp"
-        android:background="@color/primaryLightColor">
+        android:paddingBottom="3dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
@@ -18,21 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/primaryLightColor"
-            app:title="갓생메이트"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
             app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-            />
+            app:title="갓생메이트"
+            app:titleTextAppearance="@style/Toolbar.TitleText" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/todoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/makeTodoText"
         android:textAlignment="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
         android:textColor="#ff333333"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -57,7 +55,6 @@
         android:id="@+id/repeatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinner"
         android:layout_marginStart="30dp"
         android:orientation="vertical">
 
@@ -65,8 +62,8 @@
             android:id="@+id/repeatChk"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="@string/repeatCheck" />
+            android:text="@string/repeatCheck"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,8 +79,8 @@
             android:id="@+id/alarmChk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="@string/alarmCheck" />
+            android:text="@string/alarmCheck"
+            android:textSize="18sp" />
 
         <TimePicker
             android:id="@+id/timePicker"
@@ -102,9 +99,8 @@
         android:id="@+id/saveButton"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timeLinearLayout"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="6dp"
         android:background="#65B8FB"
         android:text="@string/submitBtn"
         android:textColor="#FFFFFF"

@@ -24,8 +24,6 @@
             android:id="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
             android:text="그룹 코드는"
             android:textSize="24sp" />
@@ -40,8 +38,6 @@
                 android:id="@+id/group_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:text="CODE"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -49,8 +45,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:text=" 입니다."
                 android:textSize="24sp" />
 
@@ -64,10 +58,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginRight="0dp"
+        android:layout_marginEnd="0dp"
         android:layout_marginBottom="250dp"
         android:text="확인"
         android:textColor="@color/primaryLightColor"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>

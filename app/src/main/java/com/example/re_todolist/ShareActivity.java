@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,8 +21,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -60,7 +57,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         Intent intent = getIntent();
         int achieve = intent.getExtras().getInt("achieve");
 
-        CircleProgressBar circle1 = findViewById(R.id.circlebar_share);
+        CircleProgressBar circle1 = findViewById(R.id.circle_bar_share);
         circle1.setProgress(achieve);
 
         button.setOnClickListener(new View.OnClickListener() {

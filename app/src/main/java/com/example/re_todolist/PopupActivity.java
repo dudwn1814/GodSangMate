@@ -60,7 +60,6 @@ public class PopupActivity extends Activity {
         //데이터 가져오기
         Intent intent = getIntent();
         String data = intent.getStringExtra("data");
-        Toast.makeText(getApplicationContext(), data + "가져옴", Toast.LENGTH_SHORT).show();
 
 
         ArrayList<String> yesterday_tdid = new ArrayList<>();

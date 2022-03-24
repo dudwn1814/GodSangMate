@@ -15,29 +15,29 @@
         android:contentDescription="@string/logo"
         android:scaleType="fitCenter"
         android:src="@drawable/loading_icon" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="24sp"
         android:layout_gravity="center"
-        android:textStyle="bold"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/login"
-        />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ID"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="10dp"
-        app:endIconMode="clear_text"
         android:hint="@string/ID"
-        android:id="@+id/ID">
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginActivity_edittext_id"
@@ -47,15 +47,15 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/PW"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="10dp"
-        app:endIconMode="clear_text"
         android:hint="@string/PW"
-        android:id="@+id/PW">
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginActivity_edittext_password"
@@ -68,21 +68,21 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:padding="15dp"
-        android:layout_gravity="center"
-        android:textStyle="bold"
+        android:text="@string/b_login"
         android:textColor="@color/primaryLightColor"
-        android:text="@string/b_login" />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/b_register"
         android:background="#00ff0000"
+        android:text="@string/b_register"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

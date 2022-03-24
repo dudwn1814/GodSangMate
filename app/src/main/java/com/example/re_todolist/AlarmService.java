@@ -10,9 +10,11 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -22,6 +24,7 @@ import com.example.re_todolist.RingActivity;
 public class AlarmService extends Service {
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
+    private static final int NOTIFICATION_ID = 111;
 
     @Override
     public void onCreate() {
@@ -83,7 +86,8 @@ public class AlarmService extends Service {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setFullScreenIntent(fullScreenPendingIntent, true);
 
-        notificationManager.notify(intentID, full_builder.build());
+        notificationManager.notify(NOTIFICATION_ID, full_builder.build());
+
         mediaPlayer.start();
         long[] pattern = { 0, 100, 1000 };
         vibrator.vibrate(pattern, 0);

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,7 +95,9 @@ public class GroupName extends AppCompatActivity {
                     mDbRef.child("GroupList").child(group.getG_code()).setValue(group);
 
                     /* UserAccount에 groupInfo 저장 */
-                    mDbRef.child("UserAccount").child(uid).child("g_code").setValue(groupcode);
+                    //todo: 그룹 code 저장하는거 중복쓰
+                    //Log.d("groupCodeCheck", "GroupName");
+                    //mDbRef.child("UserAccount").child(uid).child("g_code").setValue(groupcode);
 
                     /* GroupMember에 uid 저장 */
                     mDbRef.child("GroupMember").child(groupcode).child(uid).child("uid").setValue(uid);

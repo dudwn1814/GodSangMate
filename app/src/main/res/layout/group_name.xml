@@ -13,7 +13,7 @@
         android:gravity="center_horizontal"
         android:text="그룹 이름을 입력하세요"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -62,10 +62,9 @@
                 android:id="@+id/nameInput"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textColor="@color/colorPrimaryDark"
                 android:inputType="text"
-                android:layout_alignBaseline="@id/nameLabel" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -78,7 +77,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="220dp"
         android:text="다음"
+        android:textColor="@color/primaryLightColor"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/primaryLightColor"/>
+        android:textStyle="bold" />
 </RelativeLayout>

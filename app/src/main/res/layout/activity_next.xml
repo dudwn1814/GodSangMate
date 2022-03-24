@@ -57,22 +57,22 @@
                 android:id="@+id/button_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="mOnCancelClose"
-                android:textColor="@color/primaryLightColor"
                 android:backgroundTint="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:text="취소" />
+                android:onClick="mOnCancelClose"
+                android:text="취소"
+                android:textColor="@color/primaryLightColor"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
-                android:onClick="mOnClose"
-                android:textColor="@color/primaryLightColor"
                 android:backgroundTint="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:text="추가" />
+                android:onClick="mOnClose"
+                android:text="추가"
+                android:textColor="@color/primaryLightColor"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

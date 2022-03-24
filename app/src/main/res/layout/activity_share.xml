@@ -9,9 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
         <View
             android:layout_width="0dp"
@@ -23,9 +23,9 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="10dp"
-            android:scaleType="fitXY"
             android:background="@android:color/transparent"
             android:contentDescription="@string/exitIcon"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_clear_black_24dp" />
 
     </LinearLayout>
@@ -35,9 +35,9 @@
         android:layout_width="315dp"
         android:layout_height="560dp"
         android:layout_gravity="center"
-        android:transitionName="transition"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:transitionName="transition">
 
         <TextView
             android:id="@+id/date"
@@ -51,6 +51,7 @@
             android:text="000000"
             android:textAlignment="center"
             android:textSize="23sp" />
+
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
@@ -63,20 +64,20 @@
             android:textSize="25sp" />
 
         <com.dinuscxj.progressbar.CircleProgressBar
-            android:id="@+id/circlebar_share"
+            android:id="@+id/circle_bar_share"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="50dp"
             android:transitionName="transition"
+            app:progress_background_color="#fafafa"
             app:progress_end_color="@color/colorPrimaryDark"
             app:progress_start_color="#62757f"
             app:progress_stroke_cap="round"
             app:progress_stroke_width="20dp "
-            app:progress_text_size="30sp"
-            app:progress_background_color="#fafafa"
             app:progress_text_color="@color/colorPrimaryDark"
+            app:progress_text_size="30sp"
             app:style="solid_line" />
 
         <TextView
@@ -95,10 +96,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:scaleType="fitXY"
         android:background="@android:color/transparent"
+        android:contentDescription="ShareImageBtn"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_send_black_24dp"
-        android:text="공유하기"/>
+        android:text="공유하기" />
 
     <TextView
         android:layout_width="wrap_content"
