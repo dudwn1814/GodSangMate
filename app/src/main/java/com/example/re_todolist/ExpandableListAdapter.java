@@ -83,7 +83,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String writeDate = format.format(date);
 
-
         final Item item = data.get(position);
         //final String dbItem = dbkey.get(position);
 
@@ -126,7 +125,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case GROUPCHILD:
                 final ListHeaderViewHolder childItemController_g = (ListHeaderViewHolder) holder;
                 childItemController_g.checkBox.setText(item.activity);
-
 
                 if (item.repeat) childItemController_g.repeatDay.setVisibility(View.VISIBLE);
                 else childItemController_g.repeatDay.setVisibility(View.GONE);
@@ -176,8 +174,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                     GroupMember member = snapshot.getValue(GroupMember.class);
-                                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
-                                                            child(item.tdid).child("Member").child(uid).setValue(member);
+                                                    if (groupCode != null) {
+                                                        mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
+                                                                child(item.tdid).child("Member").child(uid).setValue(member);
+                                                    }
                                                 }
 
                                                 @Override
@@ -221,7 +221,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                  */
 
-
                 childItemController_g.deleteIcon.setOnClickListener(view -> {
                     Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
                     mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
@@ -230,7 +229,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             groupCode = snapshot.getValue(String.class);
                             if (groupCode != null) {
                                 new MaterialAlertDialogBuilder(view.getContext())
-                                        .setTitle('"'+ item.activity+ "\" 을(를) 삭제하시겠습니까?")
+                                        .setTitle('"' + item.activity + "\" 을(를) 삭제하시겠습니까?")
                                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -296,7 +295,6 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 childItemController_p.checkBox.setChecked(item.done);
 
-
                 if (uid.equals(item.uid)) {
                     childItemController_p.deleteIcon.setVisibility(View.VISIBLE);
                     childItemController_p.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -329,7 +327,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             groupCode = snapshot.getValue(String.class);
                             if (groupCode != null) {
                                 new MaterialAlertDialogBuilder(view.getContext())
-                                        .setTitle('"'+ item.activity+ "\" 을(를) 삭제하시겠습니까?")
+                                        .setTitle('"' + item.activity + "\" 을(를) 삭제하시겠습니까?")
                                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
