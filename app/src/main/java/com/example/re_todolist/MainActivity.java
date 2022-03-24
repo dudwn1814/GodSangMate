@@ -140,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                 Date countDate = new Date();
 
                 String nowDate = countDateFormat.format(countDate);
-                Log.d("TimeCheck", nowDate);
+                //Log.d("TimeCheck", nowDate);
                 String endDate = "24:00:00";
-                Log.d("TimeCheck", endDate);
+                //Log.d("TimeCheck", endDate);
 
                 try {
                     Date inputDate = countDateFormat.parse(nowDate);

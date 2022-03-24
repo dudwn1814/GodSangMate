@@ -14,7 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RingActivity extends MainActivity {
     Button dismiss = findViewById(R.id.dismiss);
-    ImageView clock = findViewById(R.id.clock);;
+    ImageView clock = findViewById(R.id.clock);
+    Intent intentService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,11 +23,14 @@ public class RingActivity extends MainActivity {
         setContentView(R.layout.alarm_page);
         getSupportActionBar().hide();
 
+        //intentService = new Intent(getApplicationContext(), AlarmService.class);
+        //startService(intentService);
+
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentService = new Intent(getApplicationContext(), AlarmReceiver.class);
-                getApplicationContext().stopService(intentService);
+                //stopService(intentService);
+                //getApplicationContext().stopService(intentService);
                 finish();
             }
         });

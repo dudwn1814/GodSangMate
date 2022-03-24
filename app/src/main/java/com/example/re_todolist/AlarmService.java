@@ -32,7 +32,6 @@ public class AlarmService extends Service {
 
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
         mediaPlayer.setLooping(true);
-
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
     }
@@ -47,10 +46,10 @@ public class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
+        Log.d("AlarmService", "onDestroy");
         mediaPlayer.stop();
         vibrator.cancel();
+        super.onDestroy();
     }
 
     @Nullable

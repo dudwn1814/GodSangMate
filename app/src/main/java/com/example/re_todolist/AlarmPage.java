@@ -38,7 +38,7 @@ public class AlarmPage extends AppCompatActivity {
         setContentView(R.layout.alarm_page);
         Button dismiss = findViewById(R.id.dismiss);
         TextView textView = findViewById(R.id.textView);
-
+/*
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
         mediaPlayer.setLooping(true);
 
@@ -48,19 +48,21 @@ public class AlarmPage extends AppCompatActivity {
         mediaPlayer.start();
         long[] pattern = { 0, 100, 1000 };
         vibrator.vibrate(pattern, 0);
+ */
+        Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
+        startService(intentService);
 
         Log.d("AlarmPageCHeck", "AlarmPage 들어옴");
 
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentService = new Intent(getApplicationContext(), AlarmReceiver.class);
-                getApplicationContext().stopService(intentService);
+                stopService(intentService);
                 Intent mainIntent = new Intent(AlarmPage.this, MainActivity.class);
                 startActivity(mainIntent);
                 finish();
-                mediaPlayer.stop();
-                vibrator.cancel();
+                //mediaPlayer.stop();
+                //vibrator.cancel();
             }
         });
 
