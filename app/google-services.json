@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "508691673042",
+    "firebase_url": "https://gsmate-sm-default-rtdb.firebaseio.com",
     "project_id": "gsmate-sm",
     "storage_bucket": "gsmate-sm.appspot.com"
   },
