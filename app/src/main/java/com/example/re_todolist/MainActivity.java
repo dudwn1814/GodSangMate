@@ -449,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             if (resultCode == RESULT_OK) {
                 //데이터 받기
                 String result = data.getStringExtra("result");
-                Toast.makeText(getApplicationContext(), result + "받음", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), result + "받음", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -518,9 +518,8 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
     }
 
     public void moveAlarm(Calendar calendar, String activity, Boolean repeat) {
-
         PackageManager pm = this.getPackageManager();
-        if (System.currentTimeMillis() <= calendar.getTimeInMillis()) {
+        if(System.currentTimeMillis()<=calendar.getTimeInMillis()) {
             Log.d("시간", activity);
             ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
             Intent alarmIntent = new Intent(this, AlarmReceiver.class);
