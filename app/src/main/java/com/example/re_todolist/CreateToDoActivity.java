@@ -175,7 +175,7 @@ public class CreateToDoActivity extends AppCompatActivity {
             }
             Date currentDateTime = calendar.getTime();
             String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a HH시 mm분 ", Locale.getDefault()).format(currentDateTime);
-            Toast.makeText(getApplicationContext(), date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
 
             //투두 객체 생성
@@ -235,7 +235,7 @@ public class CreateToDoActivity extends AppCompatActivity {
                 }
             });
 
-            Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();
 
         });

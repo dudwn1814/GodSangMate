@@ -1,5 +1,7 @@
 package com.example.re_todolist;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,6 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String activity = bundle.getString("activity");
         //Intent intentService = new Intent(context, AlarmService.class);
         //intentService.putExtra("activity", activity);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //context.startForegroundService(intentService);
             Log.d("alarmCheck", "alarm");
@@ -35,7 +38,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             Intent fullScreenIntent = new Intent(context, AlarmPage.class);
             fullScreenIntent.putExtra("activity", activity);
-            context.startActivity(fullScreenIntent);
+            context.startActivity(fullScreenIntent.addFlags(FLAG_ACTIVITY_NEW_TASK));
+
 
             fullScreenIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                     | Intent.FLAG_ACTIVITY_SINGLE_TOP);
