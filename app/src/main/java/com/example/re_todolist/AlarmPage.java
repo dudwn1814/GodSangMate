@@ -96,7 +96,7 @@ public class AlarmPage extends AppCompatActivity {
                                                 DataSnapshot snapshot = task.getResult();
                                                 if(snapshot != null){
                                                     String time = snapshot.child("alarm_time").getValue().toString();
-                                                    SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+                                                    SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
                                                     Date date;
                                                     //String str = "2020-03-01 12:00:01";
 
@@ -107,8 +107,19 @@ public class AlarmPage extends AppCompatActivity {
                                                             Log.d("알람 파싱", "날짜" + date);
                                                             Calendar calendar = Calendar.getInstance();
                                                             if (date != null) {
-                                                                calendar.setTime(date);
-                                                                calendar.add(Calendar.DATE,1);
+
+                                                                long now = System.currentTimeMillis();
+                                                                Date now_date = new Date(now);
+                                                                SimpleDateFormat format_year = new SimpleDateFormat("yyyy");
+                                                                SimpleDateFormat format = new SimpleDateFormat("dd");
+                                                                String writeDate = format.format(now_date);
+                                                                String writeYear = format_year.format(now_date);
+
+
+                                                                //calendar.setTime(date);
+                                                                calendar.set(Integer.parseInt(writeYear), date.getMonth(), Integer.parseInt(writeDate)+1, date.getHours(), date.getMinutes(), date.getSeconds());
+                                                                calendar.set(Calendar.DATE, Integer.parseInt(writeDate)+1);
+
                                                                 String next = sd.format(calendar.getTime());
                                                                 mDbRef.child("Alarm").child(groupCode).child(tdid).child("alarm_time").setValue(next);
                                                             }
