@@ -91,8 +91,7 @@ public class ShareActivity extends AppCompatActivity implements CircleProgressBa
         view.setBackgroundColor(Color.parseColor("#00000000"));
 
         if (bitmap == null) {
-            Toast.makeText(getApplicationContext(), "변환 오류",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "변환 오류", Toast.LENGTH_SHORT).show();
         } else {
             try {
                 File cachePath = new File(getApplicationContext().getCacheDir(), "images");

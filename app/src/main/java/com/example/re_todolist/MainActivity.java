@@ -354,8 +354,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -421,8 +420,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",
-                                            Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류", Toast.LENGTH_LONG).show();
                                 }
                             });
                         } else {
@@ -436,8 +434,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -575,8 +572,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",
-                                Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "그룹명 가져오기 오류",Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -603,8 +599,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류",
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "그룹코드 가져오기 오류", Toast.LENGTH_LONG).show();
             }
         });
     }

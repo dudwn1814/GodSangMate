@@ -230,12 +230,11 @@ public class CreateToDoActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(view.getContext(), "삭제 오류",
-                            Toast.LENGTH_LONG).show();
+                   // Toast.makeText(view.getContext(), "삭제 오류", Toast.LENGTH_LONG).show();
                 }
             });
 
-            //Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "등록완료", Toast.LENGTH_LONG).show();
             finish();
 
         });

@@ -222,7 +222,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                  */
 
                 childItemController_g.deleteIcon.setOnClickListener(view -> {
-                    Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
                     mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -233,7 +233,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
+                                                //Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
                                                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").
                                                         child(item.tdid).removeValue();
                                                 mDbRef.child("gsmate").child("Alarm").child(groupCode).child(item.tdid).removeValue();
@@ -242,7 +242,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                Toast.makeText(view.getContext(), "취소", Toast.LENGTH_SHORT);
+                                                //Toast.makeText(view.getContext(), "취소", Toast.LENGTH_SHORT);
                                             }
                                         })
                                         .show();
@@ -320,7 +320,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
 
                 childItemController_p.deleteIcon.setOnClickListener(view -> {
-                    Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT).show();
                     mDbRef.child("gsmate").child("UserAccount").child(uid).child("g_code").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -339,7 +339,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                Toast.makeText(view.getContext(), "취소", Toast.LENGTH_SHORT);
+                                                //Toast.makeText(view.getContext(), "취소", Toast.LENGTH_SHORT);
                                             }
                                         })
                                         .show();
