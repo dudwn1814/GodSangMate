@@ -26,6 +26,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Bundle bundle = intent.getExtras();
         String activity = bundle.getString("activity");
+        boolean repeat = bundle.getBoolean("repeat");
+        String tdid = bundle.getString("tdid");
         //Intent intentService = new Intent(context, AlarmService.class);
         //intentService.putExtra("activity", activity);
 
@@ -38,6 +40,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             Intent fullScreenIntent = new Intent(context, AlarmPage.class);
             fullScreenIntent.putExtra("activity", activity);
+            fullScreenIntent.putExtra("repeat", repeat);
+            if(repeat) fullScreenIntent.putExtra("tdid", tdid);
             context.startActivity(fullScreenIntent.addFlags(FLAG_ACTIVITY_NEW_TASK));
 
 

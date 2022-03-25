@@ -331,7 +331,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
+                                                //Toast.makeText(view.getContext(), "삭제", Toast.LENGTH_SHORT);
                                                 mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid)
                                                         .child(item.tdid).removeValue();
                                             }

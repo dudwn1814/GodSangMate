@@ -474,6 +474,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                     for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                                         AlarmPrac alarm = datasnapshot.getValue(AlarmPrac.class);
                                         if (alarm != null) {
+                                            String tdid = alarm.getTdid();
                                             String alarmTimes = alarm.getAlarm_time();
                                             String activity = alarm.getActivity();
                                             boolean repeat = alarm.isRepeat();
@@ -489,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                                     Calendar calendar = Calendar.getInstance();
                                                     if (date != null) {
                                                         calendar.setTime(date);
-                                                        moveAlarm(calendar, activity, repeat);
+                                                        moveAlarm(tdid, calendar, activity, repeat);
                                                     }
 
                                                 }
@@ -517,28 +518,33 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
         }
     }
 
-    public void moveAlarm(Calendar calendar, String activity, Boolean repeat) {
+    public void moveAlarm(String tdid, Calendar calendar, String activity, Boolean repeat) {
         PackageManager pm = this.getPackageManager();
         if(System.currentTimeMillis()<=calendar.getTimeInMillis()) {
             Log.d("시간", activity);
             ComponentName receiver = new ComponentName(this, DeviceBootReceiver.class);
             Intent alarmIntent = new Intent(this, AlarmReceiver.class);
             alarmIntent.putExtra("activity", activity);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, intentID++, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
+            alarmIntent.putExtra("tdid", tdid);
             // 사용자가 매일 알람을 허용했다면
             if (repeat) {
+                alarmIntent.putExtra("repeat", true);
+                /*
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         AlarmManager.INTERVAL_DAY, pendingIntent);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
-            } else {
+
+                 */
+            }
+            else alarmIntent.putExtra("repeat", false);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, intentID++, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                }
             }
             // 부팅 후 실행되는 리시버 사용가능하게 설정
             pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
