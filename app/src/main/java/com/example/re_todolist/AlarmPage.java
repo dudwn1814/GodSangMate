@@ -126,12 +126,13 @@ public class AlarmPage extends AppCompatActivity {
                             }
                         }
                     });
-                    Intent mainIntent = new Intent(AlarmPage.this, MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
+
                     //mediaPlayer.stop();
                     //vibrator.cancel();
                 }
+                Intent mainIntent = new Intent(AlarmPage.this, MainActivity.class);
+                startActivity(mainIntent);
+                finish();
             }
         });
 
