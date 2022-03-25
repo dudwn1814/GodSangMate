@@ -900,8 +900,9 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     DataSnapshot snapshot = task.getResult();
-                    String lastVisit = snapshot.getValue(String.class);
-                    if (!lastVisit.equals(writeDate)) {
+                    if (snapshot != null) {
+                        String lastVisit = snapshot.getValue(String.class);
+                        if (!lastVisit.equals(writeDate)) {
                             /*
                             Calendar alcalendar = Calendar.getInstance();
                             alcalendar.add(Calendar.DATE, 1);
@@ -909,47 +910,48 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                             String nextalarm = alformat.format(alcalendar);
                              */
 
-                        mDbRef.child("gsmate").child("ToDoList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    DataSnapshot snapshot = task.getResult();
-                                    for (DataSnapshot group : snapshot.getChildren()) {
-                                        String groupCode = group.getKey();
-                                        if (groupCode != null) {
-                                            if (group.child(lastVisit).getValue() != null) {
-                                                for (DataSnapshot groupToDo : group.child(lastVisit).child("Group").getChildren()) {
-                                                    if (groupToDo != null) {
-                                                        Log.e("test",groupToDo.toString());
-                                                        if (groupToDo.child("repeat").getValue(Boolean.class).equals(Boolean.TRUE)) {
-                                                            ToDoPrac todo = new ToDoPrac();
-                                                            todo.setTdid(groupToDo.getKey());
-                                                            todo.setActivity(groupToDo.child("activity").getValue(String.class));
-                                                            todo.setUid(groupToDo.child("uid").getValue(String.class));
-                                                            todo.setRepeat(true);
-                                                            todo.setAlarm(groupToDo.child("alarm").getValue(Boolean.class));
+                            mDbRef.child("gsmate").child("ToDoList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DataSnapshot snapshot = task.getResult();
+                                        for (DataSnapshot group : snapshot.getChildren()) {
+                                            String groupCode = group.getKey();
+                                            if (groupCode != null) {
+                                                if (group.child(lastVisit).getValue() != null) {
+                                                    for (DataSnapshot groupToDo : group.child(lastVisit).child("Group").getChildren()) {
+                                                        if (groupToDo != null) {
+                                                            Log.e("test", groupToDo.toString());
+                                                            if (groupToDo.child("repeat").getValue(Boolean.class).equals(Boolean.TRUE)) {
+                                                                ToDoPrac todo = new ToDoPrac();
+                                                                todo.setTdid(groupToDo.getKey());
+                                                                todo.setActivity(groupToDo.child("activity").getValue(String.class));
+                                                                todo.setUid(groupToDo.child("uid").getValue(String.class));
+                                                                todo.setRepeat(true);
+                                                                todo.setAlarm(groupToDo.child("alarm").getValue(Boolean.class));
 
-                                                            if (todo.isAlarm()) {
-                                                                todo.setTime(groupToDo.child("time").getValue(String.class));
+                                                                if (todo.isAlarm()) {
+                                                                    todo.setTime(groupToDo.child("time").getValue(String.class));
 
-                                                                AlarmPrac alarm = new AlarmPrac();
-                                                                alarm.setTdid(groupToDo.getKey());
-                                                                alarm.setActivity(groupToDo.child("activity").getValue(String.class));
-                                                                //alarm.setAlarm_time(nextalarm);
-                                                                //alarm 등록??
+                                                                    AlarmPrac alarm = new AlarmPrac();
+                                                                    alarm.setTdid(groupToDo.getKey());
+                                                                    alarm.setActivity(groupToDo.child("activity").getValue(String.class));
+                                                                    //alarm.setAlarm_time(nextalarm);
+                                                                    //alarm 등록??
+                                                                }
+                                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(todo.getTdid()).setValue(todo);
                                                             }
-                                                            mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Group").child(todo.getTdid()).setValue(todo);
                                                         }
                                                     }
-                                                }
-                                                for (DataSnapshot uidSnapshot : group.child(lastVisit).child("Personal").getChildren()) {
-                                                    String uid = uidSnapshot.getKey();
-                                                    for (DataSnapshot personalToDo : uidSnapshot.getChildren()) {
-                                                        ToDoPrac todo = personalToDo.getValue(ToDoPrac.class);
-                                                        todo.setDone(false);
-                                                        if (todo != null) {
-                                                            if (todo.isRepeat())
-                                                                mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(todo.getTdid()).setValue(todo);
+                                                    for (DataSnapshot uidSnapshot : group.child(lastVisit).child("Personal").getChildren()) {
+                                                        String uid = uidSnapshot.getKey();
+                                                        for (DataSnapshot personalToDo : uidSnapshot.getChildren()) {
+                                                            ToDoPrac todo = personalToDo.getValue(ToDoPrac.class);
+                                                            todo.setDone(false);
+                                                            if (todo != null) {
+                                                                if (todo.isRepeat())
+                                                                    mDbRef.child("gsmate").child("ToDoList").child(groupCode).child(writeDate).child("Personal").child(uid).child(todo.getTdid()).setValue(todo);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -957,12 +959,12 @@ public class MainActivity extends AppCompatActivity implements CircleProgressBar
                                         }
                                     }
                                 }
-                            }
-                        });
+                            });
 
-                        mDbRef.child("gsmate").child("LastVisit").setValue(writeDate);
-                    }
-                } else mDbRef.child("gsmate").child("LastVisit").setValue(writeDate);
+                            mDbRef.child("gsmate").child("LastVisit").setValue(writeDate);
+                        }
+                    } else mDbRef.child("gsmate").child("LastVisit").setValue(writeDate);
+                }
             }
         });
     }

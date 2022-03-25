@@ -38,6 +38,10 @@ public class AlarmPage extends AppCompatActivity {
         setContentView(R.layout.alarm_page);
         Button dismiss = findViewById(R.id.dismiss);
         TextView textView = findViewById(R.id.textView);
+
+        Intent intent = getIntent();
+        String activity = intent.getExtras().getString("activity");
+        textView.setText(activity+"를 할 시간입니다!");
 /*
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
         mediaPlayer.setLooping(true);

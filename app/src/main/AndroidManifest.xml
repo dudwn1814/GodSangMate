@@ -68,7 +68,6 @@
 
         <activity
             android:name=".AlarmPage"
-            android:parentActivityName=".MainActivity"
             android:showOnLockScreen="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
